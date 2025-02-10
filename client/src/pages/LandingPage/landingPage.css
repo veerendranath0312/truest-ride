@@ -1,0 +1,210 @@
+/* LANDING PAGE CSS */
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap");
+/* LANDING PAGE HERO SECTION */
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.landing-page__hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  /* Use "linear-gradient" to add a darken background effect to the image */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url("../../assets/cover-image.jpg");
+
+  /* Position and center the image to scale nicely on all screens */
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  text-align: center;
+  padding: 1rem;
+}
+
+.landing-page__hero__text {
+  margin-bottom: 2.5rem;
+  text-wrap: balance;
+}
+
+.landing-page__hero__text__title {
+  font-size: 2.5rem;
+  font-family: "Libre Baskerville", serif;
+  margin-bottom: 1rem;
+  font-weight: 400;
+}
+
+.landing-page__hero__text__description {
+  font-size: 1.2rem;
+  line-height: 2rem;
+}
+
+.landing-page__search__form {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  padding: 1rem;
+  border: 1px solid var(--text-tertiary);
+  background-color: var(--bg-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.landing-page__search__form__group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 8px;
+  flex: 1;
+  border: 1px solid var(--text-tertiary);
+  transition: all 0.2s linear;
+}
+
+.landing-page__search__form__group:hover,
+.landing-page__search__form__group:focus-within {
+  border: 1px solid var(--text-primary);
+}
+
+.landing-page__search__form__input {
+  padding: 0.5rem;
+  border: none;
+  background-color: transparent;
+  color: var(--text-primary);
+  outline: none;
+  flex: 1;
+}
+
+.landing-page__search__form__button {
+  padding: 0.5rem 1rem;
+  background-color: var(--btn-primary);
+  border: 2px solid var(--btn-primary);
+  color: var(--bg-primary);
+  border: none;
+  cursor: pointer;
+}
+
+/* LANDING PAGE FEATURES */
+.landing-page__features {
+  margin: 5rem 0;
+  padding: 1rem;
+}
+
+.landing-page__features__text {
+  margin-bottom: 3rem;
+}
+
+.landing-page__features__title {
+  font-size: 30px;
+  font-family: "Inter", serif;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+}
+
+.landing-page__features__description {
+  text-wrap: balance;
+  font-weight: 400;
+  line-height: 145%;
+}
+
+.landing-page__features__flex {
+  display: flex;
+  font-weight: light;
+}
+
+.landing-page__features__flex__item ion-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.landing-page__features__flex__item__title {
+  font-size: 24px;
+  font-weight: 400;
+  margin-bottom: 0.625rem;
+}
+
+.landing-page__features__flex__item__description {
+  text-wrap: balance;
+  line-height: 145%;
+}
+
+hr {
+  height: 1px;
+  background: var(--text-tertiary);
+  border: none;
+}
+
+/* LANDING PAGE JOIN US */
+.landing-page__joinus {
+  margin: 5rem 0;
+  padding: 6.25rem 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-secondary);
+}
+
+.landing-page__joinus__title {
+  font-size: 1.5rem;
+  font-weight: 400;
+  font-family: "Libre Baskerville", serif;
+  margin-bottom: 1.5rem;
+}
+
+.landing-page__joinus__description {
+  font-size: 0.875rem;
+  font-weight: 300;
+  margin-bottom: 2rem;
+  max-width: 320px;
+  text-wrap: balance;
+  line-height: 145%;
+}
+
+.landing-page__joinus__link {
+  padding: 1rem 1.5rem;
+  border-radius: 0.125rem;
+  font-size: 14px;
+  font-weight: 400;
+  background-color: var(--btn-secondary);
+  color: var(--bg-primary);
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  transition: all 0.2s linear;
+}
+
+.landing-page__joinus__link:hover {
+  background-color: var(--btn-primary-hover);
+}
+
+/* Media queries for responsiveness */
+@media screen and (max-width: 768px) {
+  .landing-page__hero__text__title {
+    font-size: 2rem;
+  }
+
+  .landing-page__hero__text__description {
+    font-size: 1rem;
+  }
+
+  .landing-page__search__form__button {
+    width: 100%;
+  }
+
+  .landing-page__features__flex {
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .landing-page__search__form {
+    width: 350px;
+  }
+}

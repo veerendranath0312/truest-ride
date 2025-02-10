@@ -1,11 +1,14 @@
-import './App.css'
+import { Outlet } from "react-router";
+import "./App.css";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <>
-      <p>Welcome to the Truest Ride</p>
+      {/* <Navbar /> */}
+      <Outlet />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

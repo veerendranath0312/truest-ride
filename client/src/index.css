@@ -1,0 +1,80 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap");
+
+:root {
+  --bg-primary: #000000;
+  --bg-secondary: #131313;
+  --bg-tertiary: #272727;
+  --text-primary: #f9f9f9;
+  --text-secondary: #acacac;
+  --text-tertiary: #7c7c7c;
+  --btn-primary: #f0f0f0;
+  --btn-primary-hover: #389e6e;
+  --btn-secondary: #33bb7a;
+  --btn-danger: #e14d4d;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* NAVBAR STYLING */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: var(--bg-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--bg-tertiary);
+  width: 100%;
+}
+
+.navbar__logo {
+  font-family: "Libre Baskerville", serif;
+  font-size: 1.5rem;
+  margin: 1rem;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.navbar__links {
+  display: flex;
+  /* gap: 2rem; */
+}
+
+.navbar__link {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+  padding: 1.5rem 1rem;
+  transition: all 0.3s linear;
+}
+
+/* Whenever a NavLink is active, it will automatically have 
+an .active class name for easy styling with CSS */
+.navbar__link.active {
+  color: var(--text-primary);
+}
+
+.navbar__link:hover {
+  color: var(--text-primary);
+}
+
+.navbar__link__join {
+  background-color: var(--btn-secondary);
+  color: var(--bg-primary);
+}
+
+.navbar__link__join:hover {
+  background-color: var(--btn-primary);
+  color: var(--bg-primary);
+}
