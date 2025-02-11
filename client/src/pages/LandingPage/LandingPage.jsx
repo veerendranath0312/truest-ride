@@ -1,6 +1,8 @@
 import React from "react";
 import { NavLink } from "react-router";
 import Navbar from "../../components/Navbar";
+import JoinUs from "../../components/JoinUs";
+import Footer from "../../components/Footer";
 import "./landingPage.css";
 
 function LandingPage() {
@@ -92,7 +94,7 @@ function LandingPage() {
         </div>
       </section>
 
-      <section className="landing-page__joinus">
+      {/* <section className="landing-page__joinus">
         <div className="container">
           <h2 className="landing-page__joinus__title">Join the community</h2>
           <p className="landing-page__joinus__description">
@@ -104,7 +106,11 @@ function LandingPage() {
             Get started
           </NavLink>
         </div>
-      </section>
+      </section> */}
+
+      <JoinUs />
+
+      <Footer />
     </div>
   );
 }
