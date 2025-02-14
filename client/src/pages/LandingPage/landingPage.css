@@ -86,11 +86,8 @@
 .landing-page__search__form__button {
   padding: 0.5rem 1rem;
   background-color: var(--btn-primary);
-  border: 2px solid var(--btn-primary);
   color: var(--bg-primary);
   border: none;
-  cursor: pointer;
-  transition: all 0.3s linear;
 }
 
 .landing-page__search__form__button:hover {
@@ -185,7 +182,7 @@ hr {
   text-decoration: none;
   display: inline-block;
   cursor: pointer;
-  transition: all 0.2s linear;
+  transition: all var(--transition-time) linear;
 }
 
 .landing-page__joinus__link:hover {

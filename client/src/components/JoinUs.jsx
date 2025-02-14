@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router";
+import { Link } from "react-router";
 
 function JoinUs() {
   return (
@@ -11,9 +11,9 @@ function JoinUs() {
           convenient way to travel. Share rides, save money, and make new
           friends.
         </p>
-        <NavLink to="/register" className="landing-page__joinus__link">
-          Get started
-        </NavLink>
+        <Link to="/register" className="landing-page__joinus__link">
+          Get started for free
+        </Link>
       </div>
     </section>
   );

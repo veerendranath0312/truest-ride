@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
+import Button from "./Button";
 
 function Footer() {
   const year = new Date().getFullYear();
@@ -75,9 +76,10 @@ function Footer() {
               placeholder="education@email.edu"
               className="footer-flex-item__subscribe__input"
             />
-            <button className="footer-flex-item__subscribe__button">
+
+            <Button className="footer-flex-item__subscribe__button">
               <ion-icon name="send-outline"></ion-icon>
-            </button>
+            </Button>
           </div>
         </div>
       </div>

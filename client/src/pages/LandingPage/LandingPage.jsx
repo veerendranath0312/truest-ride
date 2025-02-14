@@ -3,6 +3,7 @@ import { NavLink } from "react-router";
 import Navbar from "../../components/Navbar";
 import JoinUs from "../../components/JoinUs";
 import Footer from "../../components/Footer";
+import Button from "../../components/Button";
 import "./landingPage.css";
 
 function LandingPage() {
@@ -38,79 +39,69 @@ function LandingPage() {
                 placeholder="Destination"
               />
             </div>
-            <button className="landing-page__search__form__button">
+
+            <Button className="landing-page__search__form__button">
               Search
-            </button>
+            </Button>
           </form>
         </div>
       </section>
 
-      <section className="landing-page__features">
-        <div className="container">
-          <div className="landing-page__features__text">
-            <h2 className="landing-page__features__title">
-              Why choose Truest Ride?
-            </h2>
-            <p className="landing-page__features__description">
-              Truest ride is the best way to travel for students. We offer an
-              affordable and convenient way to travel. Here are some of the
-              reasons why you should choose us.
-            </p>
+      <div className="container">
+        <section className="landing-page__features">
+          <div className="container">
+            <div className="landing-page__features__text">
+              <h2 className="landing-page__features__title">
+                Why choose Truest Ride?
+              </h2>
+              <p className="landing-page__features__description">
+                Truest ride is the best way to travel for students. We offer an
+                affordable and convenient way to travel. Here are some of the
+                reasons why you should choose us.
+              </p>
+            </div>
+
+            <div className="landing-page__features__flex">
+              <div className="landing-page__features__flex__item">
+                <span>
+                  <ion-icon name="receipt"></ion-icon>
+                </span>
+                <h3 className="landing-page__features__flex__item__title">
+                  Our mission
+                </h3>
+                <p className="landing-page__features__flex__item__description">
+                  To provide a platform for students to share rides ensuring
+                  safety and convenience.
+                </p>
+              </div>
+              <div className="landing-page__features__flex__item">
+                <ion-icon name="checkmark-circle"></ion-icon>
+                <h3 className="landing-page__features__flex__item__title">
+                  Reliability
+                </h3>
+                <p className="landing-page__features__flex__item__description">
+                  Count on us for timely pickups and dependable service every
+                  time you ride.
+                </p>
+              </div>
+
+              <div className="landing-page__features__flex__item">
+                <ion-icon name="shield-checkmark"></ion-icon>
+                <h3 className="landing-page__features__flex__item__title">
+                  User safety
+                </h3>
+                <p className="landing-page__features__flex__item__description">
+                  Your safety is our top priority with trusted drivers and
+                  real-time tracking.
+                </p>
+              </div>
+            </div>
           </div>
+        </section>
 
-          <div className="landing-page__features__flex">
-            <div className="landing-page__features__flex__item">
-              <ion-icon name="receipt"></ion-icon>
-              <h3 className="landing-page__features__flex__item__title">
-                Our mission
-              </h3>
-              <p className="landing-page__features__flex__item__description">
-                To provide a platform for students to share rides ensuring
-                safety and convenience.
-              </p>
-            </div>
-            <div className="landing-page__features__flex__item">
-              <ion-icon name="checkmark-circle"></ion-icon>
-              <h3 className="landing-page__features__flex__item__title">
-                Reliability
-              </h3>
-              <p className="landing-page__features__flex__item__description">
-                Count on us for timely pickups and dependable service every time
-                you ride.
-              </p>
-            </div>
-
-            <div className="landing-page__features__flex__item">
-              <ion-icon name="shield-checkmark"></ion-icon>
-              <h3 className="landing-page__features__flex__item__title">
-                User safety
-              </h3>
-              <p className="landing-page__features__flex__item__description">
-                Your safety is our top priority with trusted drivers and
-                real-time tracking.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* <section className="landing-page__joinus">
-        <div className="container">
-          <h2 className="landing-page__joinus__title">Join the community</h2>
-          <p className="landing-page__joinus__description">
-            Join our community of students travellers and enjoy a safe and
-            convenient way to travel. Share rides, save money, and make new
-            friends.
-          </p>
-          <NavLink to="/register" className="landing-page__joinus__link">
-            Get started
-          </NavLink>
-        </div>
-      </section> */}
-
-      <JoinUs />
-
-      <Footer />
+        <JoinUs />
+        <Footer />
+      </div>
     </div>
   );
 }

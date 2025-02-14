@@ -1,0 +1,30 @@
+.signin__hero {
+  margin-top: 9rem;
+}
+
+.signin__illustration {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 7rem 0;
+  padding: 1rem;
+}
+
+.signin__illustration img {
+  width: 100%;
+  max-width: 800px;
+}
+
+.signin__form__footer {
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.signin__form__footer a {
+  color: var(--text-secondary);
+  transition: all var(--transition-time) ease-out;
+}
+
+.signin__form__footer a:hover {
+  color: var(--text-primary);
+}

@@ -14,6 +14,8 @@
   --btn-danger: #e14d4d;
   --font-family-primary: "Inter", serif;
   --font-family-secondary: "Libre Baskerville", serif;
+  --ui-outline: #383838;
+  --transition-time: 0.25s;
 }
 
 * {
@@ -28,7 +30,20 @@ body {
   color: var(--text-primary);
 }
 
-/* NAVBAR STYLING */
+/* ========== BUTTON STYLES ========== */
+.btn {
+  outline: none;
+  width: 100%;
+  height: 100%;
+  color: var(--bg-primary);
+  cursor: pointer;
+  transition: all var(--transition-time) linear;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ========== NAVBAR STYLING ========== */
 .navbar {
   position: fixed;
   top: 0;
@@ -39,6 +54,8 @@ body {
   align-items: center;
   border-bottom: 1px solid var(--bg-tertiary);
   width: 100%;
+  z-index: 1;
+  font-weight: 300;
 }
 
 .navbar__logo {
@@ -59,7 +76,7 @@ body {
   color: var(--text-secondary);
   font-size: 14px;
   padding: 1.5rem 1rem;
-  transition: all 0.3s linear;
+  transition: all var(--transition-time) linear;
 }
 
 /* Whenever a NavLink is active, it will automatically have 
@@ -82,13 +99,14 @@ an .active class name for easy styling with CSS */
   color: var(--bg-primary);
 }
 
-/* FOOTER STYLING */
+/* ========== FOOTER STYLING ========== */
 .footer {
   font-weight: 300;
   font-size: 0.875rem;
   max-width: 1120px;
   padding: 0 1rem;
   margin: 0 auto 5rem auto;
+  text-align: left;
 }
 
 .footer-flex {
@@ -107,7 +125,7 @@ an .active class name for easy styling with CSS */
   color: var(--text-secondary);
   margin-bottom: 0.625rem;
   font-size: 0.75rem;
-  transition: all 0.25s linear;
+  transition: all var(--transition-time) linear;
 }
 
 .footer-flex-item__links a {
@@ -130,7 +148,7 @@ an .active class name for easy styling with CSS */
   border: 1px solid var(--text-secondary);
   padding: 0.4rem;
   border-radius: 4px;
-  transition: all 0.3s linear;
+  transition: all var(--transition-time) linear;
 }
 
 .footer-flex-item__subscribe:focus-within {
@@ -148,18 +166,140 @@ an .active class name for easy styling with CSS */
 .footer-flex-item__subscribe__button {
   background: var(--btn-primary);
   padding: 0.3rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   font-weight: 700;
   border-radius: 4px;
   font-size: 14px;
   border: none;
-  outline: none;
-  cursor: pointer;
-  transition: all 0.3s linear;
 }
 
 .footer-flex-item__subscribe__button:hover {
   background: var(--btn-primary-hover);
+}
+
+/* ========== AUTH FORM STYLES ========== */
+.form__wrapper {
+  max-width: 400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 1.25rem;
+  padding: 0 10px;
+  font-weight: 300;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  font-size: 14px;
+}
+
+.form__label {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 15px;
+}
+
+.form__hero__text__title {
+  font-family: var(--font-family-secondary);
+  font-weight: 400;
+  font-size: 1.5rem;
+}
+
+.form__input {
+  padding: 14px 16px;
+  border: 1px solid var(--text-secondary);
+  outline: none;
+  display: block;
+  width: 100%;
+  background: transparent;
+  transition: all var(--transition-time) linear;
+  color: var(--text-primary);
+}
+
+.form__input:focus,
+.form__input:hover {
+  border: 1px solid var(--btn-primary);
+}
+
+.form__input::placeholder {
+  color: var(--text-secondary);
+}
+
+.form__button {
+  font-size: 14px;
+  color: var(--bg-primary);
+  padding: 14px 20px;
+  border-radius: 2px;
+  gap: 0.5rem;
+}
+
+.form__button--email {
+  border: 1px solid var(--btn-secondary);
+  background: var(--btn-secondary);
+}
+
+.form__button--email:hover {
+  border: 1px solid var(--btn-secondary-hover);
+  background: var(--btn-secondary-hover);
+}
+
+.form__button--microsoft {
+  border: 1px solid var(--btn-primary);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.form__button--microsoft:hover {
+  background-color: var(--btn-primary-hover);
+  color: var(--bg-primary);
+}
+
+.form__divider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+
+.form__divider .line {
+  flex: 1;
+  border: none;
+  height: 1px;
+  background-color: var(--ui-outline);
+}
+
+.form__divider .or-text {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--text-secondary);
+}
+
+.illustration {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 7rem 0;
+  padding: 1rem;
+}
+
+.illustration img {
+  width: 100%;
+  max-width: 800px;
+}
+
+.form__footer {
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.form__footer a {
+  color: var(--text-secondary);
+  transition: all var(--transition-time) ease-out;
+}
+
+.form__footer a:hover {
+  color: var(--text-primary);
 }
