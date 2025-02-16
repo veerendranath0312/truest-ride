@@ -1,14 +1,9 @@
 import React from "react";
 import { Link } from "react-router";
 import Button from "./Button";
-function AuthForm({
-  children,
-  title,
-  labelText,
-  btnText,
-  alternateBtnText,
-  isSignIn,
-}) {
+import FormGroup from "./FormGroup";
+
+function AuthForm({ children, title, btnText, alternateBtnText, isSignIn }) {
   return (
     <div className="form__wrapper">
       <div className="form__hero__text">
@@ -16,17 +11,7 @@ function AuthForm({
       </div>
 
       <form action="" className="form">
-        <div className="form__group">
-          <label htmlFor="email" className="form__label">
-            {labelText}
-          </label>
-          <input
-            type="email"
-            id="email"
-            className="form__input"
-            placeholder="Email address"
-          />
-        </div>
+        {children}
 
         <Button className="form__button form__button--email">{btnText}</Button>
         <div className="form__divider">

@@ -1,15 +1,14 @@
 import React from "react";
-import { Link } from "react-router";
 import Navbar from "../../components/Navbar";
 import AuthForm from "../../components/AuthForm";
+import FormGroup from "../../components/FormGroup";
 import JoinUs from "../../components/JoinUs";
 import Footer from "../../components/Footer";
-import Button from "../../components/Button";
 
 import "./signin.css";
 import astroImage from "../../assets/Astro.svg";
 
-function SIgnIn() {
+function SignIn() {
   return (
     <div className="signin">
       <Navbar />
@@ -17,11 +16,16 @@ function SIgnIn() {
         <div className="container">
           <AuthForm
             title="Sign in"
-            labelText="Email"
             btnText="Sign in with email"
             alternateBtnText="Sign in with Microsoft"
             isSignIn={true}
-          />
+          >
+            <FormGroup
+              labelText="Email"
+              inputType="email"
+              placeholderText="Email address"
+            />
+          </AuthForm>
           <div className="signin__illustration">
             <img src={astroImage} alt="" />
           </div>
@@ -34,4 +38,4 @@ function SIgnIn() {
   );
 }
 
-export default SIgnIn;
+export default SignIn;
