@@ -56,6 +56,7 @@ body {
   width: 100%;
   z-index: 1;
   font-weight: 300;
+  max-height: 65px;
 }
 
 .navbar__logo {
@@ -63,12 +64,12 @@ body {
   font-size: 1.5rem;
   margin: 1rem;
   color: var(--text-primary);
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 .navbar__links {
   display: flex;
-  /* gap: 2rem; */
+  align-items: center;
 }
 
 .navbar__link {
@@ -77,6 +78,72 @@ body {
   font-size: 14px;
   padding: 1.5rem 1rem;
   transition: all var(--transition-time) linear;
+  cursor: pointer;
+}
+
+ion-icon[name="person-circle-outline"] {
+  font-size: 36px;
+  transition: color var(--transition-time) linear;
+}
+
+.navbar__link__profile_icon:hover {
+  border: 1px solid var(--text-primary);
+}
+
+.navbar__link__profile__dropdown {
+  position: absolute;
+  top: 66px;
+  right: 0;
+  transform: translateX(-10%);
+  background-color: var(--bg-tertiary);
+  border-radius: 4px;
+  width: 200px;
+  /* z-index: 1; */
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  margin-top: 10px;
+  margin-right: -10px;
+  visibility: hidden;
+  transition: var(--transition-time);
+  opacity: 0;
+}
+
+.navbar__link__profile__dropdown.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.navbar__link__profile__dropdown::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  right: 15px;
+  width: 20px;
+  height: 20px;
+  background: var(--bg-tertiary);
+  transform: rotate(45deg);
+}
+
+.navbar__link__profile__dropdown__item {
+  font-size: 14px;
+  padding: 10px;
+  color: var(--text-primary);
+  border: 1px solid var(--bg-tertiary);
+  text-decoration: none;
+  transition: all var(--transition-time) linear;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar__link__profile__dropdown__item:not(:last-child) {
+  margin-bottom: 5px;
+}
+
+.navbar__link__profile__dropdown__item:hover {
+  border: 1px solid var(--ui-outline);
 }
 
 /* Whenever a NavLink is active, it will automatically have 
@@ -97,6 +164,16 @@ an .active class name for easy styling with CSS */
 .navbar__link__join:hover {
   background-color: var(--btn-primary);
   color: var(--bg-primary);
+}
+
+.navbar__link__profile {
+  background-color: var(--bg-primary);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  top: 100%;
+  left: 0;
+  width: 200px;
+  z-index: 1;
 }
 
 /* ========== FOOTER STYLING ========== */
@@ -302,4 +379,11 @@ an .active class name for easy styling with CSS */
 
 .form__footer a:hover {
   color: var(--text-primary);
+}
+
+@media (max-width: 480px) {
+  .navbar__logo {
+    font-size: 1rem;
+    text-decoration: underline;
+  }
 }

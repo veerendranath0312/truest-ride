@@ -7,7 +7,7 @@ function About() {
   return (
     <div className="about">
       <Navbar />
-      <div className="about">
+      <div className="about__hero">
         <div className="container">
           <h1>About page</h1>
         </div>
