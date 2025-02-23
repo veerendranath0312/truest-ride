@@ -21,8 +21,9 @@ function SignIn() {
             isSignIn={true}
           >
             <FormGroup
-              labelText="Email"
-              inputType="email"
+              label="Email"
+              input="email"
+              name="email"
               placeholderText="Email address"
             />
           </AuthForm>

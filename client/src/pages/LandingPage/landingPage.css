@@ -87,7 +87,6 @@
   padding: 0.5rem 1rem;
   background-color: var(--btn-primary);
   color: var(--bg-primary);
-  border: none;
 }
 
 .landing-page__search__form__button:hover {

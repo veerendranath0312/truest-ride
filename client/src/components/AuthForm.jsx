@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
 import Button from "./Button";
-import FormGroup from "./FormGroup";
 
 function AuthForm({ children, title, btnText, alternateBtnText, isSignIn }) {
   return (

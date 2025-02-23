@@ -23,13 +23,15 @@ function Register() {
             isSignIn={false}
           >
             <FormGroup
-              labelText="Full name"
-              inputType="text"
+              label="Full name"
+              type="text"
+              name="fullname"
               placeholderText="Full name"
             />
             <FormGroup
-              labelText="Email"
-              inputType="email"
+              label="Email"
+              type="email"
+              name="email"
               placeholderText="Email address"
             />
           </AuthForm>
