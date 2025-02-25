@@ -5,7 +5,7 @@ import OfferRide from "./OfferRide";
 import SearchResults from "./SearchResults";
 import Footer from "../../components/Footer";
 import Modal from "./Modal";
-import "./Home.css";
+import "./home.css";
 
 function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
