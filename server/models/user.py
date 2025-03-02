@@ -1,10 +1,13 @@
-from datetime import datetime, timezone
+import uuid
 from mongoengine import *
+from flask_security import UserMixin
+from datetime import datetime, timezone, timedelta
 
 
-class User(Document):
+class User(Document, UserMixin):
     full_name = StringField(required=True)
     email = EmailField(required=True, unique=True)
+    fs_uniquifier = StringField(default=lambda: str(uuid.uuid4()), unique=True)
     rides = ListField(ReferenceField('Ride'))
     place = StringField(default='')
     university = StringField(default='')
@@ -13,6 +16,7 @@ class User(Document):
     gender = StringField(choices=['Male', 'Female', 'Other'])
     age = IntField(min_value=18, max_value=100)
     created_at = DateTimeField(default=datetime.now(timezone.utc))
+    image_url = StringField(default='')
 
     meta = {
         'collection': 'users',

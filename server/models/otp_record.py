@@ -14,6 +14,7 @@ class OTPRecord(Document):
         'indexes': [
             # 'expireAfterSeconds' creates a Time-To-Live (TTL) index
             # that automatically deletes documents after a specified number of seconds
-            {'fields': ['expires'], 'expireAfterSeconds': 600}
+            {'fields': ['email'], 'unique': True},
+            {'fields': ['expires'], 'expireAfterSeconds': 86400},
         ]
     }
