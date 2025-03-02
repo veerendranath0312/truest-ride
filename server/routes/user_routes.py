@@ -3,17 +3,17 @@ from controllers.user_controllers import UserController
 
 user_bp = Blueprint('users', __name__)
 
+# Follow JSend speficication for response format
 
-@user_bp.route('/register', methods=['POST'])
-def register():
-    if request.method == 'POST':
-        data = request.get_json()
-        return UserController.register_user(data)
+
+@user_bp.route('/<id>', methods=['GET', 'DELETE'])
+def user(id):
+    if request.method == 'GET':
+        return UserController.get_user_by_id(id)
+    elif request.method == 'DELETE':
+        return UserController.delete_user_by_id(id)
     else:
-        return {"message": "Invalid request method"}, 405
-
-
-@user_bp.route('/signin', methods=['POST'])
-def sign_in():
-    credentials = request.get_json()
-    return UserController.authenticate_user(credentials)
+        return {
+            "status": "error",
+            "message": "Invalid request method"
+        }, 405
