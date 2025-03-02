@@ -1,10 +1,7 @@
 import uuid
-import jwt
 from mongoengine import *
-from flask import current_app
 from flask_security import UserMixin
 from datetime import datetime, timezone, timedelta
-from utils.config import Config
 
 
 class User(Document, UserMixin):

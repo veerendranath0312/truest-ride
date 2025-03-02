@@ -1,10 +1,5 @@
-import hashlib
 from models.user import User
-from models.otp_record import OTPRecord
 from services.auth_service import AuthService
-from services.mail_service import MailService
-
-# Follow JSend specification for API responses
 
 
 class AuthController:

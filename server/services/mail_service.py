@@ -1,7 +1,5 @@
 from flask import current_app
 from flask_mail import Mail, Message
-from threading import Thread
-from queue import Queue
 
 
 class MailService:
