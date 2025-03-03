@@ -9,22 +9,12 @@ class Config:
     }
 
     # JWT configuration
-    SECRET_KEY = os.environ.get('SECRET_KEY')
-    SECURITY_TOKEN_MAX_AGE = os.environ.get(
-        'SECURITY_TOKEN_MAX_AGE'
-    )  # 1 hour
-
-    # Flask-Security configuration
-    SECURITY_PASSWORD_SALT = os.environ.get('SECURITY_PASSWORD_SALT')
-    SECURITY_PASSWORDLESS = True
-    SECURITY_EMAIL_SENDER = os.environ.get(
-        'MAIL_USERNAME', 'noreply.truestride@gmail.com'
-    )
-    SECURITY_EMAIL_SUBJECT_PASSWORDLESS = 'Your OTP Code'
-    SECURITY_TOKEN_AUTHENTICATION_HEADER = 'Authentication-Token'
+    JWT_SECRET_KEY = os.environ.get('SECRET_KEY')
+    JWT_ACCESS_TOKEN_EXPIRES = int(os.environ.get('ACCESS_TOKEN_EXPIRES', 3600)) # Default to 1 hour
+    SECRET_SALT = os.environ.get('SECRET_SALT')
 
     # OTP configuration
-    OTP_MAX_AGE = os.environ.get('OTP_MAX_AGE')  # 5 minutes
+    OTP_MAX_AGE = os.environ.get('OTP_MAX_AGE', 300)  # Default to 5 minutes
 
     # Mail configuration
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
