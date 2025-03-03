@@ -1,12 +1,14 @@
 import re
-import jwt
 import secrets
-import hashlib
+
 from flask import current_app
 from datetime import datetime, timedelta, timezone
+from flask_jwt_extended import create_access_token
 from email_validator import validate_email, EmailNotValidError
+
 from models.otp_record import OTPRecord
 from services.mail_service import MailService
+from utils.security import otp_context
 
 
 class AuthService:
@@ -47,7 +49,7 @@ class AuthService:
         otp = str(secrets.randbelow(999999)).zfill(6)
         return {
             'raw': otp,
-            'hash': hashlib.sha256(otp.encode()).hexdigest(),
+            'hash': otp_context.hash(otp),
             'expires': datetime.now(timezone.utc) + timedelta(seconds=int(current_app.config['OTP_MAX_AGE']))
         }
 
@@ -89,7 +91,7 @@ class AuthService:
         if not otp_record:
             return {'status': 'fail', 'message': 'OTP not found'}, 404
 
-        if otp_record.otp_hash != hashlib.sha256(otp.encode()).hexdigest():
+        if otp_context.verify(otp, otp_record.otp_hash) is False:
             return {'status': 'fail', 'message': 'Invalid OTP'}, 400
 
         if AuthService.is_otp_expired(otp_record.expires):
@@ -102,10 +104,6 @@ class AuthService:
 
     @staticmethod
     def get_auth_token(user_id):
-        payload = {
-            'user_id': str(user_id),
-            'exp': datetime.now(timezone.utc) + timedelta(seconds=int(current_app.config['SECURITY_TOKEN_MAX_AGE']))
-        }
-
-        token = jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm='HS256')
+        payload = { 'user_id': str(user_id) }
+        token = create_access_token(identity=payload)
         return token

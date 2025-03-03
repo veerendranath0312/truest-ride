@@ -18,3 +18,5 @@ class OTPRecord(Document):
             {'fields': ['expires'], 'expireAfterSeconds': 86400},
         ]
     }
+
+# TODO: Change the TTL index

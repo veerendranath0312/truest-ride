@@ -15,7 +15,7 @@ class MailService:
             msg = Message(
                 subject="Your Truest Ride OTP Code",
                 recipients=[email],
-                sender=current_app.config['SECURITY_EMAIL_SENDER'],
+                sender=current_app.config['MAIL_USERNAME'],
                 html=f"""
                         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                             <h2 style="color: #1a237e;">Truest Ride Verification Code</h2>

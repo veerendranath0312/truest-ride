@@ -1,13 +1,10 @@
-import uuid
 from mongoengine import *
-from flask_security import UserMixin
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 
 
-class User(Document, UserMixin):
+class User(Document):
     full_name = StringField(required=True)
     email = EmailField(required=True, unique=True)
-    fs_uniquifier = StringField(default=lambda: str(uuid.uuid4()), unique=True)
     rides = ListField(ReferenceField('Ride'))
     place = StringField(default='')
     university = StringField(default='')
