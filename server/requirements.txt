@@ -24,6 +24,7 @@ ordered-set==4.1.0
 packaging==24.2
 passlib==1.7.4
 Pygments==2.19.1
+PyJWT==2.10.1
 pymongo==4.11.1
 python-dotenv==1.0.1
 rich==13.9.4

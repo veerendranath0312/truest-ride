@@ -104,6 +104,5 @@ class AuthService:
 
     @staticmethod
     def get_auth_token(user_id):
-        payload = { 'user_id': str(user_id) }
-        token = create_access_token(identity=payload)
+        token = create_access_token(identity=str(user_id))
         return token
