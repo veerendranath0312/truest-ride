@@ -15,7 +15,7 @@ class AuthService:
     @staticmethod
     def validate_educational_email(email, return_details=False, check_deliverability=True):
         # Primary regex pattern for common educational Top-Level-Domains (TLDs)
-        base_pattern = r"^[a-zA-Z0-9_.+-]+@(?:\w+\.)+(edu|ac\.[a-z]{2,}|sch\.[a-z]{2,}|uni\.[a-z]{2,})$"
+        base_pattern = r"^[a-zA-Z0-9_\.+-]+@(?:\w+\.)+(edu|ac\.[a-z]{2,}|sch\.[a-z]{2,}|uni\.[a-z]{2,})$"
 
         if not re.match(base_pattern, email, re.IGNORECASE):
             return False
@@ -104,6 +104,5 @@ class AuthService:
 
     @staticmethod
     def get_auth_token(user_id):
-        payload = { 'user_id': str(user_id) }
-        token = create_access_token(identity=payload)
+        token = create_access_token(identity=str(user_id))
         return token
