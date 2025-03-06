@@ -7,7 +7,7 @@ class AuthController:
     @staticmethod
     def signup(data):
         try:
-            full_name = data.get('full_name');
+            full_name = data.get('full_name')
             email = data.get('email')
             # Check email in the data
             if not email or not full_name:
@@ -56,15 +56,14 @@ class AuthController:
             user.save()
 
             # Create a secure JWT token for the user and return it
-            jwt_token_data = {
-                'email': user.email,
-                'token': AuthService.get_auth_token(user.id)
-            }
-
             return {
                 'status': 'success',
-                'message': 'User signed up successfully',
-                'data': jwt_token_data
+                'data': {
+                    'token': AuthService.get_auth_token(user.id),
+                    'user': {
+                        'email': user.email
+                    }
+                }
             }, 200
 
         except Exception as e:
@@ -117,16 +116,14 @@ class AuthController:
             if not user:
                 return {'status': 'fail', 'message': 'User not found'}, 404
 
-            jwt_token_data = {
-                'email': email,
-                "token": AuthService.get_auth_token(user.id)
-            }
-
+            # Create a secure JWT token for the user and return it
             return {
                 'status': 'success',
-                'message': 'User signed in successfully',
                 'data': {
-                    'token': jwt_token_data
+                    'token': AuthService.get_auth_token(user.id),
+                    'user': {
+                        'email': user.email
+                    }
                 }
             }, 200
         except Exception as e:

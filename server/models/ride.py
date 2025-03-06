@@ -11,8 +11,8 @@ class Ride(Document):
     provider = ReferenceField('User', required=True)
     # Users who have booked the ride
     bookers = ListField(ReferenceField('User'))
-    total_seats = IntField(required=True)
-    available_seats = IntField(required=True)
+    total_seats = IntField(required=True, default=1)
+    available_seats = IntField(required=True, default=1)
     car_model = StringField(required=True)
 
     meta = {
@@ -25,5 +25,19 @@ class Ride(Document):
         ]
     }
 
+    def to_json(self):
+        return {
+            "id": str(self.id),
+            "from_location": self.from_location,
+            "to_location": self.to_location,
+            "ride_date": self.ride_date.isoformat() if self.ride_date else None,
+            "created_on": self.created_on.isoformat() if self.created_on else None,
+            "provider": str(self.provider.id) if self.provider else None,
+            "bookers": [str(booker.id) for booker in self.bookers],
+            "total_seats": self.total_seats,
+            "available_seats": self.available_seats,
+            "car_model": self.car_model
+        }
+
     # TODO: ADD the TTL index for the ride document to expire after 30 days
-    # HINT: Use the 'expires' key in the meta dictionary
+    # HINT: Use the 'created_on' key in the meta dictionary

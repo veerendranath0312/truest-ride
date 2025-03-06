@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager
 
 from db.db import DBManager
+from models.user import User
 from utils.config import Config
 from services.mail_service import MailService
 from routes.auth_routes import auth_bp
@@ -25,6 +26,7 @@ class FlaskApp:
         self.mail_service.init_app(self.app)
         self.register_blueprints()
         self.is_development = os.environ.get('FLASK_ENV') == 'DEVELOPMENT'
+        self.setup_jwt_callbacks()
 
     def configure_app(self):
         self.app.config.from_object(Config)
@@ -44,6 +46,40 @@ class FlaskApp:
         # Get PORT from .env or use 5000 as default
         port = int(os.environ.get('PORT', 5000))
         self.app.run(host='0.0.0.0', port=port, debug=self.is_development)
+
+    def setup_jwt_callbacks(self):
+        @self.jwt.user_lookup_loader
+        def user_lookup_callback(_jwt_header, jwt_data):
+            identity = jwt_data["sub"]
+            user = User.objects(id=identity).first()
+            return user if user else None
+
+        @self.jwt.expired_token_loader
+        def expired_token_callback(jwt_header, jwt_data):
+            return {
+                'status' : "fail",
+                'data': {
+                    'token': 'The token has expired'
+                },
+            }, 401
+
+        @self.jwt.invalid_token_loader
+        def invalid_token_callback(error):
+            return {
+                'status': "fail",
+                'data': {
+                    'token': 'Invalid token'
+                },
+            }, 401
+
+        @self.jwt.unauthorized_loader
+        def unauthorized_callback(error):
+            return {
+                "status": "error",
+                'data': {
+                    'token': 'Authorization token is missing'
+                },
+            }, 401
 
 
 # Create an instance of FlaskApp

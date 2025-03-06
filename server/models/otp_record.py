@@ -19,4 +19,5 @@ class OTPRecord(Document):
         ]
     }
 
-# TODO: Change the TTL index
+# TODO: Change the OTP expiration time to 5 minutes
+# TODO: Change the TTL index to 1/ 2 hours
