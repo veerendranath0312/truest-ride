@@ -32,3 +32,8 @@ def ride(ride_id):
         return {"message": "Invalid request method"}, 405
 
 
+@ride_bp.route('/search', methods=['GET'])
+@jwt_required()
+def search_rides():
+    data = request.args
+    return RideController.search_rides(data)
