@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from models.user import User
 from models.ride import Ride
 from flask_jwt_extended import get_current_user
@@ -23,8 +23,8 @@ class RideController:
 
             user = get_current_user()
 
-            # Parse the ride_date from the input data
-            ride_date = datetime.strptime(data['ride_date'], '%m-%d-%Y')
+            # Parse the ride_date from the input data and convert it to UTC
+            ride_date = datetime.strptime(data['ride_date'], '%m-%d-%Y').replace(tzinfo=timezone.utc)
 
             ride_obj = Ride(
                 from_location=data['from_location'],
@@ -163,3 +163,33 @@ class RideController:
             return {"status": "fail", "message": str(e)}, 500
 
 
+    @staticmethod
+    def search_rides(data):
+        try:
+            from_location = data.get('from_location')
+            to_location = data.get('to_location')
+            start_date = data.get('start_date')
+            end_date = data.get('end_date')
+
+            query = {}
+
+            if from_location:
+                query['from_location__icontains'] = from_location
+
+            if to_location:
+                query['to_location__icontains'] = to_location
+
+            if start_date and end_date:
+                query['ride_date__gte'] = start_date
+                query['ride_date__lte'] = end_date
+
+            rides = Ride.objects(**query)
+
+            return {
+                "status": "success",
+                "data": {
+                    "rides": [ride.to_json() for ride in rides]
+                }
+            }
+        except Exception as e:
+            return {"status": "fail", "message": str(e)}, 500
