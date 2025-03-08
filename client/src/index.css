@@ -312,6 +312,19 @@ an .active class name for easy styling with CSS */
   background: transparent;
   transition: all var(--transition-time) linear;
   color: var(--text-primary);
+  cursor: text;
+}
+
+/* REACT DATEPICKER CUSTOME STYLES */
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker-wrapper .react-datepicker__close-icon::after {
+  background-color: var(--text-secondary);
+  color: var(--bg-primary);
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .form__input:focus,

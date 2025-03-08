@@ -20,12 +20,15 @@ function SignIn() {
             alternateBtnText="Sign in with Microsoft"
             isSignIn={true}
           >
-            <FormGroup
-              label="Email"
-              input="email"
-              name="email"
-              placeholderText="Email address"
-            />
+            <FormGroup label="Email">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Email address"
+                className="form__input"
+              />
+            </FormGroup>
           </AuthForm>
           <div className="signin__illustration">
             <img src={astroImage} alt="" />

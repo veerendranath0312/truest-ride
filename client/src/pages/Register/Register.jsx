@@ -22,18 +22,24 @@ function Register() {
             alternateBtnText="Sign up with Microsoft"
             isSignIn={false}
           >
-            <FormGroup
-              label="Full name"
-              type="text"
-              name="fullname"
-              placeholderText="Full name"
-            />
-            <FormGroup
-              label="Email"
-              type="email"
-              name="email"
-              placeholderText="Email address"
-            />
+            <FormGroup label="Full name">
+              <input
+                type="text"
+                id="fullname"
+                name="fullname"
+                placeholder="Full name"
+                className="form__input"
+              />
+            </FormGroup>
+            <FormGroup label="Email">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Email address"
+                className="form__input"
+              />
+            </FormGroup>
           </AuthForm>
 
           <div className="signin__illustration">

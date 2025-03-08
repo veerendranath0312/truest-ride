@@ -1,8 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import DatePicker from "react-datepicker";
 import FormGroup from "../../components/FormGroup";
 import Button from "../../components/Button";
 
 function Modal({ onCloseModal }) {
+  const [date, setDate] = useState();
+
   useEffect(() => {
     // Add the no-scroll class to the body when the modal is opened
     document.body.classList.add("no-scroll");
@@ -26,40 +29,58 @@ function Modal({ onCloseModal }) {
             All fields are required.
           </p>
           <form className="modal__form">
-            <FormGroup
-              label="From"
-              type="text"
-              name="from"
-              placeholderText="Departure location"
-            />
-            <FormGroup
-              label="To"
-              type="text"
-              name="to"
-              placeholderText="Destination location"
-            />
+            <FormGroup label="From">
+              <input
+                type="text"
+                id="from"
+                name="from"
+                placeholder="Departure location"
+                className="form__input"
+              />
+            </FormGroup>
+            <FormGroup label="To">
+              <input
+                type="text"
+                id="to"
+                name="to"
+                placeholder="Destination location"
+                className="form__input"
+              />
+            </FormGroup>
             <div className="modal__form__group">
-              <FormGroup
-                label="Ride date"
-                type="date"
-                name="date"
-                placeholderText="Select travel date"
-              />
-              <FormGroup
-                label="Number of seats available"
-                type="number"
-                min="1"
-                max="10"
-                default="2"
-              />
+              <FormGroup label="Ride date">
+                <DatePicker
+                  isClearable
+                  minDate={new Date()}
+                  selected={date}
+                  onChange={(date) => setDate(date)}
+                  placeholderText="Select the date of your ride"
+                  className="form__input"
+                />
+              </FormGroup>
+
+              <FormGroup label="Number of seats available">
+                <input
+                  type="number"
+                  id="seats"
+                  name="seats"
+                  placeholder="Destination location"
+                  min={1}
+                  max={10}
+                  className="form__input"
+                />
+              </FormGroup>
             </div>
 
-            <FormGroup
-              label="Car make and model"
-              type="text"
-              name="car"
-              placeholderText="Hyundai, Elantra"
-            />
+            <FormGroup label="Car make and model">
+              <input
+                type="text"
+                id="car"
+                name="car"
+                placeholder="Hyundai, Elantra"
+                className="form__input"
+              />
+            </FormGroup>
             <Button className="modal__button">Offer a ride</Button>
           </form>
         </div>
