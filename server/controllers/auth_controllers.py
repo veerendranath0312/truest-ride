@@ -1,3 +1,4 @@
+from flask import jsonify
 from models.user import User
 from services.auth_service import AuthService
 
@@ -55,16 +56,19 @@ class AuthController:
             user = User(email=email, full_name=full_name)
             user.save()
 
-            # Create a secure JWT token for the user and return it
-            return {
+            # Create a secure JWT token and store it in the cookies
+            response = jsonify({
                 'status': 'success',
                 'data': {
-                    'token': AuthService.get_auth_token(user.id),
                     'user': {
+                        'name': user.full_name,
                         'email': user.email
                     }
                 }
-            }, 200
+            })
+
+            AuthService.set_auth_cookies(response, user.id)
+            return response, 200
 
         except Exception as e:
             return {'status': 'fail', 'message': str(e)}, 500
@@ -116,15 +120,27 @@ class AuthController:
             if not user:
                 return {'status': 'fail', 'message': 'User not found'}, 404
 
-            # Create a secure JWT token for the user and return it
-            return {
+            # Create a secure JWT token and store it in the cookies
+            response = jsonify({
                 'status': 'success',
                 'data': {
-                    'token': AuthService.get_auth_token(user.id),
                     'user': {
+                        'name': user.full_name,
                         'email': user.email
                     }
                 }
-            }, 200
+            })
+
+            AuthService.set_auth_cookies(response, user.id)
+            return response, 200
         except Exception as e:
             return {'status': 'fail', 'message': str(e)}, 500
+
+    @staticmethod
+    def logout():
+        response = {
+            'status': 'success',
+            'message': 'Logged out successfully'
+        }
+        AuthService.clear_auth_cookies(response)
+        return response, 200

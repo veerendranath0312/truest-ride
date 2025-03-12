@@ -9,8 +9,16 @@ class Config:
     }
 
     # JWT configuration
+    JWT_COOKIE_SECURE = True if os.environ.get('FLASK_ENV') == 'PRODUCTION' else False   # Set to True in production for HTTPS
+    JWT_TOKEN_LOCATION = ['cookies']
+    JWT_ACCESS_COOKIE_PATH = '/api/v1'
+    JWT_ACCESS_CSRF_COOKIE_PATH = '/api/v1'
     JWT_SECRET_KEY = os.environ.get('SECRET_KEY')
-    JWT_ACCESS_TOKEN_EXPIRES = int(os.environ.get('ACCESS_TOKEN_EXPIRES', 3600)) # Default to 1 hour
+    JWT_ACCESS_TOKEN_EXPIRES = int(os.environ.get('ACCESS_TOKEN_EXPIRES', 3600))  # Default to 1 hour
+    JWT_COOKIE_SAMESITE = "None" if os.environ.get('FLASK_ENV') == 'PRODUCTION' else 'Lax'  # Set to None in production for CSRF
+    JWT_COOKIE_CSRF_PROTECT = True
+    JWT_COOKIE_REFRESH_SHORT_LIVED = True
+    JWT_COOKIE_REFRESH_TIME = int(os.environ.get('REFRESH_TIME', 5))  # Default to 5 minutes
     SECRET_SALT = os.environ.get('SECRET_SALT')
 
     # OTP configuration

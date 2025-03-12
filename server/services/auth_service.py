@@ -3,7 +3,7 @@ import secrets
 
 from flask import current_app
 from datetime import datetime, timedelta, timezone
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, set_access_cookies, unset_jwt_cookies
 from email_validator import validate_email, EmailNotValidError
 
 from models.otp_record import OTPRecord
@@ -103,6 +103,12 @@ class AuthService:
         return {'status': 'success', 'message': 'OTP verified successfully'}, 200
 
     @staticmethod
-    def get_auth_token(user_id):
+    def set_auth_cookies(response, user_id):
+        print('Generating token for user:', user_id)
         token = create_access_token(identity=str(user_id))
-        return token
+        print("Setting access cookies")
+        set_access_cookies(response, token)
+
+    @staticmethod
+    def clear_auth_cookies(response):
+        unset_jwt_cookies(response)
