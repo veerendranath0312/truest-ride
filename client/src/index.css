@@ -15,6 +15,7 @@
   --font-family-primary: "Inter", serif;
   --font-family-secondary: "Libre Baskerville", serif;
   --ui-outline: #383838;
+  --ui-outline-danger: rgba(225, 77, 77, 0.2);
   --transition-time: 0.25s;
 }
 
@@ -297,6 +298,10 @@ an .active class name for easy styling with CSS */
   margin-bottom: 15px;
 }
 
+.form__label--error {
+  color: var(--btn-danger);
+}
+
 .form__hero__text__title {
   font-family: var(--font-family-secondary);
   font-weight: 400;
@@ -315,6 +320,10 @@ an .active class name for easy styling with CSS */
   cursor: text;
 }
 
+.form__input--error {
+  border: 1px solid var(--btn-danger);
+}
+
 /* REACT DATEPICKER CUSTOME STYLES */
 .react-datepicker-wrapper {
   width: 100%;
@@ -330,6 +339,11 @@ an .active class name for easy styling with CSS */
 .form__input:focus,
 .form__input:hover {
   border: 1px solid var(--btn-primary);
+}
+
+.form__input--error:focus,
+.form__input--error:hover {
+  border: 1px solid var(--btn-danger);
 }
 
 .form__input::placeholder {
@@ -410,6 +424,24 @@ an .active class name for easy styling with CSS */
 
 .form__footer a:hover {
   color: var(--text-primary);
+}
+
+/* ========== ERROR NOTIFICATION STYLES ========== */
+.error {
+  border: 1px solid var(--ui-outline-danger);
+  padding: 14px;
+}
+
+.error__message {
+  color: var(--btn-danger);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 14px;
+}
+
+.error__message ion-icon {
+  font-size: 24px;
 }
 
 @media (max-width: 480px) {
