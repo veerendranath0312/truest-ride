@@ -1,7 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Routes, Route, Router } from "react-router";
-import "./index.css";
+import { BrowserRouter, Routes, Route } from "react-router";
 import App from "./App.jsx";
 import ScrollToTop from "./utils/ScrollToTop";
 import LandingPage from "./pages/LandingPage/LandingPage";
@@ -11,21 +10,31 @@ import Register from "./pages/Register/Register";
 import Home from "./pages/Home/Home";
 import Chats from "./pages/Chats/Chats";
 import Library from "./pages/Library/Library";
+import AuthLayout from "./components/AuthLayout";
 
-// TODO: Need to protect the routes that require authentication
+import "./index.css";
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<App />}>
-          <Route index={true} path="/" element={<LandingPage />} />
           <Route path="about" element={<About />} />
-          <Route path="signin" element={<SignIn />} />
-          <Route path="register" element={<Register />} />
-          <Route path="home" element={<Home />} />
-          <Route path="chats" element={<Chats />} />
-          <Route path="library" element={<Library />} />
+
+          {/* Redirects the SignIn and Register pages to Home page when the user is authenticated */}
+          <Route element={<AuthLayout requireAuth={false} />}>
+            <Route index element={<LandingPage />} />
+            <Route path="signin" element={<SignIn />} />
+            <Route path="register" element={<Register />} />
+          </Route>
+
+          {/* Protected Routes */}
+          <Route element={<AuthLayout requireAuth={true} />}>
+            <Route path="home" element={<Home />} />
+            <Route path="chats" element={<Chats />} />
+            <Route path="library" element={<Library />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

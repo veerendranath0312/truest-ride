@@ -1,19 +1,24 @@
 import { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router";
+import useAuthStore from "../store/useAuthStore";
+import { NavLink } from "react-router";
 
-function Navbar({ isAuthenticated = false }) {
+function Navbar() {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const signOut = useAuthStore((state) => state.signOut);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prevIsDropDownOpen) => !prevIsDropDownOpen);
   };
 
+  // Handler to close dropdown when user clicks outside the dropdown
   const handleClickOutside = (e) => {
     if (!e.target.closest(".navbar__link")) {
       setIsDropdownOpen(false);
     }
   };
 
+  // Close dropdown when user clicks outside the dropdown
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
 
@@ -29,7 +34,7 @@ function Navbar({ isAuthenticated = false }) {
       </NavLink>
       {isAuthenticated ? (
         <div className="navbar__links">
-          <NavLink to="/home" className="navbar__link" href="/home">
+          <NavLink to="/" className="navbar__link" href="/">
             Home
           </NavLink>
           <NavLink to="/chats" className="navbar__link" href="/chats">
@@ -48,27 +53,18 @@ function Navbar({ isAuthenticated = false }) {
                 : "navbar__link__profile__dropdown"
             }
           >
-            <Link
-              to="/profile"
-              className="navbar__link__profile__dropdown__item"
-            >
+            {/* <Link to="/profile" className="navbar__link__profile__dropdown__item">
               <ion-icon name="person-outline"></ion-icon>
               Profile
-            </Link>
-            <Link
-              to="/settings"
-              className="navbar__link__profile__dropdown__item"
-            >
+            </Link> */}
+            <div to="/settings" className="navbar__link__profile__dropdown__item">
               <ion-icon name="settings-outline"></ion-icon>
               Settings
-            </Link>
-            <Link
-              to="/logout"
-              className="navbar__link__profile__dropdown__item"
-            >
+            </div>
+            <div to="/logout" className="navbar__link__profile__dropdown__item" onClick={signOut}>
               <ion-icon name="log-out-outline"></ion-icon>
               Logout
-            </Link>
+            </div>
           </div>
         </div>
       ) : (
@@ -79,21 +75,11 @@ function Navbar({ isAuthenticated = false }) {
           <NavLink to="/signin" className="navbar__link" href="/login">
             Sign in
           </NavLink>
-          <NavLink
-            to="/register"
-            className="navbar__link navbar__link__join"
-            href="/register"
-          >
+          <NavLink to="/register" className="navbar__link navbar__link__join" href="/register">
             Join now
           </NavLink>
         </div>
       )}
-
-      {/* <NavLink to="/about" className={({ isActive }) =>
-            isActive ? "navbar__link--active" : "navbar__link"
-          } href="/about">
-          About
-        </NavLink> */}
     </div>
   );
 }

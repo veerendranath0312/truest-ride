@@ -154,6 +154,7 @@ ion-icon[name="person-circle-outline"] {
   display: flex;
   align-items: center;
   gap: 1rem;
+  cursor: pointer;
 }
 
 .navbar__link__profile__dropdown__item:not(:last-child) {
@@ -308,6 +309,13 @@ an .active class name for easy styling with CSS */
   font-size: 1.5rem;
 }
 
+.form__hero__text__subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 16px;
+  line-height: 145%;
+}
+
 .form__input {
   padding: 14px 16px;
   border: 1px solid var(--text-secondary);
@@ -430,6 +438,7 @@ an .active class name for easy styling with CSS */
 .error {
   border: 1px solid var(--ui-outline-danger);
   padding: 14px;
+  transform: all var(--transition-time) ease-in-out;
 }
 
 .error__message {
@@ -442,6 +451,20 @@ an .active class name for easy styling with CSS */
 
 .error__message ion-icon {
   font-size: 24px;
+}
+
+/* ========== LOADER STYLES ========== */
+.loader-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 480px) {
