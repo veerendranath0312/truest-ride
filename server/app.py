@@ -31,7 +31,7 @@ class FlaskApp:
     def configure_app(self):
         self.app.config.from_object(Config)
 
-        CORS(self.app)  # Enable CORS for all routes
+        CORS(self.app, supports_credentials=True, resources={r"/*": {"origins": "*"}})  # Enable CORS for all routes
 
         if os.environ.get('FLASK_ENV') == 'PRODUCTION':
             logging.baseConfig(
