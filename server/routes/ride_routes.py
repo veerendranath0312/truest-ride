@@ -26,14 +26,14 @@ def ride(ride_id):
         return RideController.book_ride(ride_id)
     if request.method == 'DELETE':
         return RideController.cancel_ride(ride_id)
-    if request.method == 'PUT':
+    if request.method == 'PATCH':
         return RideController.cancel_booking(ride_id)
     else:
         return {"message": "Invalid request method"}, 405
 
 
 @ride_bp.route('/search', methods=['GET'])
-@jwt_required()
+@jwt_required(optional=True)
 def search_rides():
     data = request.args
     return RideController.search_rides(data)
