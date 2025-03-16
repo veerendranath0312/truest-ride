@@ -7,7 +7,7 @@ class AuthController:
     @staticmethod
     def signup(data):
         try:
-            full_name = data.get('full_name')
+            full_name = data.get('fullname')
             email = data.get('email')
             # Check email in the data
             if not email or not full_name:
@@ -38,7 +38,7 @@ class AuthController:
     @staticmethod
     def verify_signup(data):
         try:
-            full_name = data.get('full_name')
+            full_name = data.get('fullname')
             email = data.get('email')
             otp = data.get('otp')
 
