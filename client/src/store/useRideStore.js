@@ -1,34 +1,214 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import axiosInstance from "../utils/axios";
+import useAuthStore from "./useAuthStore";
 
-// The useRideStore is a store that will handle the things related to rides
-// - Offering a ride
-//   - The user can offer a ride
-//   - It means creating a ride / storing the ride in the database
-//   - In order to make a request to the /rides endpoint, we need to send the Bearer token in the Authorization header
-// - Searching for a ride
-//   - The user can search for a ride
-//   - It means finding a ride / fetching the ride from the database
-//   - In order to make a request to the /rides/search endpoint, we may or may not send the Bearer token in the Authorization header
-//   - This particular route is a partially protected route
-//     - It means that the user can search for a ride without being authenticated
-//     - But if the user is authenticated, the user can see more details about the ride
-// - Booking the ride
-//  - The user can book a ride
-//  - It means updating the ride in the database
-//  - In order to make a request to the /rides/:id endpoint, we need to send the Bearer token in the Authorization header
-// - Cancelling the ride
-//  - The user can cancel a ride
-//  - It means deleting the ride from the database
-//  - In order to make a request to the /rides/:id endpoint, we need to send the Bearer token in the Authorization header
-// - Cancel booking
-//  - The user can cancel a booking
-//  - It means updating the ride in the database
-//  - In order to make a request to the /rides/:id endpoint, we need to send the Bearer token in the Authorization header
-// - Fetching rides that are offered by the user
-//   - The user can see the rides that are offered by the user
-//   - It means fetching the rides from the database
-//   - In order to make a request to the /rides/offered endpoint, we need to send the Bearer token in the Authorization header
-// - Fetching rides that are booked by the user
-//   - The user can see the rides that are booked by the user
-//   - It means fetching the rides from the database
-//   - In order to make a request to the /rides/booked endpoint, we need to send the Bearer token in the Authorization header
+const useRideStore = create(
+  persist(
+    (set, get) => ({
+      // State
+      rides: [],
+      offeredRides: [],
+      bookedRides: [],
+      isLoading: false,
+      isLoadingBookings: false,
+      isLoadingOfferings: false,
+
+      // Actions
+      // Offer a ride
+      offerRide: async (rideData) => {
+        set({ isLoading: true });
+        try {
+          const token = get().getToken();
+          const response = await axiosInstance.post("/rides", rideData, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.data.status === "success") {
+            set((state) => ({
+              offeredRides: [...state.offeredRides, response.data.data.ride],
+            }));
+          }
+        } catch (error) {
+          throw new Error(get().handleError(error));
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
+      // Search for a ride with pagination
+      // searchRides: async (searchParams, page = 1, limit = 10) => {
+      searchRides: async (searchParams) => {
+        set({ isLoading: true, rides: [] }); // Clear rides when searching
+        try {
+          const token = get().getToken();
+          const headers = token ? { Authorization: `Bearer ${token}` } : {};
+          const response = await axiosInstance.get("/rides/search", {
+            // params: { ...searchParams, page, limit },
+            params: { ...searchParams },
+            headers,
+          });
+
+          if (response.data.status === "success") {
+            set({ rides: response.data.data.rides });
+          }
+        } catch (error) {
+          console.log(error);
+          throw new Error(get().handleError(error));
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
+      // Book a ride
+      bookRide: async (rideId) => {
+        try {
+          const token = get().getToken();
+          const response = await axiosInstance.post(`/rides/${rideId}`, null, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.data.status === "success") {
+            set((state) => ({
+              bookedRides: [...state.bookedRides, response.data.data.ride],
+            }));
+          }
+        } catch (error) {
+          throw new Error(get().handleError(error));
+        }
+      },
+
+      // Cancel an offered ride
+      cancelRide: async (rideId) => {
+        set({ isLoading: true });
+        try {
+          const token = get().getToken();
+          const response = await axiosInstance.delete(`/rides/${rideId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.data.status === "success") {
+            set((state) => ({
+              offeredRides: state.offeredRides.filter((ride) => ride.id !== rideId),
+            }));
+          }
+        } catch (error) {
+          throw new Error(get().handleError(error));
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
+      // Cancel a bookking
+      cancelBooking: async (rideId) => {
+        set({ isLoading: true });
+        try {
+          const token = get().getToken();
+          const response = await axiosInstance.patch(
+            `/rides/cancel-booking/${rideId}`,
+            null,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (response.data.status === "success") {
+            set((state) => ({
+              bookedRides: state.bookedRides.filter((ride) => ride.id !== rideId),
+            }));
+          }
+        } catch (error) {
+          throw new Error(get().handleError(error));
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
+      // Fetch rides offered by the user with pagination
+      // fetchOfferedRides: async (page = 1, limit = 10) => {
+      fetchOfferedRides: async () => {
+        set({ isLoadingOfferings: true });
+        try {
+          const token = get().getToken();
+          const response = await axiosInstance.get("/rides/offered", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            // params: { page, limit },
+          });
+
+          if (response.data.status === "success") {
+            set({ offeredRides: response.data.data.rides });
+          }
+        } catch (error) {
+          throw new Error(get().handleError(error));
+        } finally {
+          set({ isLoadingOfferings: false });
+        }
+      },
+
+      // Fetch rides booked by the user with pagination
+      // fetchBookedRides: async (page = 1, limit = 10) => {
+      fetchBookedRides: async () => {
+        set({ isLoadingBookings: true });
+        try {
+          const token = get().getToken();
+          const response = await axiosInstance.get("/rides/booked", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            // params: { page, limit },
+          });
+
+          if (response.data.status === "success") {
+            set({ bookedRides: response.data.data.rides });
+          }
+        } catch (error) {
+          throw new Error(get().handleError(error));
+        } finally {
+          set({ isLoadingBookings: false });
+        }
+      },
+
+      // Utility: Get token from the auth store
+      getToken: () => {
+        return useAuthStore.getState().token || null;
+      },
+
+      // Reset state
+      resetState: () => {
+        set({ rides: [], offeredRides: [], bookedRides: [], isLoading: false });
+      },
+
+      // Utility: Handle errors
+      handleError: (error) => {
+        if (error.response) {
+          return error.response.data.message || "An error occurred.";
+        } else if (error.request) {
+          return "Network error. Please check your internet connection.";
+        } else {
+          return "An unexpected error occurred.";
+        }
+      },
+    }),
+    {
+      name: "ride-store",
+      partialize: (state) => ({
+        rides: state.rides,
+        offeredRides: state.offeredRides,
+        bookedRides: state.bookedRides,
+      }),
+    }
+  )
+);
+
+export default useRideStore;

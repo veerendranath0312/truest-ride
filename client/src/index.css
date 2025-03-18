@@ -434,22 +434,41 @@ an .active class name for easy styling with CSS */
   color: var(--text-primary);
 }
 
-/* ========== ERROR NOTIFICATION STYLES ========== */
-.error {
-  border: 1px solid var(--ui-outline-danger);
+/* ========== NOTIFICATION STYLES ========== */
+
+.notification {
   padding: 14px;
   transform: all var(--transition-time) ease-in-out;
 }
 
-.error__message {
-  color: var(--btn-danger);
+.home .notification {
+  margin-bottom: 24px;
+}
+
+.notification__success {
+  border: 1px solid rgba(51, 187, 122, 0.2);
+}
+
+.notification__error {
+  border: 1px solid var(--ui-outline-danger);
+}
+
+.notification__message {
   display: flex;
   align-items: center;
   gap: 15px;
   font-size: 14px;
 }
 
-.error__message ion-icon {
+.notification__success .notification__message {
+  color: var(--btn-secondary);
+}
+
+.notification__error .notification__message {
+  color: var(--btn-danger);
+}
+
+.notification__message ion-icon {
   font-size: 24px;
 }
 

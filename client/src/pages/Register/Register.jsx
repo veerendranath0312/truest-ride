@@ -5,7 +5,7 @@ import useAuthStore from "../../store/useAuthStore";
 import Navbar from "../../components/Navbar";
 import JoinUs from "../../components/JoinUs";
 import Footer from "../../components/Footer";
-import ErrorMessage from "../../components/ErrorMessage";
+import Notification from "../../components/Notification";
 import { validateEducationalEmail } from "../../utils/helpers";
 
 import newBeginningImage from "../../assets/New Beginnings.svg";
@@ -119,12 +119,12 @@ function Register() {
                 <div className="form__hero__text">
                   <h1 className="form__hero__text__title">Check your inbox</h1>
                   <p className="form__hero__text__subtitle">
-                    Enter the 6-digit code we sent to <b>{formData.email}</b> to finish your sign
-                    up.
+                    Enter the 6-digit code we sent to <b>{formData.email}</b> to finish
+                    your sign up.
                   </p>
                 </div>
 
-                {errorMessage && <ErrorMessage message={errorMessage} />}
+                {errorMessage && <Notification type="error" message={errorMessage} />}
 
                 <form className="form" onSubmit={handleVerifyOtp}>
                   <div className="form__group">
@@ -159,7 +159,7 @@ function Register() {
                   <h1 className="form__hero__text__title">Sign up</h1>
                 </div>
 
-                {errorMessage && <ErrorMessage message={errorMessage} />}
+                {errorMessage && <Notification type="error" message={errorMessage} />}
 
                 <form className="form" onSubmit={handleRegister}>
                   <div className="form__group">

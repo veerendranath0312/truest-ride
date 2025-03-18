@@ -23,16 +23,16 @@ class RideController:
 
             user = get_current_user()
 
-            # Parse the ride_date from the input data and convert it to UTC
-            ride_date = datetime.strptime(data['ride_date'], '%m-%d-%Y').replace(tzinfo=timezone.utc)
+            # Convert the ride_date to UTC
+            ride_date = datetime.fromisoformat(data['rideDate']).astimezone(timezone.utc)
 
             ride_obj = Ride(
-                from_location=data['from_location'],
-                to_location=data['to_location'],
+                from_location=data['from'],
+                to_location=data['to'],
                 ride_date=ride_date,
-                total_seats=data['total_seats'],
-                available_seats=data['total_seats'],
-                car_model=data['car_model'],
+                total_seats=data['totalSeats'],
+                available_seats=data['totalSeats'],
+                car_model=data['carModel'],
                 provider=user['id']
             )
             ride_obj.save()
@@ -166,10 +166,13 @@ class RideController:
     @staticmethod
     def search_rides(data):
         try:
-            from_location = data.get('from_location')
-            to_location = data.get('to_location')
-            start_date = data.get('start_date')
-            end_date = data.get('end_date')
+            # Convert the ride_date to UTC
+            from_location = data.get('from')
+            to_location = data.get('to')
+            start_date = datetime.fromisoformat(data.get('startDate')).astimezone(timezone.utc)
+            end_date = datetime.fromisoformat(data.get('endDate')).astimezone(timezone.utc)
+
+            print(from_location, to_location, start_date, end_date)
 
             query = {}
 
@@ -183,8 +186,79 @@ class RideController:
                 query['ride_date__gte'] = start_date
                 query['ride_date__lte'] = end_date
 
+            # Get the current_user
+            user = get_current_user()
+
+            # Exclude rides offered by the current_user
+            query['provider__ne'] = user.id
+
             rides = Ride.objects(**query)
 
+            return {
+                "status": "success",
+                "data": {
+                    "rides": [ride.to_json() for ride in rides]
+                }
+            }
+        except Exception as e:
+            return {"status": "fail", "message": str(e)}, 500
+
+    # Search rides to include pagination
+    # @staticmethod
+    # def search_rides(data):
+    #     try:
+    #         from_location = data.get('from_location')
+    #         to_location = data.get('to_location')
+    #         start_date = data.get('start_date')
+    #         end_date = data.get('end_date')
+    #         page = int(data.get('page', 1))
+    #         limit = int(data.get('limit', 10))
+    #
+    #         query = {}
+    #
+    #         if from_location:
+    #             query['from_location__icontains'] = from_location
+    #
+    #         if to_location:
+    #             query['to_location__icontains'] = to_location
+    #
+    #         if start_date and end_date:
+    #             query['ride_date__gte'] = start_date
+    #             query['ride_date__lte'] = end_date
+    #
+    #         rides = Ride.objects(**query).skip((page - 1) * limit).limit(limit)
+    #
+    #         return {
+    #             "status": "success",
+    #             "data": {
+    #                 "rides": [ride.to_json() for ride in rides],
+    #                 "page": page,
+    #                 "limit": limit,
+    #                 "total": Ride.objects(**query).count()
+    #             }
+    #         }
+    #     except Exception as e:
+    #         return {"status": "fail", "message": str(e)}, 500
+
+    @staticmethod
+    def get_offered_rides():
+        try:
+            user = get_current_user()
+            rides = Ride.objects(provider=user.id)
+            return {
+                "status": "success",
+                "data": {
+                    "rides": [ride.to_json() for ride in rides]
+                }
+            }
+        except Exception as e:
+            return {"status": "fail", "message": str(e)}, 500
+
+    @staticmethod
+    def get_booked_rides():
+        try:
+            user = get_current_user()
+            rides = Ride.objects(bookers=user.id)
             return {
                 "status": "success",
                 "data": {

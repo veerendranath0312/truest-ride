@@ -5,7 +5,7 @@ import useAuthStore from "../../store/useAuthStore";
 import Navbar from "../../components/Navbar";
 import JoinUs from "../../components/JoinUs";
 import Footer from "../../components/Footer";
-import ErrorMessage from "../../components/ErrorMessage";
+import Notification from "../../components/Notification";
 import { validateEducationalEmail } from "../../utils/helpers";
 
 import "./signin.css";
@@ -98,11 +98,12 @@ function SignIn() {
                 <div className="form__hero__text">
                   <h1 className="form__hero__text__title">Check your inbox</h1>
                   <p className="form__hero__text__subtitle">
-                    Enter the 6-digit code we sent to <b>{email}</b> to finish your sign in.
+                    Enter the 6-digit code we sent to <b>{email}</b> to finish your sign
+                    in.
                   </p>
                 </div>
 
-                {errorMessage && <ErrorMessage message={errorMessage} />}
+                {errorMessage && <Notification type="error" message={errorMessage} />}
 
                 <form className="form" onSubmit={handleVerifyOtp}>
                   <div className="form__group">
@@ -138,7 +139,7 @@ function SignIn() {
                   <h1 className="form__hero__text__title">Sign in</h1>
                 </div>
 
-                {errorMessage && <ErrorMessage message={errorMessage} />}
+                {errorMessage && <Notification type="error" message={errorMessage} />}
 
                 <form className="form" onSubmit={handleSignIn}>
                   <div className="form__group">

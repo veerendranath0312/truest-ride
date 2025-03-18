@@ -1,36 +1,13 @@
-import React from "react";
 import RidesListItem from "./RidesListItem";
 
 // TODO: Implement infinite scroll if the results are more than 10
-function RidesList() {
+// Or implement pagination
+function RidesList({ rides, setNotification }) {
   return (
     <div className="ride__search__results__container">
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
-      <RidesListItem />
+      {rides.map((ride) => (
+        <RidesListItem key={ride.id} ride={ride} setNotification={setNotification} />
+      ))}
     </div>
   );
 }

@@ -32,6 +32,12 @@
   margin-bottom: 24px;
 }
 
+.home__description {
+  padding: 1.5rem;
+  background-color: var(--bg-secondary);
+  border-radius: 4px;
+}
+
 /* ========== HOME OFFER STYLES ========== */
 .home__offer__button__container,
 .home__find__form {
@@ -146,6 +152,24 @@
   padding: 10px;
   display: block;
   border-radius: 2px;
+  cursor: pointer;
+  border: 1px solid var(--text-primary);
+  min-width: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all var(--transition-time) linear;
+}
+
+/* Styles for disabled button */
+.ride__search__results__item__button[disabled] {
+  cursor: not-allowed;
+  color: var(--text-primary);
+  border: 1px solid var(--text-primary);
+}
+
+.ride__search__results__item__button[disabled]:hover {
+  color: var(--text-secondary);
 }
 
 .ride__search__results__item__button:hover {
@@ -223,6 +247,12 @@
 
 .modal__button:hover {
   background: var(--btn-primary-hover);
+}
+.home__search--load {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
 }
 
 /* ========== RESPONSIVE ========== */
