@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { jwtDecode } from "jwt-decode";
 import axiosInstance from "../utils/axios";
+import useRideStore from "./useRideStore";
 
 const useAuthStore = create((set, get) => ({
   // State
@@ -135,6 +136,7 @@ const useAuthStore = create((set, get) => ({
   signOut: () => {
     set({ user: null, token: null, isAuthenticated: false, otpSent: false });
     localStorage.removeItem("authToken");
+    useRideStore.getState().resetState();
   },
 
   checkAuth: () => {
@@ -155,6 +157,7 @@ const useAuthStore = create((set, get) => ({
       const decoded = jwtDecode(token);
       const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
       return decoded.exp >= currentTime; // Check if token is still valid
+      // eslint-disable-next-line no-unused-vars
     } catch (err) {
       return false; // If decoding fails, consider the token invalid
     }
@@ -162,3 +165,5 @@ const useAuthStore = create((set, get) => ({
 }));
 
 export default useAuthStore;
+
+// TODO: Are we making sure that the user is logged out from the store when the token expires?

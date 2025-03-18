@@ -1,17 +1,4 @@
-import React from "react";
-
-const FormGroup = ({
-  label,
-  type = "text",
-  name,
-  value,
-  onChange,
-  options = [],
-  min = 1,
-  max = 10,
-  placeholderText,
-  children,
-}) => {
+const FormGroup = ({ label, name, children }) => {
   return (
     <div className="form__group">
       <label htmlFor={name} className="form__label">
