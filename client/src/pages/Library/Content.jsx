@@ -15,6 +15,8 @@ const Content = () => {
     fetchBookedRides,
     isLoadingBookings,
     isLoadingOfferings,
+    cancelRide,
+    cancelBooking,
   } = useRideStore();
   const [searchParams] = useSearchParams();
 
@@ -53,13 +55,16 @@ const Content = () => {
     <div className="library__content">
       {section === "bookings" ? (
         <>
+          {/* Bookings */}
+          {notification.message && (
+            <Notification type={notification.type} message={notification.message} />
+          )}
+
           {isLoadingBookings ? (
             <p className="library__content--description">
               <Loader size={18} className="loader-spin" /> &nbsp; Fetching your
               bookings...
             </p>
-          ) : notification.message ? (
-            <Notification type="error" message={notification.message} />
           ) : bookedRides.length === 0 ? (
             <p className="library__content--description">You have no bookings yet.</p>
           ) : (
@@ -70,7 +75,10 @@ const Content = () => {
                   date={formattedRideDate(ride.ride_date)}
                   from={capitalize(ride.from_location)}
                   to={capitalize(ride.to_location)}
+                  provider={ride.provider}
                   section="bookings"
+                  onCancel={() => cancelBooking(ride.id)}
+                  setNotification={setNotification}
                 />
               ))}
             </div>
@@ -78,13 +86,16 @@ const Content = () => {
         </>
       ) : (
         <>
+          {/* Offerings */}
+          {notification.message && (
+            <Notification type={notification.type} message={notification.message} />
+          )}
+
           {isLoadingOfferings ? (
             <p className="library__content--description">
               <Loader size={18} className="loader-spin" /> &nbsp; Fetching your
               offerings...
             </p>
-          ) : notification.message ? (
-            <Notification type="error" message={notification.message} />
           ) : offeredRides.length === 0 ? (
             <p className="library__content--description">
               You have not offered any rides yet.
@@ -99,6 +110,8 @@ const Content = () => {
                   to={capitalize(ride.to_location)}
                   totalSeats={ride.total_seats}
                   section="offerings"
+                  onCancel={() => cancelRide(ride.id)}
+                  setNotification={setNotification}
                 />
               ))}
             </div>

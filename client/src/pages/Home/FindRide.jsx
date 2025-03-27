@@ -21,7 +21,7 @@ function FindRide({
   const handleFormChange = (e) => {
     setFindRideFormData({
       ...findRideFormData,
-      [e.target.name]: e.target.value.toLowerCase(),
+      [e.target.name]: e.target.value,
     });
 
     setFormLabelErrors({
@@ -75,7 +75,11 @@ function FindRide({
     // Perform search
     try {
       setHasSearched(true);
-      await searchRides(findRideFormData);
+      await searchRides({
+        ...findRideFormData,
+        from: findRideFormData.from.toLowerCase(),
+        to: findRideFormData.to.toLowerCase(),
+      });
     } catch (error) {
       setNotification({ message: error.message, type: "error" });
     }

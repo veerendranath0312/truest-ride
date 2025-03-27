@@ -1,7 +1,9 @@
 from datetime import datetime, timezone
+from flask import jsonify
 from models.user import User
 from models.ride import Ride
 from flask_jwt_extended import get_current_user
+from mongoengine import Q
 
 class RideController:
 
@@ -94,6 +96,7 @@ class RideController:
                 return {"status": "fail", "message": "Ride not found"}, 404
 
             user = get_current_user()
+
             if user.to_json()['id'] != ride.to_json()['provider']:
                 return {"status": "fail", "message": "You are not authorized to cancel this ride"}, 403
 
@@ -137,7 +140,7 @@ class RideController:
                 'data': {
                     'ride': ride.to_json()
                 }
-            }
+            }, 200
         except Exception as e:
             return {"status": "fail", "message": str(e)}, 500
 
@@ -172,32 +175,61 @@ class RideController:
             start_date = datetime.fromisoformat(data.get('startDate')).astimezone(timezone.utc)
             end_date = datetime.fromisoformat(data.get('endDate')).astimezone(timezone.utc)
 
-            print(from_location, to_location, start_date, end_date)
-
-            query = {}
+            match_stage = {
+                'available_seats': {'$gt': 0}  # Filter out rides with zero available seats
+            }
 
             if from_location:
-                query['from_location__icontains'] = from_location
+                match_stage['from_location'] = {'$regex': from_location, '$options': 'i'}
 
             if to_location:
-                query['to_location__icontains'] = to_location
+                match_stage['to_location'] = {'$regex': to_location, '$options': 'i'}
 
             if start_date and end_date:
-                query['ride_date__gte'] = start_date
-                query['ride_date__lte'] = end_date
+                if start_date == end_date:
+                    match_stage['ride_date'] = {'$eq': start_date}
+                else:
+                    match_stage['ride_date'] = {'$gte': start_date, '$lte': end_date}
 
             # Get the current_user
             user = get_current_user()
+            match_stage['provider'] = {'$ne': user.id} # Exclude rides offered by the current_user
 
-            # Exclude rides offered by the current_user
-            query['provider__ne'] = user.id
+            rides = Ride.objects.aggregate([
+                {'$match': match_stage},
+                {
+                    '$lookup': {
+                        'from': 'users',
+                        'localField': 'provider',
+                        'foreignField': '_id',
+                        'as': 'provider_info'
+                    }
+                },
+                {'$unwind': '$provider_info'},
+                {
+                    '$project': {
+                        '_id': 0,
+                        'id': {'$toString': '$_id'},
+                        'from_location': 1,
+                        'to_location': 1,
+                        'ride_date': 1,
+                        'total_seats': 1,
+                        'available_seats': 1,
+                        'car_model': 1,
+                        'provider': {
+                            'id': {'$toString': '$provider_info._id'},
+                            'full_name': '$provider_info.full_name'
+                        },
+                        'bookers': 1
+                    }
+                }
+            ])
 
-            rides = Ride.objects(**query)
-
+            rides = list(rides)
             return {
                 "status": "success",
                 "data": {
-                    "rides": [ride.to_json() for ride in rides]
+                    "rides": rides,
                 }
             }
         except Exception as e:

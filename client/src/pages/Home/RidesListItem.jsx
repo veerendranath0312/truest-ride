@@ -38,8 +38,8 @@ function RidesListItem({ ride, setNotification }) {
         <p className="ride__search__results__item__description">
           Ride offered by{" "}
           <Link to="/username" className="username">
-            John Doe
-          </Link>{" "}
+            {capitalize(ride.provider.full_name)}
+          </Link>
         </p>
         <div className="ride_search__ressults__item__info">
           <p>
