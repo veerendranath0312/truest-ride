@@ -74,7 +74,7 @@ const useRideStore = create(
 
           if (response.data.status === "success") {
             set((state) => ({
-              // Add the booked rtde to the bookedRides array
+              // Add the booked ride to the bookedRides array
               bookedRides: [...state.bookedRides, response.data.data.ride],
 
               // update the rides array to decrement the available seats for the booked ride
