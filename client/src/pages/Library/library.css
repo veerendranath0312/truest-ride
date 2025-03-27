@@ -55,11 +55,8 @@
 /* BOOKING LIST STYLES */
 
 .list {
-  /* display: flex;
-  flex-direction: column;
-  gap: 1rem; */
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 1rem;
   padding: 1rem;
 }
@@ -91,10 +88,34 @@
   align-items: center;
   gap: 0.5rem;
 }
+
 .list__item__date {
   margin-bottom: 0.5rem;
 }
 
 .list__item__info .username {
-  text-decoration: underline;
+  font-weight: 500;
+}
+
+.list__item__button {
+  display: flex;
+  justify-content: center;
+  border: none;
+  outline: none;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--btn-primary);
+  color: var(--bg-primary);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition-time) linear;
+}
+
+.list__item__button:hover {
+  background-color: var(--btn-primary-hover);
+}
+
+.library__content .notification {
+  max-width: 400px;
+  margin: 0 auto;
 }

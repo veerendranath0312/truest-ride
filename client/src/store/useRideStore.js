@@ -56,7 +56,6 @@ const useRideStore = create(
             set({ rides: response.data.data.rides });
           }
         } catch (error) {
-          console.log(error);
           throw new Error(get().handleError(error));
         } finally {
           set({ isLoading: false });
@@ -75,7 +74,15 @@ const useRideStore = create(
 
           if (response.data.status === "success") {
             set((state) => ({
+              // Add the booked rtde to the bookedRides array
               bookedRides: [...state.bookedRides, response.data.data.ride],
+
+              // update the rides array to decrement the available seats for the booked ride
+              rides: state.rides.map((ride) =>
+                ride.id === rideId
+                  ? { ...ride, available_seats: ride.available_seats - 1 }
+                  : ride
+              ),
             }));
           }
         } catch (error) {
@@ -94,7 +101,7 @@ const useRideStore = create(
             },
           });
 
-          if (response.data.status === "success") {
+          if (response.status === 204) {
             set((state) => ({
               offeredRides: state.offeredRides.filter((ride) => ride.id !== rideId),
             }));
@@ -111,15 +118,11 @@ const useRideStore = create(
         set({ isLoading: true });
         try {
           const token = get().getToken();
-          const response = await axiosInstance.patch(
-            `/rides/cancel-booking/${rideId}`,
-            null,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+          const response = await axiosInstance.patch(`/rides/${rideId}`, null, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
           if (response.data.status === "success") {
             set((state) => ({
@@ -127,6 +130,13 @@ const useRideStore = create(
             }));
           }
         } catch (error) {
+          // Handle the case where the ride has already been cancelled by the rider
+          if (error.response && error.response.status === 404) {
+            set((state) => ({
+              bookedRides: state.bookedRides.filter((ride) => ride.id !== rideId),
+            }));
+            throw new Error("The ride has already been cancelled.");
+          }
           throw new Error(get().handleError(error));
         } finally {
           set({ isLoading: false });

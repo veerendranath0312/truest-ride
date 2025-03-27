@@ -1,19 +1,23 @@
-import { Navigate, Outlet } from "react-router";
+import { Navigate, Outlet, useLocation } from "react-router";
 import useAuthStore from "../store/useAuthStore";
 
 function AuthLayout({ requireAuth }) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const location = useLocation(); // Get the current location object
 
   // Protect routes that require authentication
-  // If the route requires authentication and the user is not authenticated, redirect to /signin
   if (requireAuth && !isAuthenticated) {
-    return <Navigate to="/signin" replace />;
+    // Redirect unauthenticated users to /signin and store the current location (including search params)
+    return <Navigate to="/signin" state={{ from: location }} replace />;
   }
 
-  // Redirect routes that are not protected
-  // If the route is public and the user is authenticated, redirect to the home page
+  // Redirect authenticated users accessing public routes
   if (!requireAuth && isAuthenticated) {
-    return <Navigate to="/home" replace />;
+    // Check if there's a stored "from" location in state
+    const lastVisitedRoute = location.state?.from
+      ? `${location.state.from.pathname}${location.state.from.search || ""}`
+      : "/home";
+    return <Navigate to={lastVisitedRoute} replace />;
   }
 
   // Render child routes if no redirection is needed
