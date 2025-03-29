@@ -21,11 +21,24 @@ class UserController:
         }, 200
 
     @staticmethod
-    def update_user(user_id, data):
+    def update_user(user_id, data): 
         # Check if the user_id and data exists
+        if not user_id or not data:
+            return {"status": "error", "message": "User ID and update data required"}, 400
         # Check if the user_id exists in the database
+        user = User.objects(id=user_id).first()
+        if not user:
+            return {"status": "error", "message": "User not found"}, 404
+        
         # Check if the data is valid
+        valid_fields = {"name", "email", "phone"}  # Add more fields as necessary
+        update_data = {key: value for key, value in data.items() if key in valid_fields}
+        
+        if not update_data:
+            return {"status": "error", "message": "No valid fields provided for update"}, 400
         # Update the user details
+        user.update(**update_data)
+        return {"status": "success", "message": "User updated successfully"}, 200
         # Return appropriate response with status code
         pass
 
