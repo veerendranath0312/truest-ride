@@ -1,9 +1,10 @@
 from datetime import datetime, timezone
-from flask import jsonify
 from models.user import User
 from models.ride import Ride
+from models.chat import Chat, Message
 from flask_jwt_extended import get_current_user
-from mongoengine import Q
+
+from controllers.chat_controllers import ChatController
 
 class RideController:
 
@@ -40,9 +41,14 @@ class RideController:
             ride_obj.save()
 
             # After creating the ride, attach the ride to the user object as well
-            user = User.objects(id=user['id']).first()
+            # user = User.objects(id=user['id']).first()
             user.offered_rides.append(ride_obj)
             user.save()
+
+            # Create chat and add provider to it
+            chat_response = ChatController.create_chat(str(ride_obj.id))
+            if chat_response[0]['status'] == 'success':
+                ChatController.join_chat(chat_response[0]['data']['chat_id'])
 
             return {
                 'status': 'success',
@@ -77,6 +83,11 @@ class RideController:
             ride.available_seats -= 1
             ride.save()
 
+            # Add booker to chat associated with the ride
+            chat = Chat.objects(ride=ride).first()
+            if chat:
+                ChatController.join_chat(str(chat.id))
+
             return {
                 'status': 'success',
                 'data': { 'ride': ride.to_json() }
@@ -99,6 +110,11 @@ class RideController:
 
             if user.to_json()['id'] != ride.to_json()['provider']:
                 return {"status": "fail", "message": "You are not authorized to cancel this ride"}, 403
+
+            # Delete the chat associated with the ride
+            chat = Chat.objects(ride=ride).first()
+            if chat:
+                ChatController.delete_chat(str(chat.id))
 
             # Update the offered_rides array in the user object
             user.offered_rides.remove(ride)
@@ -134,6 +150,12 @@ class RideController:
             ride.bookers.remove(user)
             ride.available_seats += 1
             ride.save()
+
+            # Remove booker from the ride's chat
+            # Remove booker from chat
+            chat = Chat.objects(ride=ride).first()
+            if chat:
+                ChatController.leave_chat(str(chat.id))
 
             return {
                 'status': 'success',

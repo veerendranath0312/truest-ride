@@ -196,7 +196,14 @@ const useRideStore = create(
 
       // Reset state
       resetState: () => {
-        set({ rides: [], offeredRides: [], bookedRides: [], isLoading: false });
+        set({
+          rides: [],
+          offeredRides: [],
+          bookedRides: [],
+          isLoading: false,
+          isLoadingBookings: false,
+          isLoadingOfferings: false,
+        });
       },
 
       // Utility: Handle errors
