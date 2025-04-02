@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
 from controllers.user_controllers import UserController
-
+from controllers.chat_controllers import ChatController
 user_bp = Blueprint('users', __name__)
 
 @user_bp.route('/', methods=['GET'])
@@ -25,6 +25,16 @@ def user(user_id):
             "status": "error",
             "message": "Invalid request method"
         }, 405
+
+@user_bp.route('/chats', methods=['GET'])
+@jwt_required()
+def get_user_chats():
+    return ChatController.get_user_chats()
+
+@user_bp.route('/chats/<string:chat_id>', methods=['GET'])
+@jwt_required()
+def get_chat_messages(chat_id):
+    return ChatController.get_chat_messages(chat_id)
 
 @user_bp.route('/<string:user_id>/initiate-delete', methods=['DELETE'])
 @jwt_required()

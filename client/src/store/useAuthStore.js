@@ -2,18 +2,52 @@ import { create } from "zustand";
 import { jwtDecode } from "jwt-decode";
 import axiosInstance from "../utils/axios";
 import useRideStore from "./useRideStore";
+import useChatStore from "./useChatStore";
 
 const useAuthStore = create((set, get) => ({
   // State
   user: null,
   otpSent: false,
-  token: localStorage.getItem("authToken") || null, // Initialize from local storage
+  token: localStorage.getItem("authToken") || null,
   isAuthenticated: false,
   isSigningIn: false,
   isSigningUp: false,
+  tokenExpirationTimer: null,
 
   // Actions
   setOtpSent: (otpSent) => set({ otpSent }),
+
+  setupTokenExpirationTimer: (token) => {
+    // Clear any existing timer
+    const currentTimer = get().tokenExpirationTimer;
+    if (currentTimer) {
+      clearTimeout(currentTimer);
+    }
+
+    try {
+      const decoded = jwtDecode(token);
+      const expirationTime = decoded.exp * 1000; // Convert to milliseconds
+      const currentTime = Date.now();
+      const timeUntilExpiration = expirationTime - currentTime;
+
+      if (timeUntilExpiration <= 0) {
+        // Token is already expired
+        get().handleTokenExpiration();
+        return;
+      }
+
+      // Set new timer
+      const timer = setTimeout(() => {
+        get().signOut();
+      }, timeUntilExpiration);
+
+      set({ tokenExpirationTimer: timer });
+    } catch (err) {
+      // If decoding fails, consider the token invalid
+      get().signOut();
+      throw new Error(err.message);
+    }
+  },
 
   signIn: async (email) => {
     set({ isSigningIn: true });
@@ -25,13 +59,14 @@ const useAuthStore = create((set, get) => ({
       }
     } catch (error) {
       if (error.response) {
-        // Server-side error
-        throw new Error(error.response.data.message || "An error occurred while sending OTP.");
+        throw new Error(
+          error.response.data.message || "An error occurred while sending OTP."
+        );
       } else if (error.request) {
-        // Network error
-        throw new Error("Network error. Please check your internet connection and try again.");
+        throw new Error(
+          "Network error. Please check your internet connection and try again."
+        );
       } else {
-        // Unexpected error
         throw new Error("An unexpected error occurred. Please try again.");
       }
     } finally {
@@ -46,8 +81,9 @@ const useAuthStore = create((set, get) => ({
 
       if (response.data.status === "success") {
         const { token, user } = response.data.data;
+        get().setupTokenExpirationTimer(token);
 
-        // Save token to local storage
+        // Save token to local storage and update state
         set({
           token,
           user,
@@ -55,18 +91,20 @@ const useAuthStore = create((set, get) => ({
           otpSent: false,
         });
         localStorage.setItem("authToken", token);
+
+        // Initialize socket connection after successful sign in
+        useChatStore.getState().initializeSocket();
       } else {
         throw new Error(response.data.message);
       }
     } catch (error) {
       if (error.response) {
-        // Server-side error
         throw new Error(error.response.data.message || "Failed to verify OTP.");
       } else if (error.request) {
-        // Network error
-        throw new Error("Network error. Please check your internet connection and try again.");
+        throw new Error(
+          "Network error. Please check your internet connection and try again."
+        );
       } else {
-        // Unexpected error
         throw new Error("An unexpected error occurred. Please try again.");
       }
     } finally {
@@ -84,13 +122,14 @@ const useAuthStore = create((set, get) => ({
       }
     } catch (error) {
       if (error.response) {
-        // Server-side error
-        throw new Error(error.response.data.message || "An error occurred while sending OTP.");
+        throw new Error(
+          error.response.data.message || "An error occurred while sending OTP."
+        );
       } else if (error.request) {
-        // Network error
-        throw new Error("Network error. Please check your internet connection and try again.");
+        throw new Error(
+          "Network error. Please check your internet connection and try again."
+        );
       } else {
-        // Unexpected error
         throw new Error("An unexpected error occurred. Please try again.");
       }
     } finally {
@@ -101,12 +140,17 @@ const useAuthStore = create((set, get) => ({
   verifySignUp: async (fullname, email, otp) => {
     set({ isSigningUp: true });
     try {
-      const response = await axiosInstance.post("/auth/verify-signup", { fullname, email, otp });
+      const response = await axiosInstance.post("/auth/verify-signup", {
+        fullname,
+        email,
+        otp,
+      });
 
       if (response.data.status === "success") {
         const { token, user } = response.data.data;
+        get().setupTokenExpirationTimer(token);
 
-        // Save token to local storage
+        // Save token to local storage and update state
         set({
           token,
           user,
@@ -114,18 +158,20 @@ const useAuthStore = create((set, get) => ({
           otpSent: false,
         });
         localStorage.setItem("authToken", token);
+
+        // Initialize socket connection after successful sign up
+        useChatStore.getState().initializeSocket();
       } else {
         throw new Error(response.data.message);
       }
     } catch (error) {
       if (error.response) {
-        // Server-side error
         throw new Error(error.response.data.message || "Failed to verify OTP.");
       } else if (error.request) {
-        // Network error
-        throw new Error("Network error. Please check your internet connection and try again.");
+        throw new Error(
+          "Network error. Please check your internet connection and try again."
+        );
       } else {
-        // Unexpected error
         throw new Error("An unexpected error occurred. Please try again.");
       }
     } finally {
@@ -134,9 +180,28 @@ const useAuthStore = create((set, get) => ({
   },
 
   signOut: () => {
-    set({ user: null, token: null, isAuthenticated: false, otpSent: false });
+    // Disconnect socket connection before signing out
+    useChatStore.getState().disconnectSocket();
+
+    // Clear token expiration timer
+    const currentTimer = get().tokenExpirationTimer;
+    if (currentTimer) {
+      clearTimeout(currentTimer);
+    }
+
+    // Clear local storage and reset state
     localStorage.removeItem("authToken");
+    set({
+      user: null,
+      token: null,
+      isAuthenticated: false,
+      otpSent: false,
+      tokenExpirationTimer: null,
+    });
+
+    // Reset other stores
     useRideStore.getState().resetState();
+    useChatStore.getState().resetState();
   },
 
   checkAuth: () => {
@@ -144,10 +209,17 @@ const useAuthStore = create((set, get) => ({
     if (token) {
       const isTokenValid = get().isTokenValid(token);
       if (isTokenValid) {
+        // Update axios default headers
+        axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+        // Setup expiration timer and update state
+        get().setupTokenExpirationTimer(token);
         set({ token, isAuthenticated: true });
+
+        // Initialize socket connection if token is valid
+        useChatStore.getState().initializeSocket();
       } else {
-        set({ token: null, isAuthenticated: false });
-        localStorage.removeItem("authToken");
+        get().signOut();
       }
     }
   },
@@ -156,7 +228,7 @@ const useAuthStore = create((set, get) => ({
     try {
       const decoded = jwtDecode(token);
       const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-      return decoded.exp >= currentTime; // Check if token is still valid
+      return decoded.exp > currentTime; // Check if token is still valid
       // eslint-disable-next-line no-unused-vars
     } catch (err) {
       return false; // If decoding fails, consider the token invalid
@@ -165,5 +237,3 @@ const useAuthStore = create((set, get) => ({
 }));
 
 export default useAuthStore;
-
-// TODO: Are we making sure that the user is logged out from the store when the token expires?
