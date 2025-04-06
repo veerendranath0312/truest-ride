@@ -460,6 +460,10 @@ an .active class name for easy styling with CSS */
   font-size: 14px;
 }
 
+.home .notification__message {
+  margin-bottom: 0;
+}
+
 .notification__success .notification__message {
   color: var(--btn-secondary);
 }

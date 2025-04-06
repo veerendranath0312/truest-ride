@@ -1,11 +1,11 @@
 import os
 import logging
 
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 from dotenv import load_dotenv
-from flask_jwt_extended import JWTManager
-from flask_socketio import SocketIO
+from flask_jwt_extended import JWTManager, verify_jwt_in_request, get_jwt_identity, get_current_user
+from flask_socketio import SocketIO, disconnect
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from db.db import DBManager
@@ -22,8 +22,13 @@ class FlaskApp:
     def __init__(self):
         load_dotenv()  # Load environment variables
         self.app = Flask(__name__)
-        self.socketio = SocketIO(self.app, cors_allowed_origins="*")
+
+        # Configure app before initializing extensions
         self.configure_app()
+
+        # Initialize Socket.IO with explicit CORS settings
+        self.socketio = SocketIO(self.app, cors_allowed_origins="*")
+
         self.db = DBManager.initialize_db(self.app)
         self.jwt = JWTManager(self.app)
         self.mail_service = MailService()
@@ -33,6 +38,7 @@ class FlaskApp:
         self.setup_jwt_callbacks()
         self.register_socketio_events()
         self.setup_scheduler()
+        self.app.user_socket_map = {}  # Map user_ids to socket_ids
 
     def configure_app(self):
         self.app.config.from_object(Config)
@@ -42,7 +48,6 @@ class FlaskApp:
              supports_credentials=True,
              resources={r"/*": {
                 "origins": "*",
-                 "max_age": 3600, # Cache preflight requests for 1 hour
              }})
 
         if os.environ.get('FLASK_ENV') == 'PRODUCTION':
@@ -57,11 +62,46 @@ class FlaskApp:
     def register_socketio_events(self):
         @self.socketio.on('connect')
         def handle_connect():
-            print("Client connected")
+            try:
+                token = request.args.get('token')
+                if not token:
+                    print("No token provided")
+                    disconnect()
+                    return False
+
+                request.headers = {'Authorization': f'Bearer {token}'}
+                verify_jwt_in_request()
+                user_id = get_jwt_identity()
+                user = User.objects(id=user_id).first()
+
+                if not user:
+                    print("User not found")
+                    disconnect()
+                    return False
+
+                # Store the user's socket connection
+                self.app.user_socket_map[str(user.id)] = request.sid
+                print(f"User {user.id} connected with socket ID: {request.sid}")
+                return True
+            except Exception as e:
+                print(f"Connection authentication failed: {str(e)}")
+                disconnect()
+                return False
 
         @self.socketio.on('disconnect')
         def handle_disconnect():
-            print("Client disconnected")
+            try:
+                sid = request.sid
+                # Find and remove the user from the socket map
+                user_id = None
+                for uid, socket_sid in self.app.user_socket_map.items():
+                    if socket_sid == sid:
+                        user_id = uid
+                        del self.app.user_socket_map[uid]
+                        break
+                print(f"Client disconnected: {sid} (User ID: {user_id})")
+            except Exception as e:
+                print(f"Error in handle_disconnect: {str(e)}")
 
         @self.socketio.on('join_chat')
         def handle_join_chat(data):
@@ -71,9 +111,36 @@ class FlaskApp:
         def handle_leave_chat(data):
             ChatController.leave_chat(data['chat_id'])
 
+        def authenticate_socket(data=None):
+            try:
+                # First try to get token from data if provided
+                token = data.get('token') if data else None
+                # If not in data, try to get from connection query
+                if not token:
+                    token = request.args.get('token')
+                if not token:
+                    return False
+
+                # Set token in request context
+                request.headers = {'Authorization': f'Bearer {token}'}
+                verify_jwt_in_request()
+                return True
+            except Exception as e:
+                return False
+
         @self.socketio.on('send_message')
         def handle_send_message(data):
-            ChatController.send_message(data)
+            try:
+                print(f"Received message data: {data}")
+                if not authenticate_socket(data):
+                    return {'status': 'fail', 'message': 'Authentication required'}, 401
+
+                result = ChatController.send_message(data)
+                print(f"Send message result: {result}")
+                return result
+            except Exception as e:
+                print(f"Error in handle_send_message: {str(e)}")
+                return {'status': 'fail', 'message': str(e)}
 
         @self.socketio.on('delete_chat')
         def handle_delete_chat(data):

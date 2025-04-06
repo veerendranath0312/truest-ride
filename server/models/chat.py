@@ -30,6 +30,10 @@ class Chat(Document):
             "users": [{"id": str(user.id), "full_name": user.full_name} for user in self.users]
         }
 
+    def get_participant_ids(self):
+        """Return list of user IDs who are participants in this chat"""
+        return [str(user.id) for user in self.users]
+
 class Message(Document):
     chat = ReferenceField('Chat', required=True)
     sender = ReferenceField('User', required=False) # Optional for system messages

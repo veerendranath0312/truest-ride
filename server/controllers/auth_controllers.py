@@ -61,7 +61,9 @@ class AuthController:
                 'data': {
                     'token': AuthService.get_auth_token(user.id),
                     'user': {
-                        'email': user.email
+                        'id': str(user.id),
+                        'email': user.email,
+                        'full_name': user.full_name
                     }
                 }
             }, 200
@@ -122,7 +124,9 @@ class AuthController:
                 'data': {
                     'token': AuthService.get_auth_token(user.id),
                     'user': {
-                        'email': user.email
+                        'id': str(user.id),
+                        'email': user.email,
+                        'full_name': user.full_name
                     }
                 }
             }, 200

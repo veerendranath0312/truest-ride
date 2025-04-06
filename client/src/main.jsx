@@ -33,6 +33,7 @@ createRoot(document.getElementById("root")).render(
           <Route element={<AuthLayout requireAuth={true} />}>
             <Route path="home" element={<Home />} />
             <Route path="chats" element={<Chats />} />
+            <Route path="chats/:chatId" element={<Chats />} />
             <Route path="library" element={<Library />} />
           </Route>
         </Route>

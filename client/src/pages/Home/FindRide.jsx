@@ -75,10 +75,12 @@ function FindRide({
     // Perform search
     try {
       setHasSearched(true);
+      setNotification({ message: "", type: "" }); // Clear notification when starting new search
+
       await searchRides({
         ...findRideFormData,
-        from: findRideFormData.from.toLowerCase(),
-        to: findRideFormData.to.toLowerCase(),
+        from: findRideFormData.from.toLowerCase().trim(),
+        to: findRideFormData.to.toLowerCase().trim(),
       });
     } catch (error) {
       setNotification({ message: error.message, type: "error" });

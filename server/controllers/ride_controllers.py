@@ -30,8 +30,8 @@ class RideController:
             ride_date = datetime.fromisoformat(data['rideDate']).astimezone(timezone.utc)
 
             ride_obj = Ride(
-                from_location=data['from'],
-                to_location=data['to'],
+                from_location=data['from'].lower().title(),
+                to_location=data['to'].lower().title(),
                 ride_date=ride_date,
                 total_seats=data['totalSeats'],
                 available_seats=data['totalSeats'],
@@ -41,14 +41,11 @@ class RideController:
             ride_obj.save()
 
             # After creating the ride, attach the ride to the user object as well
-            # user = User.objects(id=user['id']).first()
             user.offered_rides.append(ride_obj)
             user.save()
 
             # Create chat and add provider to it
-            chat_response = ChatController.create_chat(str(ride_obj.id))
-            if chat_response[0]['status'] == 'success':
-                ChatController.join_chat(chat_response[0]['data']['chat_id'])
+            ChatController.create_chat(str(ride_obj.id))
 
             return {
                 'status': 'success',
@@ -213,9 +210,11 @@ class RideController:
                 else:
                     match_stage['ride_date'] = {'$gte': start_date, '$lte': end_date}
 
+
             # Get the current_user
             user = get_current_user()
             match_stage['provider'] = {'$ne': user.id} # Exclude rides offered by the current_user
+            print(match_stage)
 
             rides = Ride.objects.aggregate([
                 {'$match': match_stage},
@@ -242,12 +241,14 @@ class RideController:
                             'id': {'$toString': '$provider_info._id'},
                             'full_name': '$provider_info.full_name'
                         },
-                        'bookers': 1
+                        'bookers': '$bookerStringIds'
                     }
                 }
             ])
 
             rides = list(rides)
+            print("Ride details: ", rides)
+
             return {
                 "status": "success",
                 "data": {
@@ -255,6 +256,7 @@ class RideController:
                 }
             }
         except Exception as e:
+            print("Error from search controller: ", e)
             return {"status": "fail", "message": str(e)}, 500
 
     # Search rides to include pagination

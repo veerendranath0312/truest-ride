@@ -1,46 +1,53 @@
 import { useState, useEffect } from "react";
-import { MoreVertical, LogOut, Trash2, MapPin, CalendarDays, Loader } from "lucide-react";
+import { useNavigate } from "react-router";
+import { MoreVertical, Trash2, MapPin, CalendarDays, Loader2 } from "lucide-react";
 import useChatStore from "../../store/useChatStore";
 import { formattedRideDate, capitalize, truncateNames } from "../../utils/helpers";
 
 function ChatList({ chats, isLoading }) {
+  const navigate = useNavigate();
   const { currentChat, setCurrentChat } = useChatStore();
   const [activeDropdown, setActiveDropdown] = useState(null);
 
-  // Handler to close dropdown when clicking outside
-  const handleClickOutside = (e) => {
-    if (!e.target.closest(".chat-list__item-actions")) {
-      setActiveDropdown(null);
-    }
-  };
-
+  // Close dropdown when user clicks outside the dropdown
   useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
+    const handleClickOutside = (e) => {
+      if (!e.target.closest(".chat-list__item-actions")) {
+        setActiveDropdown(null);
+      }
     };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  const toggleDropdown = (chatId) => {
+  const toggleDropdown = (e, chatId) => {
+    e.stopPropagation();
     setActiveDropdown(activeDropdown === chatId ? null : chatId);
   };
 
-  const handleLeaveChat = async (chatId) => {
-    console.log("Leaving chat: ", chatId);
-  };
-
-  const handleDeleteChat = async (chatId) => {
-    console.log("Deleting chat: ", chatId);
-  };
-
   const handleChatSelect = (chat) => {
-    // If clicking the same chat, deselect it
     if (currentChat?.id === chat.id) {
       setCurrentChat(null);
+      navigate("/chats");
     } else {
       setCurrentChat(chat);
+      navigate(`/chats/${chat.id}`);
     }
   };
+
+  // const handleDeleteChat = async (e, chatId) => {
+  //   e.stopPropagation();
+  //   try {
+  //     await deleteChat(chatId);
+  //     if (currentChat?.id === chatId) {
+  //       navigate("/chats");
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to delete chat:", error);
+  //   }
+  //   setActiveDropdown(null);
+  // };
 
   return (
     <div className="chat-list">
@@ -50,7 +57,8 @@ function ChatList({ chats, isLoading }) {
       <div className="chat-list__content">
         {isLoading ? (
           <div className="chat-list__loading">
-            <Loader size={20} className="loader-spin" />
+            <Loader2 size={20} className="loader-spin" />
+            &nbsp;
           </div>
         ) : chats?.length === 0 ? (
           <div className="chat-list__empty">
@@ -83,31 +91,20 @@ function ChatList({ chats, isLoading }) {
                   </div>
                 </div>
                 <div className="chat-list__item-actions">
-                  <div onClick={() => toggleDropdown(chat)}>
+                  <div onClick={(e) => toggleDropdown(e, chat.id)}>
                     <MoreVertical size={24} />
                   </div>
-                  <div
-                    className={
-                      activeDropdown === chat
-                        ? "chat-list__item-dropdown active"
-                        : "chat-list__item-dropdown"
-                    }
-                  >
-                    <div
-                      className="chat-list__item-dropdown__item"
-                      onClick={() => handleLeaveChat(chat)}
-                    >
-                      <LogOut size={16} />
-                      Leave chat
+                  {activeDropdown === chat.id && (
+                    <div className="chat-list__item-dropdown">
+                      <div
+                        className="chat-list__item-dropdown__item"
+                        // onClick={(e) => handleDeleteChat(e, chat.id)}
+                      >
+                        <Trash2 size={16} />
+                        Delete chat
+                      </div>
                     </div>
-                    <div
-                      className="chat-list__item-dropdown__item"
-                      onClick={() => handleDeleteChat(chat)}
-                    >
-                      <Trash2 size={16} />
-                      Delete chat
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             ))}

@@ -16,73 +16,93 @@ const useChatStore = create((set, get) => ({
   // Actions
   initializeSocket: () => {
     let { socket } = get();
+    const token = useAuthStore.getState().token;
 
-    // If socket is null or disconnected, create a new one
-    if (!socket) {
-      socket = io("http://127.0.0.1:5000");
-      set({ socket });
+    // Disconnect existing socket if it exists
+    if (socket) {
+      socket.disconnect();
+      socket.removeAllListeners();
     }
 
-    // Only set up listeners if they haven't been set up yet
-    if (socket && !socket._hasConnected) {
-      socket.on("connect", () => {
-        set({ isConnected: true });
-        socket._hasConnected = true;
-      });
+    // Create new socket with proper configuration
+    socket = io("http://127.0.0.1:5000", {
+      query: { token },
+      transports: ["websocket", "polling"],
+      reconnection: true,
+      reconnectionAttempts: 5,
+    });
 
-      socket.on("disconnect", () => {
-        set({ isConnected: false });
-      });
+    socket.on("connect", () => {
+      set({ isConnected: true });
+    });
 
-      socket.on("new_message", (message) => {
-        set((state) => ({
-          messages: [...state.messages, message],
-        }));
-      });
+    socket.on("connect_error", () => {
+      set({ isConnected: false });
+    });
 
-      socket.on("user_joined", (data) => {
-        set((state) => ({
-          messages: [
-            ...state.messages,
-            {
-              content: `${data.user} joined the chat`,
-              timestamp: new Date().toISOString(),
-              type: "system",
-            },
-          ],
-        }));
-      });
+    socket.on("disconnect", () => {
+      set({ isConnected: false });
+    });
 
-      socket.on("user_left", (data) => {
-        set((state) => ({
-          messages: [
-            ...state.messages,
-            {
-              content: `${data.user} left the chat`,
-              timestamp: new Date().toISOString(),
-              type: "system",
-            },
-          ],
-        }));
-      });
+    socket.on("new_message", (message) => {
+      const currentChat = get().currentChat;
 
-      socket.on("chat_deleted", (data) => {
-        set((state) => ({
-          chats: state.chats.filter((chat) => chat.id !== data.chat_id),
-          currentChat: state.currentChat !== data.chat_id ? state.currentChat : null,
-          messages: state.currentChat !== data.chat_id ? state.messages : [],
-        }));
-      });
+      if (currentChat && message.chat === currentChat.id) {
+        set((state) => {
+          // Simpler deduplication based only on message ID
+          const messageExists = state.messages.some((m) => m.id === message.id);
 
-      socket.on("message_history", (messages) => {
-        set({ messages });
-      });
-    }
+          if (!messageExists) {
+            const newMessages = [...state.messages, message];
+            return { messages: newMessages };
+          }
+          return state;
+        });
+      }
+    });
 
-    // Connect the socket
-    if (socket && !socket.connected) {
-      socket.connect();
-    }
+    socket.on("user_joined", (data) => {
+      console.log("User joined:", data);
+      set((state) => ({
+        messages: [
+          ...state.messages,
+          {
+            content: `${data.user} joined the chat`,
+            timestamp: new Date().toISOString(),
+            type: "system",
+          },
+        ],
+      }));
+    });
+
+    socket.on("user_left", (data) => {
+      set((state) => ({
+        messages: [
+          ...state.messages,
+          {
+            content: `${data.user} left the chat`,
+            timestamp: new Date().toISOString(),
+            type: "system",
+          },
+        ],
+      }));
+    });
+
+    socket.on("chat_deleted", (data) => {
+      set((state) => ({
+        chats: state.chats.filter((chat) => chat.id !== data.chat_id),
+        currentChat: state.currentChat !== data.chat_id ? state.currentChat : null,
+        messages: state.currentChat !== data.chat_id ? state.messages : [],
+      }));
+    });
+
+    socket.on("message_history", (messages) => {
+      console.log("Received message history:", messages);
+      set({ messages });
+    });
+
+    socket.connect();
+    set({ socket });
   },
 
   disconnectSocket: () => {
@@ -114,7 +134,6 @@ const useChatStore = create((set, get) => ({
         },
       });
 
-      console.log(response.data.data);
       if (response.data.status === "success") {
         set({ chats: response.data.data.chats });
       }
@@ -164,7 +183,27 @@ const useChatStore = create((set, get) => ({
         throw new Error("Socket connection not initialized");
       }
 
-      socket.emit("send_message", { chat_id: chatId, message });
+      const token = useAuthStore.getState().token;
+      if (!token) {
+        throw new Error("No authentication token available");
+      }
+
+      const messageData = {
+        chat_id: chatId,
+        message: message,
+        token: token, // Include token with message
+      };
+
+      // Emit the message and wait for acknowledgment
+      return new Promise((resolve, reject) => {
+        socket.emit("send_message", messageData, (response) => {
+          if (response && response.status === "success") {
+            resolve(response);
+          } else {
+            reject(new Error(response?.message || "Failed to send message"));
+          }
+        });
+      });
     } catch (error) {
       throw new Error(error.response?.data?.message || "Failed to send message.");
     }
