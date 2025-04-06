@@ -62,7 +62,6 @@ const useChatStore = create((set, get) => ({
     });
 
     socket.on("user_joined", (data) => {
-      console.log("User joined:", data);
       set((state) => ({
         messages: [
           ...state.messages,
@@ -97,7 +96,6 @@ const useChatStore = create((set, get) => ({
     });
 
     socket.on("message_history", (messages) => {
-      console.log("Received message history:", messages);
       set({ messages });
     });
 

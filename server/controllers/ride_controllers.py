@@ -214,7 +214,6 @@ class RideController:
             # Get the current_user
             user = get_current_user()
             match_stage['provider'] = {'$ne': user.id} # Exclude rides offered by the current_user
-            print(match_stage)
 
             rides = Ride.objects.aggregate([
                 {'$match': match_stage},
@@ -247,7 +246,6 @@ class RideController:
             ])
 
             rides = list(rides)
-            print("Ride details: ", rides)
 
             return {
                 "status": "success",
