@@ -1,3 +1,4 @@
+from flask import current_app
 from flask_socketio import emit, join_room, leave_room
 from datetime import datetime, timezone
 from flask_jwt_extended import get_current_user
@@ -12,13 +13,14 @@ class ChatController:
             if not user:
                 return {"status": "fail", "message": "User not authenticated"}, 401
 
-            # Fetch all active chats for the user
+            # Fetch all active chats for the user, sorted by ride date
             chats = Chat.objects(users=user, is_active=True)
+            sorted_chats = sorted(chats, key=lambda chat: chat.ride.ride_date, reverse=False)  # reverse=True for newest first
 
             return {
                 'status': 'success',
                 'data': {
-                    'chats': [chat.to_json() for chat in chats],
+                    'chats': [chat.to_json() for chat in sorted_chats],
                 }
             }, 200
         except Exception as e:
@@ -58,8 +60,8 @@ class ChatController:
             if not ride:
                 return {"status": "fail", "message": "Ride not found"}, 404
 
-            # Create chat
-            chat = Chat(ride=ride)
+            # Create chat and add the ride provider to users list
+            chat = Chat(ride=ride, users=[ride.provider])
             chat.save()
 
             # Add system message for the chat creation
@@ -82,14 +84,17 @@ class ChatController:
         try:
             user = get_current_user()
             chat = Chat.objects(id=chat_id).first()
+
             if not chat or not chat.is_active:
                 return {'status': 'fail', 'message': 'Chat not found or inactive'}, 404
 
+            print(f"User {user.full_name} joining chat: {chat_id}")
+
+            # Add user to chat if not already present
             if user not in chat.users:
                 chat.users.append(user)
                 chat.save()
 
-                # Add system message for user joining
                 join_message = Message(
                     chat=chat,
                     content=f"{user.full_name} joined the chat",
@@ -97,16 +102,35 @@ class ChatController:
                 )
                 join_message.save()
 
-            join_room(str(chat.id))
-
             # Fetch message history
             messages = Message.objects(chat=chat).order_by('timestamp')
             message_history = [message.to_json() for message in messages]
 
-            emit('message_history', message_history, to=str(chat.id))
-            emit('user_joined', {'user': str(user.full_name)}, to=str(chat.id))
+            # Get the application context and socketio instance
+            app = current_app._get_current_object()
+            socketio = app.extensions['socketio']
+
+            # Get all participant socket IDs
+            participant_ids = chat.get_participant_ids()
+            recipient_socket_ids = [
+                sid for uid, sid in app.user_socket_map.items()
+                if uid in participant_ids
+            ]
+
+            # Send message history to the joining user
+            user_socket_id = app.user_socket_map.get(str(user.id))
+            if user_socket_id:
+                print(f"Sending message history to user socket: {user_socket_id}")
+                socketio.emit('message_history', message_history, room=user_socket_id)
+
+            # Notify other participants about the new user
+            join_notification = {'user': str(user.full_name)}
+            for socket_id in recipient_socket_ids:
+                if socket_id != user_socket_id:  # Don't send to the joining user
+                    socketio.emit('user_joined', join_notification, room=socket_id)
             return {'status': 'success'}, 200
         except Exception as e:
+            print(f"Join chat error: {str(e)}")
             return {'status': 'fail', 'message': str(e)}, 500
 
     @staticmethod
@@ -139,6 +163,9 @@ class ChatController:
     def send_message(data):
         try:
             user = get_current_user()
+            if not user:
+                return {'status': 'fail', 'message': 'User not authenticated'}, 401
+
             chat_id = data.get('chat_id')
             message_content = data.get('message')
 
@@ -149,20 +176,37 @@ class ChatController:
             if not chat or not chat.is_active:
                 return {'status': 'fail', 'message': 'Chat not found or inactive'}, 404
 
-            if user not in chat.users:
-                return {'status': 'fail', 'message': 'User not in chat'}, 403
-
             message = Message(
                 chat=chat,
                 sender=user,
                 content=message_content,
-                message_type="user"
+                message_type="user",
+                timestamp = datetime.now(timezone.utc)
             )
             message.save()
 
-            emit('new_message', message.to_json(), to=str(chat.id))
-            return {'status': 'success'}, 200
+            message_data = message.to_json()
+
+            # Get the application context
+            app = current_app._get_current_object()
+            socketio = app.extensions['socketio']
+
+            # Get all participant socket IDs
+            participant_ids = chat.get_participant_ids()
+            recipient_socket_ids = [
+                sid for uid, sid in app.user_socket_map.items()
+                if uid in participant_ids
+            ]
+
+
+            # Emit message only to chat participants
+            for socket_id in recipient_socket_ids:
+                socketio.emit('new_message', message_data, room=socket_id)
+
+            return {'status': 'success', 'data': message_data}, 200
+
         except Exception as e:
+            print("ChatController send message error:", str(e))
             return {'status': 'fail', 'message': str(e)}, 500
 
     @staticmethod
