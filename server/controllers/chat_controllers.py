@@ -88,8 +88,6 @@ class ChatController:
             if not chat or not chat.is_active:
                 return {'status': 'fail', 'message': 'Chat not found or inactive'}, 404
 
-            print(f"User {user.full_name} joining chat: {chat_id}")
-
             # Add user to chat if not already present
             if user not in chat.users:
                 chat.users.append(user)
