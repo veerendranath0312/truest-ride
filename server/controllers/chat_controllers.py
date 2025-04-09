@@ -118,17 +118,20 @@ class ChatController:
             # Send message history to the joining user
             user_socket_id = app.user_socket_map.get(str(user.id))
             if user_socket_id:
-                print(f"Sending message history to user socket: {user_socket_id}")
                 socketio.emit('message_history', message_history, room=user_socket_id)
 
             # Notify other participants about the new user
-            join_notification = {'user': str(user.full_name)}
+            join_notification = {
+                'user': str(user.full_name),
+                'user_id': str(user.id),
+                'chat_id': str(chat.id)
+            }
+
             for socket_id in recipient_socket_ids:
                 if socket_id != user_socket_id:  # Don't send to the joining user
                     socketio.emit('user_joined', join_notification, room=socket_id)
             return {'status': 'success'}, 200
         except Exception as e:
-            print(f"Join chat error: {str(e)}")
             return {'status': 'fail', 'message': str(e)}, 500
 
     @staticmethod
@@ -139,20 +142,46 @@ class ChatController:
             if not chat or not chat.is_active:
                 return {'status': 'fail', 'message': 'Chat not found or inactive'}, 404
 
-            if user in chat.users:
-                chat.users.remove(user)
-                chat.save()
+            if user not in chat.users:
+                return {'status': 'fail', 'message': 'User not in chat'}, 404
 
-                # Add system message for user leaving
-                leave_message = Message(
-                    chat=chat,
-                    content=f"{user.full_name} left the chat",
-                    message_type="system"
-                )
-                leave_message.save()
+            if user == chat.ride.provider:
+                return {'status': 'fail', 'message': 'Ride provider cannot leave the chat'}, 403
 
-                leave_room(str(chat.id))
-                emit('user_left', {'user': str(user.full_name)}, to=str(chat.id))
+            # Remove user from chat
+            chat.users.remove(user)
+            chat.save()
+
+            # Add system message for user leaving
+            leave_message = Message(
+                chat=chat,
+                content=f"{user.full_name} left the chat",
+                message_type="system"
+            )
+            leave_message.save()
+
+            # Get the application context and socketio instance
+            app = current_app._get_current_object()
+            socketio = app.extensions['socketio']
+
+            # Prepare leave notification
+            leave_notification = {
+                'user': str(user.full_name),
+                'user_id': str(user.id),
+                'chat_id': str(chat.id)
+            }
+
+            # Get all participant socket IDs
+            participant_ids = chat.get_participant_ids()
+            recipient_socket_ids = [
+                sid for uid, sid in app.user_socket_map.items()
+                if uid in participant_ids or uid == str(user.id)  # Include the leaving user
+            ]
+
+            # Emit to all participants including the leaving user
+            for socket_id in recipient_socket_ids:
+                socketio.emit('user_left', leave_notification, room=socket_id)
+
             return {'status': 'success'}, 200
         except Exception as e:
             return {'status': 'fail', 'message': str(e)}, 500
@@ -196,7 +225,6 @@ class ChatController:
                 if uid in participant_ids
             ]
 
-
             # Emit message only to chat participants
             for socket_id in recipient_socket_ids:
                 socketio.emit('new_message', message_data, room=socket_id)
@@ -210,13 +238,26 @@ class ChatController:
     @staticmethod
     def delete_chat(chat_id):
         try:
-            user = get_current_user()
             chat = Chat.objects(id=chat_id).first()
             if not chat or not chat.is_active:
                 return {'status': 'fail', 'message': 'Chat not found or inactive'}, 404
 
-            if user not in chat.users:
-                return {'status': 'fail', 'message': 'User not in chat'}, 403
+            # Get the application context and socketio instance
+            app = current_app._get_current_object()
+            socketio = app.extensions['socketio']
+
+            # Get all participant socket IDs to notify them
+            participant_ids = chat.get_participant_ids()
+            recipient_socket_ids = [
+                sid for uid, sid in app.user_socket_map.items()
+                if uid in participant_ids
+            ]
+
+            # Prepare delete notification
+            delete_notification = {
+                'chat_id': str(chat.id),
+                'message': 'Ride has been cancelled by the provider'
+            }
 
             # Delete all messages in the chat
             Message.objects(chat=chat).delete()
@@ -224,9 +265,11 @@ class ChatController:
             # Delete the chat
             chat.delete()
 
-            # Notify all users in the chat
-            emit('chat_deleted', {'chat_id': str(chat.id)}, to=str(chat.id))
+            # Notify all participants
+            for socket_id in recipient_socket_ids:
+                socketio.emit('chat_deleted', delete_notification, room=socket_id)
 
+            return {'status': 'success'}, 200
         except Exception as e:
             return {'status': 'fail', 'message': str(e)}, 500
 

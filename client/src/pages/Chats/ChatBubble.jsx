@@ -2,12 +2,38 @@ function ChatBubble({ message, isCurrentUser }) {
   const formatTimestamp = (timestamp) => {
     if (!timestamp) return "";
 
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
+    try {
+      // Add 'Z' to explicitly treat the timestamp as UTC if it doesn't have a timezone
+      const utcTimestamp = timestamp.endsWith("Z") ? timestamp : timestamp + "Z";
+
+      // Create Date object from UTC timestamp
+      const utcDate = new Date(utcTimestamp);
+
+      // Convert to local timezone
+      const localDate = new Date(utcDate.toLocaleString());
+      const currentTime = new Date();
+
+      // For messages from today, show only time
+      if (localDate.toDateString() === currentTime.toDateString()) {
+        return localDate.toLocaleTimeString([], {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        });
+      }
+
+      // For older messages, show date and time
+      return localDate.toLocaleString([], {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      });
+      // eslint-disable-next-line no-unused-vars
+    } catch (error) {
+      return "";
+    }
   };
 
   if (message.type === "system") {

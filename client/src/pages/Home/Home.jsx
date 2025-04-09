@@ -3,7 +3,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Loader2 } from "lucide-react";
 
+import useAuthStore from "../../store/useAuthStore";
 import useRideStore from "../../store/useRideStore";
+import { capitalize } from "../../utils/helpers";
 import Navbar from "../../components/Navbar";
 import FindRide from "./FindRide";
 import OfferRide from "./OfferRide";
@@ -13,8 +15,8 @@ import Modal from "./Modal";
 import "./home.css";
 
 function Home() {
+  const { user } = useAuthStore();
   const { isLoading, offerRide } = useRideStore();
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     from: "",
@@ -108,6 +110,12 @@ function Home() {
     <div className="home">
       <Navbar isAuthenticated={true} />
       <div className="container">
+        <h2 className="home__welcome">
+          Welcome back, {capitalize(user?.full_name?.split(" ")[0] || "")}{" "}
+          <span className="waving-hand" role="img" aria-label="waving hand">
+            👋
+          </span>
+        </h2>
         <section className="home__hero">
           <div className="home__options">
             <OfferRide onOpenModal={openModal} />
