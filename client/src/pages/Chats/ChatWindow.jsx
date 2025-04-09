@@ -62,7 +62,7 @@ function ChatWindow() {
   }
 
   // If no chat is selected, display a message
-  if (!currentChat & !isMobile) {
+  if (!currentChat && !isMobile) {
     return (
       <div className="chat-window chat-window--empty">
         <div className="chat-window__empty">
