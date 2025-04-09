@@ -131,15 +131,12 @@ class FlaskApp:
         @self.socketio.on('send_message')
         def handle_send_message(data):
             try:
-                print(f"Received message data: {data}")
                 if not authenticate_socket(data):
                     return {'status': 'fail', 'message': 'Authentication required'}, 401
 
                 result = ChatController.send_message(data)
-                print(f"Send message result: {result}")
                 return result
             except Exception as e:
-                print(f"Error in handle_send_message: {str(e)}")
                 return {'status': 'fail', 'message': str(e)}
 
         @self.socketio.on('delete_chat')

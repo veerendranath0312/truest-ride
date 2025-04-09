@@ -7,11 +7,11 @@ export default defineConfig({
 
   server: {
     proxy: {
-      "/socket.io": {
-        target: "http://127.0.0.1:5000",
-        ws: true,
-        changeOrigin: true,
-      },
+      // "/socket.io": {
+      //   target: "http://127.0.0.1:5000",
+      //   ws: true,
+      //   changeOrigin: true,
+      // },
       "/api": {
         target: "http://127.0.0.1:5000/", // Backend server
         changeOrigin: true, // Change the origin of the request to match the target

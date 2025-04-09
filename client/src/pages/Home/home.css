@@ -1,6 +1,14 @@
+.home__welcome {
+  margin: 9rem 0 3rem;
+  text-align: left;
+  padding: 0 1rem;
+  font-family: var(--font-family-secondary);
+  font-weight: 400;
+}
+
 .home__hero {
   /* min-height: 100vh; */
-  margin: 9rem 0;
+  margin-bottom: 9rem;
   display: flex;
   flex-wrap: wrap;
   gap: 4rem;
@@ -255,12 +263,53 @@
   margin-top: 2rem;
 }
 
+/* ========== WAVING HAND ANIMATION STYLES ========== */
+.waving-hand {
+  display: inline-block;
+  animation-name: wave; /* Refers to the name of your @keyframes element below */
+  animation-duration: 2.5s; /* Change to speed up or slow down */
+  animation-iteration-count: infinite; /* Never stop waving :) */
+  transform-origin: 70% 70%; /* Pivot around the bottom-left palm */
+  display: inline-block;
+}
+
+@keyframes wave {
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(14deg);
+  } /* The following five values can be played with to make the waving more or less extreme */
+  20% {
+    transform: rotate(-8deg);
+  }
+  30% {
+    transform: rotate(14deg);
+  }
+  40% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  60% {
+    transform: rotate(0deg);
+  } /* Reset for the last half to pause */
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
 /* ========== RESPONSIVE ========== */
 
 @media (max-width: 900px) {
+  .home__welcome {
+    text-align: center;
+  }
+
   .home__hero {
     max-width: 560px;
-    margin: 9rem auto;
+    margin: 0 auto 9rem auto;
     flex-direction: column;
   }
 }

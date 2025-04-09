@@ -104,6 +104,13 @@ ion-icon[name="person-circle-outline"] {
   transition: color var(--transition-time) linear;
 }
 
+.navbar__profile {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+}
+
 .navbar__link__profile_icon:hover {
   border: 1px solid var(--text-primary);
 }

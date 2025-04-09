@@ -53,7 +53,14 @@ const useChatStore = create((set, get) => ({
           const messageExists = state.messages.some((m) => m.id === message.id);
 
           if (!messageExists) {
-            const newMessages = [...state.messages, message];
+            // Ensure the timestamp is in ISO format
+            const formattedMessage = {
+              ...message,
+              timestamp: message.timestamp
+                ? new Date(message.timestamp).toISOString()
+                : new Date().toISOString(),
+            };
+            const newMessages = [...state.messages, formattedMessage];
             return { messages: newMessages };
           }
           return state;
@@ -62,37 +69,91 @@ const useChatStore = create((set, get) => ({
     });
 
     socket.on("user_joined", (data) => {
-      set((state) => ({
-        messages: [
+      set((state) => {
+        // Add system message about user joining
+        const newMessages = [
           ...state.messages,
           {
             content: `${data.user} joined the chat`,
             timestamp: new Date().toISOString(),
             type: "system",
           },
-        ],
-      }));
+        ];
+
+        // Update the users list in the current chat if it matches
+        let updatedChats = state.chats.map((chat) => {
+          if (chat.id === data.chat_id) {
+            return {
+              ...chat,
+              users: [...chat.users, { id: data.user_id, full_name: data.user }],
+            };
+          }
+          return chat;
+        });
+
+        return {
+          messages: newMessages,
+          chats: updatedChats,
+        };
+      });
     });
 
     socket.on("user_left", (data) => {
-      set((state) => ({
-        messages: [
+      set((state) => {
+        // Add system message about user leaving
+        const newMessages = [
           ...state.messages,
           {
             content: `${data.user} left the chat`,
             timestamp: new Date().toISOString(),
             type: "system",
           },
-        ],
-      }));
+        ];
+
+        // Update the users list in the current chat if it matches
+        let updatedChats = state.chats.map((chat) => {
+          if (chat.id === data.chat_id) {
+            return {
+              ...chat,
+              users: chat.users.filter((user) => user.id !== data.user_id),
+            };
+          }
+          return chat;
+        });
+
+        return {
+          messages: newMessages,
+          chats: updatedChats,
+        };
+      });
     });
 
     socket.on("chat_deleted", (data) => {
-      set((state) => ({
-        chats: state.chats.filter((chat) => chat.id !== data.chat_id),
-        currentChat: state.currentChat !== data.chat_id ? state.currentChat : null,
-        messages: state.currentChat !== data.chat_id ? state.messages : [],
-      }));
+      set((state) => {
+        const deletedChatId = data.chat_id;
+        const isCurrentChat = state.currentChat?.id === deletedChatId;
+
+        // Filter out the deleted chat from chats list
+        const updatedChats = state.chats.filter((chat) => chat.id !== deletedChatId);
+
+        // If we're currently viewing the deleted chat, clear messages and current chat
+        const updatedMessages = isCurrentChat ? [] : state.messages;
+        const updatedCurrentChat = isCurrentChat ? null : state.currentChat;
+
+        // If we're in the deleted chat, navigate back to chats list
+        if (isCurrentChat && window.navigateToChats) {
+          // Using window.location here because we can't use useNavigate in a store
+          window.navigateToChats();
+        }
+
+        // TODO:Show toast notification about chat deletion
+
+        return {
+          chats: updatedChats,
+          messages: updatedMessages,
+          currentChat: updatedCurrentChat,
+        };
+      });
     });
 
     socket.on("message_history", (messages) => {
@@ -204,61 +265,6 @@ const useChatStore = create((set, get) => ({
       });
     } catch (error) {
       throw new Error(error.response?.data?.message || "Failed to send message.");
-    }
-  },
-
-  // Join a user to the chat when the user books a ride
-  joinChat: async (chatId) => {
-    try {
-      const { socket } = get();
-      if (!socket) {
-        throw new Error("Socket connection not initialized");
-      }
-
-      socket.emit("join_chat", { chat_id: chatId });
-      set({
-        currentChat: chatId,
-        messages: [], // Clear messages when joining a new chat
-      });
-    } catch (error) {
-      throw new Error(error.response?.data?.message || "Failed to join chat.");
-    }
-  },
-
-  // Leave a user from the chat when the user cancels a booking
-  leaveChat: async (chatId) => {
-    try {
-      const { socket } = get();
-      if (!socket) {
-        throw new Error("Socket connection not initialized");
-      }
-
-      socket.emit("leave_chat", { chat_id: chatId });
-      set({
-        currentChat: null,
-        messages: [], // Clear messages when leaving a chat
-      });
-    } catch (error) {
-      throw new Error(error.response?.data?.message || "Failed to leave chat.");
-    }
-  },
-
-  // Delete a chat
-  deleteChat: async (chatId) => {
-    try {
-      const { socket } = get();
-      if (!socket) {
-        throw new Error("Socket connection not initialized");
-      }
-
-      socket.emit("delete_chat", { chat_id: chatId });
-      set((state) => ({
-        chats: state.chats.filter((chat) => chat.id !== chatId),
-        currentChat: state.currentChat !== chatId ? state.currentChat : null,
-        messages: state.currentChat !== chatId ? state.messages : [],
-      }));
-    } catch (error) {
-      throw new Error(error.response?.data?.message || "Failed to delete chat.");
     }
   },
 

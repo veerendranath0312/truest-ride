@@ -96,9 +96,6 @@ const useAuthStore = create(
               isAuthenticated: true,
               otpSent: false,
             });
-
-            // Initialize socket connection after successful sign in
-            useChatStore.getState().initializeSocket();
           } else {
             throw new Error(response.data.message);
           }
@@ -163,9 +160,6 @@ const useAuthStore = create(
               isAuthenticated: true,
               otpSent: false,
             });
-
-            // Initialize socket connection after successful sign up
-            useChatStore.getState().initializeSocket();
           } else {
             throw new Error(response.data.message);
           }
@@ -185,9 +179,6 @@ const useAuthStore = create(
       },
 
       signOut: () => {
-        // Disconnect socket connection before signing out
-        useChatStore.getState().disconnectSocket();
-
         // Clear token expiration timer
         const currentTimer = get().tokenExpirationTimer;
         if (currentTimer) {
@@ -218,9 +209,6 @@ const useAuthStore = create(
             // Setup expiration timer and update state
             get().setupTokenExpirationTimer(token);
             set({ token, isAuthenticated: true });
-
-            // Initialize socket connection if token is valid
-            useChatStore.getState().initializeSocket();
           } else {
             get().signOut();
           }

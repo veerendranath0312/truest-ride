@@ -9,21 +9,16 @@ import "./chats.css";
 function Chats() {
   const navigate = useNavigate();
   const { chatId } = useParams();
-  const {
-    chats,
-    currentChat,
-    fetchChats,
-    setCurrentChat,
-    isLoading,
-    initializeSocket,
-    disconnectSocket,
-  } = useChatStore();
+  const { chats, currentChat, fetchChats, setCurrentChat, isLoading } = useChatStore();
 
-  // Initialize socket connection
+  // Make navigate available to the store
   useEffect(() => {
-    initializeSocket();
-    return () => disconnectSocket();
-  }, [initializeSocket, disconnectSocket]);
+    window.navigateToChats = () => navigate("/chats");
+
+    return () => {
+      delete window.navigateToChats;
+    };
+  }, [navigate]);
 
   // Fetch chats
   useEffect(() => {
