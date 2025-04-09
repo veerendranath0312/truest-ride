@@ -84,6 +84,11 @@ function Register() {
 
     try {
       await signUp(formData.fullname, formData.email);
+      setFormLabelErrors({
+        fullnameErrorLabel: "",
+        emailErrorLabel: "",
+      });
+      setErrorMessage("");
     } catch (err) {
       setErrorMessage(err.message);
     }

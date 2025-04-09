@@ -62,6 +62,8 @@ function SignIn() {
 
     try {
       await signIn(email);
+      setEmailErrorLabel("");
+      setErrorMessage("");
     } catch (err) {
       // Server-side
       setErrorMessage(err.message);

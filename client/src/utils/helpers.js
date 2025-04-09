@@ -29,4 +29,10 @@ const capitalize = (str) => {
     .join(" ");
 };
 
-export { validateEducationalEmail, formattedRideDate, capitalize };
+// Truncate names with ellipsis after character limit
+const truncateNames = (users, limit = 30) => {
+  const names = users.map((user) => user.full_name).join(", ");
+  return names.length > limit ? `${names.slice(0, limit)}...` : names;
+};
+
+export { validateEducationalEmail, formattedRideDate, capitalize, truncateNames };
