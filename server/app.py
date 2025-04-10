@@ -27,7 +27,7 @@ class FlaskApp:
         self.configure_app()
 
         # Initialize Socket.IO with explicit CORS settings
-        self.socketio = SocketIO(self.app, cors_allowed_origins="*")
+        self.socketio = SocketIO(self.app, cors_allowed_origins=self.app.config['CORS_ORIGINS'])
 
         self.db = DBManager.initialize_db(self.app)
         self.jwt = JWTManager(self.app)
@@ -44,11 +44,7 @@ class FlaskApp:
         self.app.config.from_object(Config)
 
         # Configure CORS for REST endpoints
-        CORS(self.app,
-             supports_credentials=True,
-             resources={r"/*": {
-                "origins": "*",
-             }})
+        CORS(self.app, origins=self.app.config['CORS_ORIGINS'])
 
         if os.environ.get('FLASK_ENV') == 'PRODUCTION':
             logging.baseConfig(
