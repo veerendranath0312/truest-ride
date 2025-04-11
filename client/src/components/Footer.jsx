@@ -1,6 +1,4 @@
-import React from "react";
 import { Link } from "react-router";
-import Button from "./Button";
 
 function Footer() {
   const year = new Date().getFullYear();
@@ -30,11 +28,7 @@ function Footer() {
         {/* <div className="footer-flex-item">
           <p className="footer-flex-item__label">Social</p>
           <div className="footer-flex-item__links">
-            <a
-              className="footer-flex-item__link"
-              href="https://x.com/"
-              target="_blank"
-            >
+            <a className="footer-flex-item__link" href="https://x.com/" target="_blank">
               <ion-icon name="logo-twitter"></ion-icon> Twitter
             </a>
             <a
@@ -77,9 +71,9 @@ function Footer() {
               className="footer-flex-item__subscribe__input"
             />
 
-            <Button className="footer-flex-item__subscribe__button">
+            <button className="btn footer-flex-item__subscribe__button">
               <ion-icon name="send-outline"></ion-icon>
-            </Button>
+            </button>
           </div>
         </div>
       </div>

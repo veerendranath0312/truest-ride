@@ -84,6 +84,14 @@
 }
 
 .landing-page__search__form__button {
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-time) linear;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   padding: 0.5rem 1rem;
   background-color: var(--btn-primary);
   color: var(--bg-primary);
