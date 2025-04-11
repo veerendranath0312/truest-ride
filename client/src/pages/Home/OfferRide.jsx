@@ -1,5 +1,3 @@
-import Button from "../../components/Button";
-
 function OfferRide({ onOpenModal }) {
   return (
     <>
@@ -9,9 +7,9 @@ function OfferRide({ onOpenModal }) {
           Share your journey, help others reach their destination, and make new friends.
         </p>
         <div className="home__offer__button__container">
-          <Button className="home__offer__button" onClick={onOpenModal}>
+          <button className="btn home__offer__button" onClick={onOpenModal}>
             Offer a ride
-          </Button>
+          </button>
         </div>
       </div>
     </>
