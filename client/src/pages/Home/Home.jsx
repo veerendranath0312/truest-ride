@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Loader2 } from "lucide-react";
 
+import PlacesAutocomplete from "../../components/PlacesAutocomplete";
 import useAuthStore from "../../store/useAuthStore";
 import useRideStore from "../../store/useRideStore";
 import { capitalize } from "../../utils/helpers";
@@ -44,16 +45,16 @@ function Home() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const handleFormChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const handleLocationChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
 
-    setFormLabelErrors({
-      ...formLabelErrors,
-      [`${e.target.name}ErrorLabel`]: "",
-    });
+    setFormLabelErrors((prev) => ({
+      ...prev,
+      [`${field}ErrorLabel`]: "",
+    }));
 
     setNotification({ message: "", type: "" }); // Clear notification when user starts typing
   };
@@ -145,48 +146,27 @@ function Home() {
             notification={notification}
           >
             <form className="modal__form" onSubmit={handleOfferRide}>
-              <div className="form__group">
-                <label
-                  htmlFor="from"
-                  className={`form__label ${
-                    formLabelErrors.fromErrorLabel && "form__label--error"
-                  }`}
-                >
-                  {formLabelErrors.fromErrorLabel || "From"}
-                </label>
-                <input
-                  type="text"
-                  id="from"
-                  name="from"
-                  placeholder="Departure location"
-                  className={`form__input ${
-                    formLabelErrors.fromErrorLabel && "form__input--error"
-                  }`}
-                  value={formData.from}
-                  onChange={handleFormChange}
-                />
-              </div>
-              <div className="form__group">
-                <label
-                  htmlFor="to"
-                  className={`form__label ${
-                    formLabelErrors.toErrorLabel && "form__label--error"
-                  }`}
-                >
-                  {formLabelErrors.toErrorLabel || "To"}
-                </label>
-                <input
-                  type="text"
-                  id="to"
-                  name="to"
-                  placeholder="Destination location"
-                  className={`form__input ${
-                    formLabelErrors.toErrorLabel && "form__input--error"
-                  }`}
-                  value={formData.to}
-                  onChange={handleFormChange}
-                />
-              </div>
+              <PlacesAutocomplete
+                id="from"
+                name="from"
+                label="From"
+                value={formData.from}
+                placeholder="Departure location"
+                error={formLabelErrors.fromErrorLabel}
+                onChange={(value) => handleLocationChange("from", value)}
+                onPlaceSelect={(value) => handleLocationChange("from", value)}
+              />
+
+              <PlacesAutocomplete
+                id="to"
+                name="to"
+                label="To"
+                value={formData.to}
+                placeholder="Destination location"
+                error={formLabelErrors.toErrorLabel}
+                onChange={(value) => handleLocationChange("to", value)}
+                onPlaceSelect={(value) => handleLocationChange("to", value)}
+              />
 
               <div className="modal__form__group">
                 <div className="form__group">
@@ -232,7 +212,7 @@ function Home() {
                       formLabelErrors.totalSeatsErrorLabel && "form__input--error"
                     }`}
                     value={formData.totalSeats}
-                    onChange={handleFormChange}
+                    onChange={(e) => handleLocationChange("totalSeats", e.target.value)}
                   />
                 </div>
               </div>
@@ -255,7 +235,7 @@ function Home() {
                     formLabelErrors.carModelErrorLabel && "form__input--error"
                   }`}
                   value={formData.carModel}
-                  onChange={handleFormChange}
+                  onChange={(e) => handleLocationChange("carModel", e.target.value)}
                 />
               </div>
               <button className="btn modal__button">
