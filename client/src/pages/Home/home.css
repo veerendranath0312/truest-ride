@@ -273,6 +273,8 @@
   display: inline-block;
 }
 
+/* --------- PLACES AUTOCOMPLETE STYLES --------- */
+
 @keyframes wave {
   0% {
     transform: rotate(0deg);

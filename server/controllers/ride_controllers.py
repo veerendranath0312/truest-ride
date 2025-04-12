@@ -30,8 +30,8 @@ class RideController:
             ride_date = datetime.fromisoformat(data['rideDate']).astimezone(timezone.utc)
 
             ride_obj = Ride(
-                from_location=data['from'].lower().title(),
-                to_location=data['to'].lower().title(),
+                from_location=data['from'],
+                to_location=data['to'],
                 ride_date=ride_date,
                 total_seats=data['totalSeats'],
                 available_seats=data['totalSeats'],
