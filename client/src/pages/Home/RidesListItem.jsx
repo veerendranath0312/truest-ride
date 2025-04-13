@@ -41,7 +41,7 @@ function RidesListItem({ ride, setNotification }) {
             {capitalize(ride.provider.full_name)}
           </Link>
         </p>
-        <div className="ride_search__ressults__item__info">
+        <div className="ride_search__results__item__info">
           <p>
             <ion-icon name="calendar-outline"></ion-icon>
             {formattedRideDate(ride.ride_date)}

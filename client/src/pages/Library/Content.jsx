@@ -5,7 +5,7 @@ import { Loader } from "lucide-react";
 import useRideStore from "../../store/useRideStore";
 import LibraryListItem from "./LibraryListItem";
 import Notification from "../../components/Notification";
-import { capitalize, formattedRideDate } from "../../utils/helpers";
+import { formattedRideDate } from "../../utils/helpers";
 
 const Content = () => {
   const {
@@ -73,8 +73,8 @@ const Content = () => {
                 <LibraryListItem
                   key={ride.id}
                   date={formattedRideDate(ride.ride_date)}
-                  from={capitalize(ride.from_location)}
-                  to={capitalize(ride.to_location)}
+                  from={ride.from_location}
+                  to={ride.to_location}
                   provider={ride.provider}
                   section="bookings"
                   onCancel={() => cancelBooking(ride.id)}
@@ -106,8 +106,8 @@ const Content = () => {
                 <LibraryListItem
                   key={ride.id}
                   date={formattedRideDate(ride.ride_date)}
-                  from={capitalize(ride.from_location)}
-                  to={capitalize(ride.to_location)}
+                  from={ride.from_location}
+                  to={ride.to_location}
                   totalSeats={ride.total_seats}
                   section="offerings"
                   onCancel={() => cancelRide(ride.id)}

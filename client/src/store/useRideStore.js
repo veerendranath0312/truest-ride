@@ -220,7 +220,6 @@ const useRideStore = create(
     {
       name: "ride-store",
       partialize: (state) => ({
-        rides: state.rides,
         offeredRides: state.offeredRides,
         bookedRides: state.bookedRides,
       }),
