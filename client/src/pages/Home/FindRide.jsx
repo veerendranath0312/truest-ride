@@ -29,6 +29,9 @@ function FindRide({
       ...prev,
       [`${field}ErrorLabel`]: "",
     }));
+
+    setNotification({ message: "", type: "" }); // Clear notification when user starts typing
+    setHasSearched(false); // Reset search results when user starts typing
   };
 
   const handleDateChange = (dates) => {
@@ -72,13 +75,13 @@ function FindRide({
 
     // Perform search
     try {
-      setHasSearched(true);
+      setHasSearched(true); // Set hasSearched after the search is complete
       setNotification({ message: "", type: "" }); // Clear notification when starting new search
 
       await searchRides({
         ...findRideFormData,
-        from: findRideFormData.from.toLowerCase().trim(),
-        to: findRideFormData.to.toLowerCase().trim(),
+        from: findRideFormData.from.trim(),
+        to: findRideFormData.to.trim(),
       });
     } catch (error) {
       setNotification({ message: error.message, type: "error" });
