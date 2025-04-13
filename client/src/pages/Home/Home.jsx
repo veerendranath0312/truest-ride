@@ -130,6 +130,7 @@ function Home() {
 
           <SearchResults
             hasSearched={hasSearched}
+            setHasSearched={setHasSearched}
             findRideFormData={findRideFormData}
             notification={notification}
             setNotification={setNotification}

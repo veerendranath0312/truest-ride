@@ -99,6 +99,10 @@ body {
   cursor: pointer;
 }
 
+.navbar__link-icon {
+  display: none;
+}
+
 ion-icon[name="person-circle-outline"] {
   font-size: 36px;
   transition: color var(--transition-time) linear;
@@ -488,12 +492,29 @@ an .active class name for easy styling with CSS */
   animation: spin 1s linear infinite;
 }
 
+/* ========== KEYFRAMES ========== */
 @keyframes spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 768px) {
+  .navbar__link-text {
+    display: none;
+  }
+  .navbar__link-icon {
+    display: block;
+    font-size: 16px;
+  }
+
+  .navbar__profile__name {
+    display: none;
   }
 }
 
