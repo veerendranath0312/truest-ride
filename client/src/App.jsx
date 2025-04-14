@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Outlet } from "react-router";
+import { Toaster } from "sonner";
 import "./App.css";
 import useAuthStore from "./store/useAuthStore";
 import useChatStore from "./store/useChatStore";
@@ -25,6 +26,7 @@ function App() {
 
   return (
     <>
+      <Toaster visibleToasts={5} position="bottom-right" />
       <Outlet />
     </>
   );

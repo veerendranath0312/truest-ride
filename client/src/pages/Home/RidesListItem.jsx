@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { Loader } from "lucide-react";
+import { Loader, MessageCircleMore } from "lucide-react";
+import { toast } from "sonner";
 
 import useRideStore from "../../store/useRideStore";
 import { formattedRideDate, capitalize } from "../../utils/helpers";
 
-function RidesListItem({ ride, setNotification }) {
+function RidesListItem({ ride }) {
   const { bookRide, bookedRides } = useRideStore();
   const [isBooking, setIsBooking] = useState(false);
 
@@ -18,8 +19,20 @@ function RidesListItem({ ride, setNotification }) {
     setIsBooking(true);
     try {
       await bookRide(id);
+      toast.success("Ride booked successfully!");
+      setTimeout(() => {
+        toast("Chat room joined!", {
+          action: {
+            label: "Open",
+            onClick: () => {
+              window.location.href = `/chats`;
+            },
+          },
+          icon: <MessageCircleMore size={16} />,
+        });
+      }, 1500);
     } catch (err) {
-      setNotification({ type: "error", message: err.message });
+      toast.error(err.message);
     } finally {
       setIsBooking(false);
     }
@@ -30,9 +43,8 @@ function RidesListItem({ ride, setNotification }) {
       <div className="ride__search__results__item__details">
         <h4 className="ride__search__results__item__title">
           <ion-icon name="location-outline"></ion-icon>
-          {capitalize(ride.from_location)}{" "}
-          <ion-icon name="arrow-forward-outline"></ion-icon>{" "}
-          {capitalize(ride.to_location)}
+          {ride.from_location} <ion-icon name="arrow-forward-outline"></ion-icon>{" "}
+          {ride.to_location}
         </h4>
         {/* TODO: Implement navigation to the user profile */}
         <p className="ride__search__results__item__description">

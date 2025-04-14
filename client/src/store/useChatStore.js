@@ -147,7 +147,6 @@ const useChatStore = create((set, get) => ({
         }
 
         // TODO:Show toast notification about chat deletion
-
         return {
           chats: updatedChats,
           messages: updatedMessages,

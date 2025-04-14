@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { Loader } from "lucide-react";
+import { toast } from "sonner";
 
 import useRideStore from "../../store/useRideStore";
 import LibraryListItem from "./LibraryListItem";
-import Notification from "../../components/Notification";
 import { formattedRideDate } from "../../utils/helpers";
 
 const Content = () => {
@@ -23,7 +23,6 @@ const Content = () => {
   // Flags to track whether rides have been fetched
   const [hasFetchedBookings, setHasFetchedBookings] = useState(false);
   const [hasFetchedOfferings, setHasFetchedOfferings] = useState(false);
-  const [notification, setNotification] = useState({ message: "", type: "" });
 
   const section = searchParams.get("section");
 
@@ -38,7 +37,7 @@ const Content = () => {
           setHasFetchedOfferings(true);
         }
       } catch (err) {
-        setNotification({ message: err.message, type: "error" });
+        toast.error(err.message);
       }
     };
 
@@ -56,10 +55,6 @@ const Content = () => {
       {section === "bookings" ? (
         <>
           {/* Bookings */}
-          {notification.message && (
-            <Notification type={notification.type} message={notification.message} />
-          )}
-
           {isLoadingBookings ? (
             <p className="library__content--description">
               <Loader size={18} className="loader-spin" /> &nbsp; Fetching your
@@ -78,7 +73,6 @@ const Content = () => {
                   provider={ride.provider}
                   section="bookings"
                   onCancel={() => cancelBooking(ride.id)}
-                  setNotification={setNotification}
                 />
               ))}
             </div>
@@ -87,10 +81,6 @@ const Content = () => {
       ) : (
         <>
           {/* Offerings */}
-          {notification.message && (
-            <Notification type={notification.type} message={notification.message} />
-          )}
-
           {isLoadingOfferings ? (
             <p className="library__content--description">
               <Loader size={18} className="loader-spin" /> &nbsp; Fetching your
@@ -111,7 +101,6 @@ const Content = () => {
                   totalSeats={ride.total_seats}
                   section="offerings"
                   onCancel={() => cancelRide(ride.id)}
-                  setNotification={setNotification}
                 />
               ))}
             </div>
