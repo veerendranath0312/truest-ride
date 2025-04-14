@@ -47,10 +47,19 @@ class UserController:
     def initiate_delete_user(user_id):
         # When the user clicks on the delete account button,
         # Check if the user is authorized to perform this action
+        user = User.objects(id=user_id).first()
+        if not user:
+            return {"status": "error", "message": "User not found"}, 404
         # A secure 6 digit OTP will be generated
+        otp = random.randit(100000, 999999)
+        hashed_otp = hashlib.sha256(str(otp).encode()).hexdigest()
+        otp_store[user_id] = {"otp": hashed_otp, "expires_at": datetime.datetime.utcnow() + datetime.timedelta(minutes=5)}
+        
         # The OTP will be hashed and stored in the database ()
         # The OTP will be sent to the user's email
+        #TODO: user
         # Return appropriate response with status code
+        return {"status": "success", "message": "OTP sent to registered email"}, 200
         pass
 
     @staticmethod
