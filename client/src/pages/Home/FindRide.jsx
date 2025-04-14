@@ -2,15 +2,12 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import useRideStore from "../../store/useRideStore";
+import PlacesAutocomplete from "../../components/PlacesAutocomplete";
 
-function FindRide({
-  setHasSearched,
-  findRideFormData,
-  setFindRideFormData,
-  setNotification,
-}) {
+function FindRide({ setHasSearched, findRideFormData, setFindRideFormData }) {
   const { isLoading, searchRides } = useRideStore();
   const [FormLabelErrors, setFormLabelErrors] = useState({
     fromErrorLabel: "",
@@ -18,35 +15,16 @@ function FindRide({
     dateErrorLabel: "",
   });
 
-  const handleFormChange = (e) => {
-    setFindRideFormData({
-      ...findRideFormData,
-      [e.target.name]: e.target.value,
-    });
-
-    setFormLabelErrors({
-      ...FormLabelErrors,
-      [`${e.target.name}ErrorLabel`]: "",
-    });
-
-    setNotification({ message: "", type: "" }); // Clear notification when user starts typing
+  const handleLocationChange = (field, value) => {
+    setFindRideFormData((prev) => ({ ...prev, [field]: value }));
+    setFormLabelErrors((prev) => ({ ...prev, [`${field}ErrorLabel`]: "" }));
     setHasSearched(false); // Reset search results when user starts typing
   };
 
   const handleDateChange = (dates) => {
     const [start, end] = dates;
-    setFindRideFormData({
-      ...findRideFormData,
-      startDate: start,
-      endDate: end,
-    });
-
-    setFormLabelErrors({
-      ...FormLabelErrors,
-      dateErrorLabel: "",
-    });
-
-    setNotification({ message: "", type: "" }); // Clear notification when user starts typing
+    setFindRideFormData((prev) => ({ ...prev, startDate: start, endDate: end }));
+    setFormLabelErrors({ ...FormLabelErrors, dateErrorLabel: "" });
     setHasSearched(false); // Reset search results when user starts typing
   };
 
@@ -74,16 +52,14 @@ function FindRide({
 
     // Perform search
     try {
-      setHasSearched(true);
-      setNotification({ message: "", type: "" }); // Clear notification when starting new search
-
       await searchRides({
         ...findRideFormData,
-        from: findRideFormData.from.toLowerCase().trim(),
-        to: findRideFormData.to.toLowerCase().trim(),
+        from: findRideFormData.from.trim(),
+        to: findRideFormData.to.trim(),
       });
+      setHasSearched(true); // Set hasSearched after the search is complete
     } catch (error) {
-      setNotification({ message: error.message, type: "error" });
+      toast.error(error.message);
     }
   };
 
@@ -93,48 +69,28 @@ function FindRide({
       <p>Search for available rides that matches your route.</p>
 
       <form className="home__find__form" onSubmit={handleFindRide}>
-        <div className="form__group">
-          <label
-            htmlFor="from"
-            className={`form__label ${
-              FormLabelErrors.fromErrorLabel && "form__label--error"
-            }`}
-          >
-            {FormLabelErrors.fromErrorLabel || "From"}
-          </label>
-          <input
-            type="text"
-            id="from"
-            name="from"
-            placeholder="Enter pickup location"
-            className={`form__input ${
-              FormLabelErrors.fromErrorLabel && "form__input--error"
-            }`}
-            value={findRideFormData.from}
-            onChange={handleFormChange}
-          />
-        </div>
-        <div className="form__group">
-          <label
-            htmlFor="to"
-            className={`form__label ${
-              FormLabelErrors.toErrorLabel && "form__label--error"
-            }`}
-          >
-            {FormLabelErrors.toErrorLabel || "To"}
-          </label>
-          <input
-            type="text"
-            id="to"
-            name="to"
-            placeholder="Enter drop-off location"
-            className={`form__input ${
-              FormLabelErrors.toErrorLabel && "form__input--error"
-            }`}
-            value={findRideFormData.to}
-            onChange={handleFormChange}
-          />
-        </div>
+        <PlacesAutocomplete
+          id="from"
+          name="from"
+          label="From"
+          value={findRideFormData.from}
+          placeholder="Enter pickup location"
+          error={FormLabelErrors.fromErrorLabel}
+          onChange={(value) => handleLocationChange("from", value)}
+          onPlaceSelect={(value) => handleLocationChange("from", value)}
+        />
+
+        <PlacesAutocomplete
+          id="to"
+          name="to"
+          label="To"
+          value={findRideFormData.to}
+          placeholder="Enter drop-off location"
+          error={FormLabelErrors.toErrorLabel}
+          onChange={(value) => handleLocationChange("to", value)}
+          onPlaceSelect={(value) => handleLocationChange("to", value)}
+        />
+
         <div className="form__group">
           <label
             htmlFor="date"

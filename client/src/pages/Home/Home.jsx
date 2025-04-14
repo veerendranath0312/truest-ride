@@ -1,8 +1,9 @@
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
+import PlacesAutocomplete from "../../components/PlacesAutocomplete";
 import useAuthStore from "../../store/useAuthStore";
 import useRideStore from "../../store/useRideStore";
 import { capitalize } from "../../utils/helpers";
@@ -31,7 +32,6 @@ function Home() {
     startDate: null,
     endDate: null,
   });
-  const [notification, setNotification] = useState({ message: "", type: "" });
   const [formLabelErrors, setFormLabelErrors] = useState({
     fromErrorLabel: "",
     toErrorLabel: "",
@@ -44,27 +44,14 @@ function Home() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const handleFormChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-
-    setFormLabelErrors({
-      ...formLabelErrors,
-      [`${e.target.name}ErrorLabel`]: "",
-    });
-
-    setNotification({ message: "", type: "" }); // Clear notification when user starts typing
+  const handleLocationChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormLabelErrors((prev) => ({ ...prev, [`${field}ErrorLabel`]: "" }));
   };
 
   const handleDateChange = (date) => {
     setFormData({ ...formData, rideDate: date?.toISOString() });
-    setFormLabelErrors({
-      ...formLabelErrors,
-      rideDateErrorLabel: "",
-    });
-    setNotification({ message: "", type: "" }); // Clear notification when user starts typing
+    setFormLabelErrors({ ...formLabelErrors, rideDateErrorLabel: "" });
   };
 
   const handleOfferRide = async (e) => {
@@ -85,25 +72,43 @@ function Home() {
     }
 
     // Submit the form
-    try {
-      await offerRide(formData);
-      setNotification({ message: "Ride offered successfully!", type: "success" });
+    toast.promise(offerRide(formData), {
+      loading: "Offering ride...",
+      success: () => {
+        // Reset the form data and close the modal after successful creation
+        setTimeout(() => {
+          setFormData({
+            from: "",
+            to: "",
+            rideDate: new Date().toISOString(),
+            totalSeats: 1,
+            carModel: "",
+          });
+          closeModal();
+        }, 1000);
+        return "Ride offered successfully!";
+      },
+      error: (err) => err.message,
+    });
 
-      // Reset the form data, Notification, and close the modal after 1 second
-      setTimeout(() => {
-        setFormData({
-          from: "",
-          to: "",
-          rideDate: new Date().toISOString(),
-          totalSeats: 1,
-          carModel: "",
-        });
-        setNotification({ message: "", type: "" });
-        closeModal();
-      }, 1000);
-    } catch (err) {
-      setNotification({ message: err.message, type: "error" });
-    }
+    // try {
+    //   await offerRide(formData);
+    //   toast.success("Ride offered successfully!");
+
+    //   // Reset the form data, Notification, and close the modal after 1 second
+    //   setTimeout(() => {
+    //     setFormData({
+    //       from: "",
+    //       to: "",
+    //       rideDate: new Date().toISOString(),
+    //       totalSeats: 1,
+    //       carModel: "",
+    //     });
+    //     closeModal();
+    //   }, 1000);
+    // } catch (err) {
+    //   toast.error(err.message);
+    // }
   };
 
   return (
@@ -123,15 +128,13 @@ function Home() {
               setHasSearched={setHasSearched}
               findRideFormData={findRideFormData}
               setFindRideFormData={setFindRideFormData}
-              setNotification={setNotification}
             />
           </div>
 
           <SearchResults
             hasSearched={hasSearched}
+            setHasSearched={setHasSearched}
             findRideFormData={findRideFormData}
-            notification={notification}
-            setNotification={setNotification}
           />
         </section>
 
@@ -142,51 +145,29 @@ function Home() {
             onCloseModal={closeModal}
             modalTitle="Offer a ride"
             modalDescription="Please enter the departure and destination locations, ride date, number of available seats (up to 10), and the car's make and model. All fields are required."
-            notification={notification}
           >
             <form className="modal__form" onSubmit={handleOfferRide}>
-              <div className="form__group">
-                <label
-                  htmlFor="from"
-                  className={`form__label ${
-                    formLabelErrors.fromErrorLabel && "form__label--error"
-                  }`}
-                >
-                  {formLabelErrors.fromErrorLabel || "From"}
-                </label>
-                <input
-                  type="text"
-                  id="from"
-                  name="from"
-                  placeholder="Departure location"
-                  className={`form__input ${
-                    formLabelErrors.fromErrorLabel && "form__input--error"
-                  }`}
-                  value={formData.from}
-                  onChange={handleFormChange}
-                />
-              </div>
-              <div className="form__group">
-                <label
-                  htmlFor="to"
-                  className={`form__label ${
-                    formLabelErrors.toErrorLabel && "form__label--error"
-                  }`}
-                >
-                  {formLabelErrors.toErrorLabel || "To"}
-                </label>
-                <input
-                  type="text"
-                  id="to"
-                  name="to"
-                  placeholder="Destination location"
-                  className={`form__input ${
-                    formLabelErrors.toErrorLabel && "form__input--error"
-                  }`}
-                  value={formData.to}
-                  onChange={handleFormChange}
-                />
-              </div>
+              <PlacesAutocomplete
+                id="from"
+                name="from"
+                label="From"
+                value={formData.from}
+                placeholder="Departure location"
+                error={formLabelErrors.fromErrorLabel}
+                onChange={(value) => handleLocationChange("from", value)}
+                onPlaceSelect={(value) => handleLocationChange("from", value)}
+              />
+
+              <PlacesAutocomplete
+                id="to"
+                name="to"
+                label="To"
+                value={formData.to}
+                placeholder="Destination location"
+                error={formLabelErrors.toErrorLabel}
+                onChange={(value) => handleLocationChange("to", value)}
+                onPlaceSelect={(value) => handleLocationChange("to", value)}
+              />
 
               <div className="modal__form__group">
                 <div className="form__group">
@@ -232,7 +213,7 @@ function Home() {
                       formLabelErrors.totalSeatsErrorLabel && "form__input--error"
                     }`}
                     value={formData.totalSeats}
-                    onChange={handleFormChange}
+                    onChange={(e) => handleLocationChange("totalSeats", e.target.value)}
                   />
                 </div>
               </div>
@@ -255,18 +236,11 @@ function Home() {
                     formLabelErrors.carModelErrorLabel && "form__input--error"
                   }`}
                   value={formData.carModel}
-                  onChange={handleFormChange}
+                  onChange={(e) => handleLocationChange("carModel", e.target.value)}
                 />
               </div>
-              <button className="btn modal__button">
-                {isLoading ? (
-                  <>
-                    <Loader2 size={22} className="loader-spin" />
-                    &nbsp; Offering ride...
-                  </>
-                ) : (
-                  "Offer ride"
-                )}
+              <button className="btn modal__button" disabled={isLoading}>
+                Offer ride
               </button>
             </form>
           </Modal>

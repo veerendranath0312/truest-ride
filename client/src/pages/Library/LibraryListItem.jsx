@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import { Loader } from "lucide-react";
+import { toast } from "sonner";
 
 import { capitalize } from "../../utils/helpers";
 
@@ -12,7 +13,6 @@ const LibraryListItem = ({
   totalSeats = 1,
   section,
   onCancel,
-  setNotification,
 }) => {
   const [isCancelling, setIsCancelling] = useState(false);
 
@@ -21,25 +21,16 @@ const LibraryListItem = ({
     try {
       if (section === "bookings") {
         await onCancel();
-        setNotification({
-          type: "success",
-          message: `Booking cancelled successfully.`,
-        });
+        toast.success("Booking cancelled successfully!");
       }
       if (section === "offerings") {
         await onCancel();
-        setNotification({
-          type: "success",
-          message: `Ride cancelled successfully.`,
-        });
+        toast.success("Ride cancelled successfully!");
       }
     } catch (err) {
-      setNotification({ type: "error", message: err.message });
+      toast.error(err.message);
     } finally {
       setIsCancelling(false);
-      setTimeout(() => {
-        setNotification({ type: "", message: "" });
-      }, 1500);
     }
   };
 

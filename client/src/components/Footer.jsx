@@ -25,21 +25,7 @@ function Footer() {
             </a>
           </div>
         </div>
-        <div className="footer-flex-item">
-          <p className="footer-flex-item__label">Social</p>
-          <div className="footer-flex-item__links">
-            <a className="footer-flex-item__link" href="https://x.com/" target="_blank">
-              <ion-icon name="logo-twitter"></ion-icon> Twitter
-            </a>
-            <a
-              className="footer-flex-item__link"
-              href="https://www.instagram.com/"
-              target="_blank"
-            >
-              <ion-icon name="logo-instagram"></ion-icon> Instagram
-            </a>
-          </div>
-        </div>
+
         <div className="footer-flex-item">
           <p className="footer-flex-item__label">Support</p>
           <div className="footer-flex-item__links">

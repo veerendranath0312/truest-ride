@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { MapPin, CalendarDays, Loader2 } from "lucide-react";
+import { MapPin, CalendarDays, Loader2, MessageCircleMore } from "lucide-react";
 
 import useChatStore from "../../store/useChatStore";
-import { formattedRideDate, capitalize, truncateNames } from "../../utils/helpers";
+import { formattedRideDate, truncateNames } from "../../utils/helpers";
 
 function ChatList({ chats, isLoading }) {
   const navigate = useNavigate();
@@ -37,7 +37,10 @@ function ChatList({ chats, isLoading }) {
   return (
     <div className={`chat-list ${currentChat && isMobile ? "hidden" : ""}`}>
       <div className="chat-list__header">
-        <h1 className="chat-list__header__title">Group messaging</h1>
+        <h1 className="chat-list__header__title">
+          <MessageCircleMore color="var(--text-secondary)" />
+          Group messaging
+        </h1>
       </div>
       <div className="chat-list__content">
         {isLoading ? (
@@ -65,8 +68,7 @@ function ChatList({ chats, isLoading }) {
                     <div className="chat-list__item-detail">
                       <MapPin size={14} />
                       <span>
-                        {capitalize(chat.ride.from_location)} to{" "}
-                        {capitalize(chat.ride.to_location)}
+                        {chat.ride.from_location} to {chat.ride.to_location}
                       </span>
                     </div>
                     <div className="chat-list__item-detail">
@@ -75,22 +77,6 @@ function ChatList({ chats, isLoading }) {
                     </div>
                   </div>
                 </div>
-                {/* <div className="chat-list__item-actions">
-                  <div onClick={(e) => toggleDropdown(e, chat.id)}>
-                    <MoreVertical size={24} />
-                  </div>
-                  {activeDropdown === chat.id && (
-                    <div className="chat-list__item-dropdown active">
-                      <div
-                        style={{ color: "var(--btn-danger)" }}
-                        className="chat-list__item-dropdown__item"
-                      >
-                        <Trash2 size={16} style={{ color: "var(--btn-danger)" }} />
-                        Delete chat
-                      </div>
-                    </div>
-                  )}
-                </div> */}
               </div>
             ))}
           </>
