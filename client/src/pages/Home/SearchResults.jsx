@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import RidesList from "./RidesList";
 import { Loader, X } from "lucide-react";
+
 import useRideStore from "../../store/useRideStore";
 import { formattedRideDate } from "../../utils/helpers";
-import Notification from "../../components/Notification";
+import RidesList from "./RidesList";
 
 // Component for initial search instructions
 const SearchInstructions = () => (
@@ -46,13 +46,7 @@ const NoRidesFound = ({ findRideFormData }) => {
 };
 
 // Component for search results content
-const SearchResultsContent = ({
-  hasSearched,
-  isLoading,
-  rides,
-  findRideFormData,
-  setNotification,
-}) => {
+const SearchResultsContent = ({ hasSearched, isLoading, rides, findRideFormData }) => {
   if (isLoading) {
     return <LoadingState />;
   }
@@ -65,16 +59,10 @@ const SearchResultsContent = ({
     return <NoRidesFound findRideFormData={findRideFormData} />;
   }
 
-  return <RidesList rides={rides} setNotification={setNotification} />;
+  return <RidesList rides={rides} />;
 };
 
-function SearchResults({
-  hasSearched,
-  setHasSearched,
-  findRideFormData,
-  notification,
-  setNotification,
-}) {
+function SearchResults({ hasSearched, setHasSearched, findRideFormData }) {
   const { isLoading, rides } = useRideStore();
   const [isResultsVisible, setIsResultsVisible] = useState(false);
 
@@ -112,18 +100,12 @@ function SearchResults({
       {/* Desktop View */}
       <div className="ride__search__results desktop-only">
         <h3 className="home__title">Search results</h3>
-
-        {notification.message ? (
-          <Notification type={notification.type} message={notification.message} />
-        ) : (
-          <SearchResultsContent
-            hasSearched={hasSearched}
-            isLoading={isLoading}
-            rides={rides}
-            findRideFormData={findRideFormData}
-            setNotification={setNotification}
-          />
-        )}
+        <SearchResultsContent
+          hasSearched={hasSearched}
+          isLoading={isLoading}
+          rides={rides}
+          findRideFormData={findRideFormData}
+        />
       </div>
 
       {/* Mobile view */}
@@ -134,17 +116,12 @@ function SearchResults({
             <X />
           </button>
         </div>
-        {notification.message ? (
-          <Notification type={notification.type} message={notification.message} />
-        ) : (
-          <SearchResultsContent
-            hasSearched={hasSearched}
-            isLoading={isLoading}
-            rides={rides}
-            findRideFormData={findRideFormData}
-            setNotification={setNotification}
-          />
-        )}
+        <SearchResultsContent
+          hasSearched={hasSearched}
+          isLoading={isLoading}
+          rides={rides}
+          findRideFormData={findRideFormData}
+        />
       </div>
 
       {/* Overlay for mobile */}

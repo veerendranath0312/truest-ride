@@ -2,16 +2,12 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import useRideStore from "../../store/useRideStore";
 import PlacesAutocomplete from "../../components/PlacesAutocomplete";
 
-function FindRide({
-  setHasSearched,
-  findRideFormData,
-  setFindRideFormData,
-  setNotification,
-}) {
+function FindRide({ setHasSearched, findRideFormData, setFindRideFormData }) {
   const { isLoading, searchRides } = useRideStore();
   const [FormLabelErrors, setFormLabelErrors] = useState({
     fromErrorLabel: "",
@@ -20,34 +16,15 @@ function FindRide({
   });
 
   const handleLocationChange = (field, value) => {
-    setFindRideFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-
-    setFormLabelErrors((prev) => ({
-      ...prev,
-      [`${field}ErrorLabel`]: "",
-    }));
-
-    setNotification({ message: "", type: "" }); // Clear notification when user starts typing
+    setFindRideFormData((prev) => ({ ...prev, [field]: value }));
+    setFormLabelErrors((prev) => ({ ...prev, [`${field}ErrorLabel`]: "" }));
     setHasSearched(false); // Reset search results when user starts typing
   };
 
   const handleDateChange = (dates) => {
     const [start, end] = dates;
-    setFindRideFormData((prev) => ({
-      ...prev,
-      startDate: start,
-      endDate: end,
-    }));
-
-    setFormLabelErrors({
-      ...FormLabelErrors,
-      dateErrorLabel: "",
-    });
-
-    setNotification({ message: "", type: "" }); // Clear notification when user starts typing
+    setFindRideFormData((prev) => ({ ...prev, startDate: start, endDate: end }));
+    setFormLabelErrors({ ...FormLabelErrors, dateErrorLabel: "" });
     setHasSearched(false); // Reset search results when user starts typing
   };
 
@@ -75,16 +52,14 @@ function FindRide({
 
     // Perform search
     try {
-      setHasSearched(true); // Set hasSearched after the search is complete
-      setNotification({ message: "", type: "" }); // Clear notification when starting new search
-
       await searchRides({
         ...findRideFormData,
         from: findRideFormData.from.trim(),
         to: findRideFormData.to.trim(),
       });
+      setHasSearched(true); // Set hasSearched after the search is complete
     } catch (error) {
-      setNotification({ message: error.message, type: "error" });
+      toast.error(error.message);
     }
   };
 

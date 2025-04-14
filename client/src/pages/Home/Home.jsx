@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import PlacesAutocomplete from "../../components/PlacesAutocomplete";
 import useAuthStore from "../../store/useAuthStore";
@@ -32,7 +32,6 @@ function Home() {
     startDate: null,
     endDate: null,
   });
-  const [notification, setNotification] = useState({ message: "", type: "" });
   const [formLabelErrors, setFormLabelErrors] = useState({
     fromErrorLabel: "",
     toErrorLabel: "",
@@ -46,26 +45,13 @@ function Home() {
   const closeModal = () => setIsModalOpen(false);
 
   const handleLocationChange = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-
-    setFormLabelErrors((prev) => ({
-      ...prev,
-      [`${field}ErrorLabel`]: "",
-    }));
-
-    setNotification({ message: "", type: "" }); // Clear notification when user starts typing
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormLabelErrors((prev) => ({ ...prev, [`${field}ErrorLabel`]: "" }));
   };
 
   const handleDateChange = (date) => {
     setFormData({ ...formData, rideDate: date?.toISOString() });
-    setFormLabelErrors({
-      ...formLabelErrors,
-      rideDateErrorLabel: "",
-    });
-    setNotification({ message: "", type: "" }); // Clear notification when user starts typing
+    setFormLabelErrors({ ...formLabelErrors, rideDateErrorLabel: "" });
   };
 
   const handleOfferRide = async (e) => {
@@ -86,25 +72,43 @@ function Home() {
     }
 
     // Submit the form
-    try {
-      await offerRide(formData);
-      setNotification({ message: "Ride offered successfully!", type: "success" });
+    toast.promise(offerRide(formData), {
+      loading: "Offering ride...",
+      success: () => {
+        // Reset the form data and close the modal after successful creation
+        setTimeout(() => {
+          setFormData({
+            from: "",
+            to: "",
+            rideDate: new Date().toISOString(),
+            totalSeats: 1,
+            carModel: "",
+          });
+          closeModal();
+        }, 1000);
+        return "Ride offered successfully!";
+      },
+      error: (err) => err.message,
+    });
 
-      // Reset the form data, Notification, and close the modal after 1 second
-      setTimeout(() => {
-        setFormData({
-          from: "",
-          to: "",
-          rideDate: new Date().toISOString(),
-          totalSeats: 1,
-          carModel: "",
-        });
-        setNotification({ message: "", type: "" });
-        closeModal();
-      }, 1000);
-    } catch (err) {
-      setNotification({ message: err.message, type: "error" });
-    }
+    // try {
+    //   await offerRide(formData);
+    //   toast.success("Ride offered successfully!");
+
+    //   // Reset the form data, Notification, and close the modal after 1 second
+    //   setTimeout(() => {
+    //     setFormData({
+    //       from: "",
+    //       to: "",
+    //       rideDate: new Date().toISOString(),
+    //       totalSeats: 1,
+    //       carModel: "",
+    //     });
+    //     closeModal();
+    //   }, 1000);
+    // } catch (err) {
+    //   toast.error(err.message);
+    // }
   };
 
   return (
@@ -124,7 +128,6 @@ function Home() {
               setHasSearched={setHasSearched}
               findRideFormData={findRideFormData}
               setFindRideFormData={setFindRideFormData}
-              setNotification={setNotification}
             />
           </div>
 
@@ -132,8 +135,6 @@ function Home() {
             hasSearched={hasSearched}
             setHasSearched={setHasSearched}
             findRideFormData={findRideFormData}
-            notification={notification}
-            setNotification={setNotification}
           />
         </section>
 
@@ -144,7 +145,6 @@ function Home() {
             onCloseModal={closeModal}
             modalTitle="Offer a ride"
             modalDescription="Please enter the departure and destination locations, ride date, number of available seats (up to 10), and the car's make and model. All fields are required."
-            notification={notification}
           >
             <form className="modal__form" onSubmit={handleOfferRide}>
               <PlacesAutocomplete
@@ -239,15 +239,8 @@ function Home() {
                   onChange={(e) => handleLocationChange("carModel", e.target.value)}
                 />
               </div>
-              <button className="btn modal__button">
-                {isLoading ? (
-                  <>
-                    <Loader2 size={22} className="loader-spin" />
-                    &nbsp; Offering ride...
-                  </>
-                ) : (
-                  "Offer ride"
-                )}
+              <button className="btn modal__button" disabled={isLoading}>
+                Offer ride
               </button>
             </form>
           </Modal>
