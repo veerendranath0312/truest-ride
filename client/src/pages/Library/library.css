@@ -114,8 +114,3 @@
 .list__item__button:hover {
   background-color: var(--btn-primary-hover);
 }
-
-.library__content .notification {
-  max-width: 400px;
-  margin: 0 auto;
-}

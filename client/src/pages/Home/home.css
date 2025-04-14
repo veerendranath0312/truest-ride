@@ -311,6 +311,10 @@
   border-radius: 2px;
 }
 
+.modal__button[disabled] {
+  cursor: not-allowed;
+}
+
 .modal__button:hover {
   background: var(--btn-primary-hover);
 }

@@ -1,7 +1,6 @@
 import { useEffect } from "react";
-import Notification from "../../components/Notification";
 
-function Modal({ onCloseModal, children, modalTitle, modalDescription, notification }) {
+function Modal({ onCloseModal, children, modalTitle, modalDescription }) {
   useEffect(() => {
     // Add the no-scroll class to the body when the modal is opened
     document.body.classList.add("no-scroll");
@@ -20,9 +19,6 @@ function Modal({ onCloseModal, children, modalTitle, modalDescription, notificat
         <div className="modal__content">
           <h3 className="modal__title">{modalTitle}</h3>
           <p className="model__description">{modalDescription}</p>
-          {notification.message && (
-            <Notification type={notification.type} message={notification.message} />
-          )}
           {children}
         </div>
       </div>
