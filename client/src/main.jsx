@@ -13,6 +13,7 @@ import Library from "./pages/Library/Library";
 import AuthLayout from "./components/AuthLayout";
 
 import "./index.css";
+import Profile from "./pages/Profile/Profile.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -35,6 +36,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="chats" element={<Chats />} />
             <Route path="chats/:chatId" element={<Chats />} />
             <Route path="library" element={<Library />} />
+            <Route path="/profile" element={<Profile />} />
           </Route>
         </Route>
       </Routes>

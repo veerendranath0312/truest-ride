@@ -5,7 +5,7 @@ class Config:
     # Database configuration
     MONGODB_SETTINGS = {
         'db': 'truest-ride',
-        'host': os.environ.get('MONGODB_URI'),
+        'host': os.getenv('MONGODB_URI'),
     }
 
     # JWT configuration

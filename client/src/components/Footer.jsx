@@ -27,7 +27,7 @@ function Footer() {
             </a>
           </div>
         </div>
-        <div className="footer-flex-item">
+        {/* <div className="footer-flex-item">
           <p className="footer-flex-item__label">Social</p>
           <div className="footer-flex-item__links">
             <a
@@ -45,7 +45,7 @@ function Footer() {
               <ion-icon name="logo-instagram"></ion-icon> Instagram
             </a>
           </div>
-        </div>
+        </div> */}
         <div className="footer-flex-item">
           <p className="footer-flex-item__label">Support</p>
           <div className="footer-flex-item__links">
@@ -73,7 +73,7 @@ function Footer() {
           <div className="footer-flex-item__subscribe">
             <input
               type="email"
-              placeholder="education@email.edu"
+              placeholder="truestride.team@gmail.com"
               className="footer-flex-item__subscribe__input"
             />
 

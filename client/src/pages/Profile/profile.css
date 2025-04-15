@@ -1,0 +1,148 @@
+/* Profile.css – Apple-Inspired Minimalist Theme */
+
+.profile-page {
+    background-color: #000;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, sans-serif;
+  }
+  
+  .profile-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 40px 20px;
+    box-sizing: border-box;
+  }
+  
+  .profile-card {
+    background-color: #111;
+    padding: 40px 30px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.06);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .avatar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .avatar {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    margin-bottom: 10px;
+    transition: transform 0.3s ease;
+  }
+  
+  .avatar:hover {
+    transform: scale(1.05);
+  }
+  
+  .upload-btn {
+    font-size: 13px;
+    color: white;
+    background-color: #222;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .upload-btn input {
+    position: absolute;
+    opacity: 0;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+  
+  .name-input {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #444;
+    font-size: 22px;
+    text-align: center;
+    color: white;
+    outline: none;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  
+  .view-name {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .profile-role {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 25px;
+    text-align: center;
+  }
+  
+  .profile-info {
+    width: 100%;
+  }
+  
+  .info-item {
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #ccc;
+  }
+  
+  .info-item label {
+    display: block;
+    margin-bottom: 5px;
+    color: #aaa;
+    font-weight: 500;
+  }
+  
+  .info-item input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background-color: #1a1a1a;
+    color: white;
+    font-size: 14px;
+    outline: none;
+  }
+  
+  .action-btn {
+    margin-top: 30px;
+    padding: 10px 24px;
+    font-size: 14px;
+    color: white;
+    background-color: #333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .action-btn:hover {
+    background-color: #444;
+  }
