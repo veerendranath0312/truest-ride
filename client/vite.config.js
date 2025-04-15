@@ -19,7 +19,7 @@ export default defineConfig((command, mode) => {
           target: env.VITE_CORS_ORIGINS, // Backend server
           changeOrigin: true, // Change the origin of the request to match the target
         },
-        allowedHosts: ["cassini.cs.kent.edu", "truestride.kentcs.org"],
+        allowedHosts: ["truestride.kentcs.org", "cassini.cs.kent.edu"],
       },
     },
   };
