@@ -1,9 +1,7 @@
 import { useState } from "react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { toast } from "sonner";
 
-import PlacesAutocomplete from "../../components/PlacesAutocomplete";
 import useAuthStore from "../../store/useAuthStore";
 import useRideStore from "../../store/useRideStore";
 import { capitalize } from "../../utils/helpers";
@@ -11,6 +9,7 @@ import Navbar from "../../components/Navbar";
 import FindRide from "./FindRide";
 import OfferRide from "./OfferRide";
 import SearchResults from "./SearchResults";
+import OfferRideForm from "./OfferRideForm";
 import Footer from "../../components/Footer";
 import Modal from "./Modal";
 import "./home.css";
@@ -90,25 +89,6 @@ function Home() {
       },
       error: (err) => err.message,
     });
-
-    // try {
-    //   await offerRide(formData);
-    //   toast.success("Ride offered successfully!");
-
-    //   // Reset the form data, Notification, and close the modal after 1 second
-    //   setTimeout(() => {
-    //     setFormData({
-    //       from: "",
-    //       to: "",
-    //       rideDate: new Date().toISOString(),
-    //       totalSeats: 1,
-    //       carModel: "",
-    //     });
-    //     closeModal();
-    //   }, 1000);
-    // } catch (err) {
-    //   toast.error(err.message);
-    // }
   };
 
   return (
@@ -146,103 +126,14 @@ function Home() {
             modalTitle="Offer a ride"
             modalDescription="Please enter the departure and destination locations, ride date, number of available seats (up to 10), and the car's make and model. All fields are required."
           >
-            <form className="modal__form" onSubmit={handleOfferRide}>
-              <PlacesAutocomplete
-                id="from"
-                name="from"
-                label="From"
-                value={formData.from}
-                placeholder="Departure location"
-                error={formLabelErrors.fromErrorLabel}
-                onChange={(value) => handleLocationChange("from", value)}
-                onPlaceSelect={(value) => handleLocationChange("from", value)}
-              />
-
-              <PlacesAutocomplete
-                id="to"
-                name="to"
-                label="To"
-                value={formData.to}
-                placeholder="Destination location"
-                error={formLabelErrors.toErrorLabel}
-                onChange={(value) => handleLocationChange("to", value)}
-                onPlaceSelect={(value) => handleLocationChange("to", value)}
-              />
-
-              <div className="modal__form__group">
-                <div className="form__group">
-                  <label
-                    htmlFor="rideDate"
-                    className={`form__label ${
-                      formLabelErrors.rideDateErrorLabel && "form__label--error"
-                    }`}
-                  >
-                    {formLabelErrors.rideDateErrorLabel || "Ride date"}
-                  </label>
-                  <DatePicker
-                    name="rideDate"
-                    isClearable
-                    minDate={new Date()}
-                    selected={formData.rideDate}
-                    onChange={handleDateChange}
-                    dateFormat="MM-dd-yyyy"
-                    placeholderText="Select the date of your ride"
-                    className={`form__input ${
-                      formLabelErrors.rideDateErrorLabel && "form__input--error"
-                    }`}
-                  />
-                </div>
-
-                <div className="form__group">
-                  <label
-                    htmlFor="seats"
-                    className={`form__label ${
-                      formLabelErrors.totalSeatsErrorLabel && "form__label--error"
-                    }`}
-                  >
-                    {formLabelErrors.totalSeatsErrorLabel || "Seats available"}
-                  </label>
-                  <input
-                    type="number"
-                    id="seats"
-                    name="totalSeats"
-                    placeholder="Select seats from 1 to 10"
-                    min={1}
-                    max={10}
-                    className={`form__input ${
-                      formLabelErrors.totalSeatsErrorLabel && "form__input--error"
-                    }`}
-                    value={formData.totalSeats}
-                    onChange={(e) => handleLocationChange("totalSeats", e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="form__group">
-                <label
-                  htmlFor="car"
-                  className={`form__label ${
-                    formLabelErrors.carModelErrorLabel && "form__label--error"
-                  }`}
-                >
-                  {formLabelErrors.carModelErrorLabel || "Car make and model"}
-                </label>
-                <input
-                  type="text"
-                  id="car"
-                  name="carModel"
-                  placeholder="Hyundai, Elantra"
-                  className={`form__input ${
-                    formLabelErrors.carModelErrorLabel && "form__input--error"
-                  }`}
-                  value={formData.carModel}
-                  onChange={(e) => handleLocationChange("carModel", e.target.value)}
-                />
-              </div>
-              <button className="btn modal__button" disabled={isLoading}>
-                Offer ride
-              </button>
-            </form>
+            <OfferRideForm
+              formData={formData}
+              formLabelErrors={formLabelErrors}
+              isLoading={isLoading}
+              handleLocationChange={handleLocationChange}
+              handleDateChange={handleDateChange}
+              handleOfferRide={handleOfferRide}
+            />
           </Modal>
         )}
       </div>
