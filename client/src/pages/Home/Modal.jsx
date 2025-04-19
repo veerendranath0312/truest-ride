@@ -1,26 +1,30 @@
 import { useEffect } from "react";
 
-function Modal({ onCloseModal, children, modalTitle, modalDescription }) {
+function Modal({
+  onCloseModal,
+  children,
+  modalTitle,
+  modalDescription,
+  size = "medium",
+}) {
   useEffect(() => {
-    // Add the no-scroll class to the body when the modal is opened
-    document.body.classList.add("no-scroll");
-
-    // Remove the no-scroll class from the body when the modal is closed
-    return () => {
-      document.body.classList.remove("no-scroll");
-    };
+    document.body.classList.add("no-scroll"); // Add the no-scroll class to the body when the modal is opened
+    return () => document.body.classList.remove("no-scroll"); // Remove the no-scroll class from the body when the modal is closed
   }, []);
+
   return (
     <div className="modal-overlay" onClick={onCloseModal}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div className={`modal-content modal-${size}`} onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" onClick={onCloseModal}>
           <ion-icon name="close-circle-outline"></ion-icon>
         </button>
-        <div className="modal__content">
-          <h3 className="modal__title">{modalTitle}</h3>
-          <p className="model__description">{modalDescription}</p>
-          {children}
-        </div>
+        {(modalTitle || modalDescription) && (
+          <div className="modal-header">
+            {modalTitle && <h3 className="modal-title">{modalTitle}</h3>}
+            {modalDescription && <p className="model-description">{modalDescription}</p>}
+          </div>
+        )}
+        <div className="modal-body">{children}</div>
       </div>
     </div>
   );

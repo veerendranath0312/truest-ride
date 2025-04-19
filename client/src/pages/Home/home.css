@@ -267,18 +267,32 @@
   margin: 1rem;
 }
 
-.modal__title {
+.modal-small {
+  max-width: 480px;
+}
+.modal-medium {
+  max-width: 720px;
+}
+.modal-large {
+  max-width: 960px;
+}
+
+.modal-header {
+  margin-bottom: 24px;
+}
+
+.modal-title {
   font-family: var(--font-family-secondary);
   font-weight: 300;
   font-size: 24px;
   margin-bottom: 1rem;
 }
 
-.model__description {
+.model-description {
+  color: var(--text-secondary);
   font-size: 14px;
   font-weight: 300;
   margin-bottom: 1.5rem;
-  color: var(--text-secondary);
   line-height: 145%;
 }
 
@@ -318,6 +332,11 @@
 .modal__button:hover {
   background: var(--btn-primary-hover);
 }
+
+.modal-body {
+  width: 100%;
+}
+
 .home__search--load {
   display: flex;
   justify-content: center;

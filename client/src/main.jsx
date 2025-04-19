@@ -10,6 +10,7 @@ import Register from "./pages/Register/Register";
 import Home from "./pages/Home/Home";
 import Chats from "./pages/Chats/Chats";
 import Library from "./pages/Library/Library";
+import Profile from "./pages/Profile/Profile";
 import AuthLayout from "./components/AuthLayout";
 
 import "./index.css";
@@ -35,6 +36,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="chats" element={<Chats />} />
             <Route path="chats/:chatId" element={<Chats />} />
             <Route path="library" element={<Library />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
         </Route>
       </Routes>
