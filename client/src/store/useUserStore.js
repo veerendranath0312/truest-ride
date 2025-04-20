@@ -27,9 +27,9 @@ const useUserStore = create((set) => ({
     }
   },
 
-  updateUser: async () => {
+  updateUser: async (userId, userData) => {
     try {
-      const response = await axiosInstance.patch("/users", {
+      const response = await axiosInstance.patch(`/users/${userId}`, userData, {
         headers: {
           Authorization: `Bearer ${useAuthStore.getState().token}`,
         },
