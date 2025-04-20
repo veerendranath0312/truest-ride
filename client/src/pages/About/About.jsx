@@ -1,6 +1,6 @@
 import Navbar from "../../components/Navbar";
 
-import "./aboust.css";
+import "./about.css";
 
 function About() {
   return (

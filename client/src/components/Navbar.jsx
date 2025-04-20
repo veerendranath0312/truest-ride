@@ -35,15 +35,15 @@ function Navbar() {
       </NavLink>
       {isAuthenticated ? (
         <div className="navbar__links">
-          <NavLink to="/" className="navbar__link" href="/">
+          <NavLink to="/" className="navbar__link">
             <span className="navbar__link-text">Home</span>
             <Home className="navbar__link-icon" size={16} strokeWidth={2} />
           </NavLink>
-          <NavLink to="/chats" className="navbar__link" href="/chats">
+          <NavLink to="/chats" className="navbar__link">
             <span className="navbar__link-text">Chats</span>
             <MessagesSquare className="navbar__link-icon" size={16} strokeWidth={2} />
           </NavLink>
-          <NavLink to="/library" className="navbar__link" href="/library">
+          <NavLink to="/library" className="navbar__link">
             <span className="navbar__link-text">Library</span>
             <Library className="navbar__link-icon" size={16} strokeWidth={2} />
           </NavLink>
@@ -77,17 +77,13 @@ function Navbar() {
         </div>
       ) : (
         <div className="navbar__links">
-          <NavLink to="/about" className="navbar__link" href="/about">
+          <NavLink to="/about" className="navbar__link">
             About
           </NavLink>
-          <NavLink to="/signin" className="navbar__link" href="/login">
+          <NavLink to="/signin" className="navbar__link">
             Sign in
           </NavLink>
-          <NavLink
-            to="/register"
-            className="navbar__link navbar__link__join"
-            href="/register"
-          >
+          <NavLink to="/register" className="navbar__link navbar__link__join">
             Join now
           </NavLink>
         </div>
