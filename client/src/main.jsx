@@ -37,6 +37,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="chats/:chatId" element={<Chats />} />
             <Route path="library" element={<Library />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="user/:username" element={<Profile />} />
           </Route>
         </Route>
       </Routes>
