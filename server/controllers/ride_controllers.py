@@ -105,8 +105,8 @@ class RideController:
 
             user = get_current_user()
 
-            if user.to_json()['id'] != ride.to_json()['provider']:
-                return {"status": "fail", "message": "You are not authorized to cancel this ride"}, 403
+            if str(user.id) != str(ride.provider.id):
+                 return {"status": "fail", "message": "You are not authorized to cancel this ride"}, 403
 
             # Delete the chat associated with the ride
             chat = Chat.objects(ride=ride).first()
@@ -114,8 +114,7 @@ class RideController:
                 ChatController.delete_chat(str(chat.id))
 
             # Update the offered_rides array in the user object
-            user.offered_rides.remove(ride)
-            user.save()
+            User.objects(id=user.id).update_one(pull__offered_rides=ride)
 
             # Delete the ride
             ride.delete()

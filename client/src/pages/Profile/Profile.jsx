@@ -13,7 +13,7 @@ import "./profile.css";
 
 function Profile() {
   const { user } = useAuthStore();
-  const { currentUser, fetchUser, updateUser, isLoading } = useUserStore();
+  const { currentUser, fetchUser, isLoading } = useUserStore();
   const { offeredRides, bookedRides, fetchOfferedRides, fetchBookedRides } =
     useRideStore();
   const [isDataLoading, setIsDataLoading] = useState(true);
@@ -34,16 +34,6 @@ function Profile() {
 
     loadProfileData();
   }, [fetchUser, user, fetchOfferedRides, fetchBookedRides]);
-
-  const handleUpdateUser = async (userData) => {
-    try {
-      // Implement the update user logic here using your user store
-      await updateUser(userData);
-      await fetchUser(user.id); // Refresh the user data
-    } catch (error) {
-      throw new Error(error.message || "Failed to update profile");
-    }
-  };
 
   if (isDataLoading || isLoading) {
     return (
@@ -168,8 +158,6 @@ function Profile() {
         <SettingsModal
           isOpen={isSettingsOpen}
           onClose={() => setIsSettingsOpen((prev) => !prev)}
-          currentUser={currentUser}
-          onUpdateUser={handleUpdateUser}
         />
       )}
     </>

@@ -9,12 +9,12 @@ user_bp = Blueprint('users', __name__)
 def get_users():
     return UserController.get_all_users()
 
-@user_bp.route('/<string:user_id>', methods=['GET', 'PUT'])
+@user_bp.route('/<string:user_id>', methods=['GET', 'PATCH', 'DELETE'])
 @jwt_required()
 def user(user_id):
     if request.method == 'GET':
         return UserController.get_user(user_id)
-    elif request.method == 'PUT':
+    elif request.method == 'PATCH':
         data = request.get_json()
         return UserController.update_user(user_id, data)
     elif request.method == 'DELETE':
