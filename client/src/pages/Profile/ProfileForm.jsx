@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import DatePicker from "react-datepicker";
+import useUserStore from "../../store/useUserStore";
 import PlacesAutocomplete from "../../components/PlacesAutocomplete";
 import FormInput from "../../components/FormInput";
 import FormSelect from "../../components/FormSelect";
 
-function ProfileForm({ currentUser, onUpdateUser, onClose }) {
+function ProfileForm({ onClose }) {
+  const { currentUser, updateUser } = useUserStore();
+
   const [formData, setFormData] = useState({
     fullname: currentUser.full_name || "",
     email: currentUser.email || "",
@@ -73,7 +76,7 @@ function ProfileForm({ currentUser, onUpdateUser, onClose }) {
     }
 
     try {
-      await onUpdateUser(formData);
+      await updateUser(currentUser.id, formData);
       toast.success("Profile updated successfully!");
       onClose();
     } catch (error) {
@@ -118,9 +121,9 @@ function ProfileForm({ currentUser, onUpdateUser, onClose }) {
           error={formLabelErrors.genderErrorLabel}
           options={[
             { value: "", label: "Select your gender" },
-            { value: "male", label: "Male" },
-            { value: "female", label: "Female" },
-            { value: "other", label: "Other" },
+            { value: "Male", label: "Male" },
+            { value: "Female", label: "Female" },
+            { value: "Other", label: "Other" },
           ]}
         />
 

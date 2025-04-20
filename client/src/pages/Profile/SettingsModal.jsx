@@ -6,7 +6,7 @@ import AdvancedSettings from "./AdvancedSettings";
 
 import "./settings.css";
 
-function SettingsModal({ isOpen, onClose, currentUser, onUpdateUser }) {
+function SettingsModal({ isOpen, onClose }) {
   const [activeTab, setActiveTab] = useState("profile");
 
   if (!isOpen) return null;
@@ -22,11 +22,7 @@ function SettingsModal({ isOpen, onClose, currentUser, onUpdateUser }) {
 
       <div className="settings-content">
         {activeTab === "profile" ? (
-          <ProfileForm
-            currentUser={currentUser}
-            onUpdateUser={onUpdateUser}
-            onClose={onClose}
-          />
+          <ProfileForm onClose={onClose} />
         ) : (
           <AdvancedSettings onClose={onClose} />
         )}
