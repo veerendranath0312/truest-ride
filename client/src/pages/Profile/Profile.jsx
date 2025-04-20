@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
 import { toast } from "sonner";
 import { User, MapPin, School, Calendar, Loader2 } from "lucide-react";
+import RidesList from "../Home/RidesList";
 
 import useAuthStore from "../../store/useAuthStore";
 import useRideStore from "../../store/useRideStore";
@@ -12,6 +14,8 @@ import { formattedRideDate, capitalize } from "../../utils/helpers";
 import "./profile.css";
 
 function Profile() {
+  const location = useLocation();
+  const { userId } = location.state;
   const { user } = useAuthStore();
   const { currentUser, fetchUser, isLoading } = useUserStore();
   const { offeredRides, bookedRides, fetchOfferedRides, fetchBookedRides } =
@@ -19,12 +23,25 @@ function Profile() {
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
+  // Determine if we're viewing our own profile or someone else's
+  const isOwnProfile = !userId || userId === user.id;
+
   useEffect(() => {
     const loadProfileData = async () => {
       setIsDataLoading(true);
       try {
         // Fetch user profile and rides data in parallel
-        await Promise.all([fetchUser(user.id), fetchOfferedRides(), fetchBookedRides()]);
+        // If viewing own profile, fetch all data
+        if (isOwnProfile) {
+          await Promise.all([
+            fetchUser(user.id),
+            fetchOfferedRides(),
+            fetchBookedRides(),
+          ]);
+        } else {
+          // If viewing someone else's profile, just fetch their own data
+          await fetchUser(userId);
+        }
       } catch (err) {
         toast.error(err.message || "Failed to load profile data.");
       } finally {
@@ -33,7 +50,7 @@ function Profile() {
     };
 
     loadProfileData();
-  }, [fetchUser, user, fetchOfferedRides, fetchBookedRides]);
+  }, [fetchUser, user, fetchOfferedRides, fetchBookedRides, isOwnProfile, userId]);
 
   if (isDataLoading || isLoading) {
     return (
@@ -78,24 +95,34 @@ function Profile() {
                 <h1 className="profile__name">{capitalize(currentUser.full_name)}</h1>
                 <p className="profile__email">{currentUser.email}</p>
               </div>
-              <button className="profile__button" onClick={() => setIsSettingsOpen(true)}>
-                Settings
-              </button>
+              {/* If viewing own profile, show settings button */}
+              {isOwnProfile && (
+                <button
+                  className="profile__button"
+                  onClick={() => setIsSettingsOpen(true)}
+                >
+                  Settings
+                </button>
+              )}
             </div>
 
+            {/* If viewing own profile, show total rides */}
             <hr />
-            <div className="profile__total__rides">
-              <div className="profile__total__rides__item">
-                <p>Currently offering</p>
-                <h2>{offeredRides?.length || 0} rides</h2>
-              </div>
-              <div className="profile__total__rides__item">
-                <p>Currently booked</p>
-                <h2>{bookedRides?.length || 0} rides</h2>
-              </div>
-            </div>
-
-            <hr />
+            {isOwnProfile && (
+              <>
+                <div className="profile__total__rides">
+                  <div className="profile__total__rides__item">
+                    <p>Currently offering</p>
+                    <h2>{offeredRides?.length || 0} rides</h2>
+                  </div>
+                  <div className="profile__total__rides__item">
+                    <p>Currently booked</p>
+                    <h2>{bookedRides?.length || 0} rides</h2>
+                  </div>
+                </div>
+                <hr />
+              </>
+            )}
 
             <div className="profile__bio">
               <div className="profile__content__group">

@@ -49,7 +49,11 @@ function RidesListItem({ ride }) {
         {/* TODO: Implement navigation to the user profile */}
         <p className="ride__search__results__item__description">
           Ride offered by{" "}
-          <Link to="/username" className="username">
+          <Link
+            to={`/user/${ride.provider.full_name.split(" ")[0].toLowerCase()}`}
+            state={{ userId: ride.provider.id }}
+            className="username"
+          >
             {capitalize(ride.provider.full_name)}
           </Link>
         </p>
