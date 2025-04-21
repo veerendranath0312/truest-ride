@@ -1,5 +1,11 @@
 from datetime import datetime, timezone
+
+from flask_jwt_extended import get_current_user
+
 from models.user import User
+from models.ride import Ride
+from models.chat import Chat, Message
+from services.auth_service import AuthService
 
 
 class UserController:
@@ -78,22 +84,121 @@ class UserController:
 
     # This is used to delete a user account
     @staticmethod
-    def initiate_delete_user(user_id):
-        # When the user clicks on the delete account button,
-        # Check if the user is authorized to perform this action
-        # A secure 6 digit OTP will be generated
-        # The OTP will be hashed and stored in the database ()
-        # The OTP will be sent to the user's email
-        # Return appropriate response with status code
-        pass
+    def initiate_delete_user(data):
+        try:
+            email = data.get("email")
+            if not email:
+                return {"status": "error", "message": "Email is required"}, 400
+
+            # FInd the user by email
+            user = User.objects(email=email).first()
+            if not user:
+                return {"status": "error", "message": "User not found"}, 404
+
+            # Verify the requesting user is the same as the user to be deleted
+            current_user = get_current_user()
+            if current_user.email != email:
+                return {"status": "error", "message": "Unauthorized to delete this account"}, 403
+
+            # Generate OTP and send it user's email
+            if AuthService.generate_otp_and_email(email):
+                return {
+                    "status": "success",
+                    "message": "Verification code sent to your email to confirm account deletion."
+                }, 200
+            else:
+                return {
+                    "status": "error",
+                    "message": "Failed to send verification code."
+                }, 500
+        except Exception as e:
+            return {"status": "error", "message": str(e)}, 500
+
 
     @staticmethod
-    def delete_user(user_id, data):
-        # Check if the user_id and data exists
-        # Check if the user_id exists in the database
-        # Check if the OTP is valid
-        # If the OTP is expired or invalid, return appropriate response with status code
-            # Return appropriate response with status code
-        # If the OTP is not expired and valid, delete the user account
-            # Return appropriate response with status code
-        pass
+    def delete_user(data):
+        try:
+            email = data.get("email")
+            otp = data.get("otp")
+
+            if not email or not otp:
+                return {"status": "error", "message": "Email and OTP are required"}, 400
+
+            # Find the user by email
+            user = User.objects(email=email).first()
+            if not user:
+                return {"status": "error", "message": "User not found"}, 404
+
+            # Verify the requesting user is the same as the user to be deleted
+            current_user = get_current_user()
+            if current_user.email != email:
+                return {"status": "error", "message": "Unauthorized to delete this account"}, 403
+
+            # Verify OTP
+            otp_verification = AuthService.verify_otp(user.email, otp)
+            if otp_verification[0]["status"] == "fail":
+                return otp_verification
+
+            # Get all offered rides by the user
+            offered_rides = Ride.objects(provider=user)
+
+            # Get all booked rides by the user
+            booked_rides = Ride.objects(bookers=user)
+
+            # For each offered ride, delete associated chats and the ride itself
+            for ride in offered_rides:
+                # Get associated chat
+                chat = Chat.objects(ride=ride).first()
+                if chat:
+                    # Delete all messages in the chat
+                    Message.objects(chat=chat).delete()
+                    # Delete the chat
+                    chat.delete()
+
+                # Delete the ride
+                ride.delete()
+
+            # For each booked ride, remove user from bookers and update available seats
+            for ride in booked_rides:
+                if user in ride.bookers:
+                    ride.bookers.remove(user)
+                    ride.available_seats += 1
+                    ride.save()
+
+                # Remove user from any chats associated with the ride
+                chat = Chat.objects(ride=ride).first()
+                if chat and user in chat.users:
+                    chat.users.remove(user)
+                    chat.save()
+
+                    # Add system message about user leaving
+                    system_message = Message(
+                        chat=chat,
+                        content=f"{user.full_name} has left the chat (account deleted).",
+                        message_type="system",
+                        timestamp=datetime.now(timezone.utc)
+                    )
+                    system_message.save()
+
+            # Remove user from any remaining chats (cleanup)
+            for chat in Chat.objects(users=user):
+                chat.users.remove(user)
+                chat.save()
+
+                # Add system message about user leaving
+                system_message = Message(
+                    chat=chat,
+                    content=f"{user.full_name} has left the chat (account deleted).",
+                    message_type="system",
+                    timestamp=datetime.now(timezone.utc)
+                )
+
+            # Finally delete the user
+            user.delete()
+
+            return {
+                "status": "success",
+                "message": "Account deleted successfully."
+            }
+        except Exception as e:
+            return {"status": "error", "message": str(e)}, 500

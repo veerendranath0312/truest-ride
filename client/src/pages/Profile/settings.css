@@ -53,6 +53,7 @@
   background: transparent;
   display: flex;
   align-items: center;
+  text-align: center;
   transition: all var(--transition-time) linear;
 }
 
