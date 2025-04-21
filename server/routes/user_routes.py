@@ -4,12 +4,22 @@ from controllers.user_controllers import UserController
 from controllers.chat_controllers import ChatController
 user_bp = Blueprint('users', __name__)
 
-@user_bp.route('/', methods=['GET'])
+@user_bp.route('', methods=['GET', 'DELETE'])
 @jwt_required()
-def get_users():
-    return UserController.get_all_users()
+def users():
+    if request.method == 'GET':
+        return UserController.get_all_users()
+    elif request.method == 'DELETE':
+        data = request.get_json()
+        return UserController.delete_user(data)
 
-@user_bp.route('/<string:user_id>', methods=['GET', 'PATCH', 'DELETE'])
+@user_bp.route('/initiate-delete', methods=['POST'])
+@jwt_required()
+def initiate_delete_user():
+    data = request.get_json()
+    return UserController.initiate_delete_user(data)
+
+@user_bp.route('/<string:user_id>', methods=['GET', 'PATCH'])
 @jwt_required()
 def user(user_id):
     if request.method == 'GET':
@@ -17,9 +27,6 @@ def user(user_id):
     elif request.method == 'PATCH':
         data = request.get_json()
         return UserController.update_user(user_id, data)
-    elif request.method == 'DELETE':
-        data = request.get_json()
-        return UserController.delete_user(user_id, data)
     else:
         return {
             "status": "error",
@@ -36,7 +43,4 @@ def get_user_chats():
 def get_chat_messages(chat_id):
     return ChatController.get_chat_messages(chat_id)
 
-@user_bp.route('/<string:user_id>/initiate-delete', methods=['DELETE'])
-@jwt_required()
-def initiate_delete_user(user_id):
-    return UserController.initiate_delete_user(user_id)
+

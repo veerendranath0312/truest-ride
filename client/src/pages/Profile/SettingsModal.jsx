@@ -24,7 +24,7 @@ function SettingsModal({ isOpen, onClose }) {
         {activeTab === "profile" ? (
           <ProfileForm onClose={onClose} />
         ) : (
-          <AdvancedSettings onClose={onClose} />
+          <AdvancedSettings />
         )}
       </div>
     </Modal>

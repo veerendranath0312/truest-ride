@@ -10,6 +10,7 @@ import { validateEducationalEmail } from "../../utils/helpers";
 
 import "./signin.css";
 import astroImage from "../../assets/Astro.svg";
+import OTPVerification from "../../components/OTPVerification";
 
 function SignIn() {
   const navigate = useNavigate();
@@ -19,7 +20,6 @@ function SignIn() {
   const [email, setEmail] = useState("");
   const [emailErrorLabel, setEmailErrorLabel] = useState(""); // For label error text
   const [errorMessage, setErrorMessage] = useState(""); // For ErrorMessage component
-  const [otp, setOtp] = useState("");
 
   // Reset otpSent state when user navigates away from the page
   useEffect(() => {
@@ -37,11 +37,6 @@ function SignIn() {
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
     setEmailErrorLabel("");
-    setErrorMessage(""); // Clear error message when user starts typing
-  };
-
-  const handleOtpChange = (e) => {
-    setOtp(e.target.value);
     setErrorMessage(""); // Clear error message when user starts typing
   };
 
@@ -71,19 +66,12 @@ function SignIn() {
   };
 
   // Verify OTP and sign in the user if OTP is valid and redirect to the home page
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
-
-    if (!otp) {
-      setErrorMessage("Please enter a valid 6-digit code.");
-      return;
-    }
-
+  const handleVerifyOtp = async (otp) => {
     try {
       await verifySignIn(email, otp);
       navigate("/home", { replace: true });
     } catch (err) {
-      setErrorMessage(err.message);
+      throw new Error(err.message);
     }
   };
 
@@ -95,45 +83,15 @@ function SignIn() {
         <div className="container">
           <div className="form__wrapper">
             {otpSent ? (
-              <>
-                {/* OTP verification step */}
-                <div className="form__hero__text">
-                  <h1 className="form__hero__text__title">Check your inbox</h1>
-                  <p className="form__hero__text__subtitle">
-                    Enter the 6-digit code we sent to <b>{email}</b> to finish your sign
-                    in.
-                  </p>
-                </div>
-
-                {errorMessage && <Notification type="error" message={errorMessage} />}
-
-                <form className="form" onSubmit={handleVerifyOtp}>
-                  <div className="form__group">
-                    <label htmlFor="otp" className="form__label">
-                      OTP
-                    </label>
-                    <input
-                      type="text"
-                      id="otp"
-                      name="otp"
-                      placeholder="6-digit code"
-                      className="form__input"
-                      value={otp}
-                      onChange={handleOtpChange}
-                      required
-                    />
-                  </div>
-                  <button className="btn form__button form__button--email">
-                    {isSigningIn ? (
-                      <>
-                        <Loader2 size={22} /> Signing up...
-                      </>
-                    ) : (
-                      "Sign in"
-                    )}
-                  </button>
-                </form>
-              </>
+              <OTPVerification
+                email={email}
+                onVerify={handleVerifyOtp}
+                isLoading={isSigningIn}
+                title="Check your inbox"
+                buttonText="Sign in"
+                loadingText="Signing in..."
+                action="finish your sign in"
+              />
             ) : (
               <>
                 {/* Email entering step */}

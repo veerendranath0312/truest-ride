@@ -15,7 +15,7 @@ import "./profile.css";
 
 function Profile() {
   const location = useLocation();
-  const { userId } = location.state;
+  const userId = location?.state?.userId;
   const { user } = useAuthStore();
   const { currentUser, fetchUser, isLoading } = useUserStore();
   const { offeredRides, bookedRides, fetchOfferedRides, fetchBookedRides } =

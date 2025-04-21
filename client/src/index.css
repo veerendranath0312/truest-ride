@@ -412,6 +412,35 @@ select.form__input {
   color: var(--bg-primary);
 }
 
+.form__button-container {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+}
+
+.form__button--danger {
+  color: var(--btn-danger);
+  border: 1px solid var(--btn-danger);
+  background: transparent;
+}
+
+.form__button--danger:hover:not(:disabled) {
+  background: var(--btn-danger);
+  color: var(--text-primary);
+}
+
+.form__button--cancel {
+  color: var(--text-secondary);
+  border: 1px solid var(--text-secondary);
+  background: transparent;
+}
+
+.form__button--cancel:hover:not(:disabled) {
+  color: var(--bg-primary);
+  border: 1px solid var(--text-primary);
+  background: var(--text-primary);
+}
+
 .form__divider {
   display: flex;
   justify-content: center;

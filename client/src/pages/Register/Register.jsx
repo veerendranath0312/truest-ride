@@ -9,6 +9,7 @@ import Notification from "../../components/Notification";
 import { validateEducationalEmail } from "../../utils/helpers";
 
 import newBeginningImage from "../../assets/New Beginnings.svg";
+import OTPVerification from "../../components/OTPVerification";
 
 function Register() {
   const navigate = useNavigate();
@@ -16,7 +17,6 @@ function Register() {
     useAuthStore();
 
   const [formData, setFormData] = useState({ fullname: "", email: "" });
-  const [otp, setOtp] = useState("");
   const [formLabelErrors, setFormLabelErrors] = useState({
     fullnameErrorLabel: "",
     emailErrorLabel: "",
@@ -46,11 +46,6 @@ function Register() {
       ...formLabelErrors,
       [`${e.target.name}ErrorLabel`]: "",
     });
-    setErrorMessage(""); // Clear error message when user starts typing
-  };
-
-  const handleOtpChange = (e) => {
-    setOtp(e.target.value);
     setErrorMessage(""); // Clear error message when user starts typing
   };
 
@@ -95,19 +90,12 @@ function Register() {
   };
 
   // Verify OTP and sign up the user if OTP is valid and redirect to the home page
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
-
-    if (!otp) {
-      setErrorMessage("Please enter a valid 6-digit code.");
-      return;
-    }
-
+  const handleVerifyOtp = async (otp) => {
     try {
       await verifySignUp(formData.fullname, formData.email, otp);
       navigate("/home", { replace: true });
     } catch (err) {
-      setErrorMessage(err.message);
+      throw new Error(err.message);
     }
   };
 
@@ -119,44 +107,15 @@ function Register() {
         <div className="container">
           <div className="form__wrapper">
             {otpSent ? (
-              <>
-                {/* OTP verification step */}
-                <div className="form__hero__text">
-                  <h1 className="form__hero__text__title">Check your inbox</h1>
-                  <p className="form__hero__text__subtitle">
-                    Enter the 6-digit code we sent to <b>{formData.email}</b> to finish
-                    your sign up.
-                  </p>
-                </div>
-
-                {errorMessage && <Notification type="error" message={errorMessage} />}
-
-                <form className="form" onSubmit={handleVerifyOtp}>
-                  <div className="form__group">
-                    <label htmlFor="otp" className="form__label">
-                      OTP
-                    </label>
-                    <input
-                      type="text"
-                      id="otp"
-                      name="otp"
-                      placeholder="6-digit code"
-                      className="form__input"
-                      value={otp}
-                      onChange={handleOtpChange}
-                    />
-                  </div>
-                  <button className="btn form__button form__button--email">
-                    {isSigningUp ? (
-                      <>
-                        <Loader2 size={24} /> Signing up...
-                      </>
-                    ) : (
-                      "Sign up"
-                    )}
-                  </button>
-                </form>
-              </>
+              <OTPVerification
+                email={formData.email}
+                onVerify={handleVerifyOtp}
+                isLoading={isSigningUp}
+                title="Check your inbox"
+                buttonText="Sign up"
+                loadingText="Signing up..."
+                action="finish your sign up"
+              />
             ) : (
               <>
                 {/* Fullname & Email entering step */}

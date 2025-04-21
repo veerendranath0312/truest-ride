@@ -43,19 +43,47 @@ const useUserStore = create((set) => ({
     }
   },
 
-  deleteAccount: async () => {
+  initiateDeleteAccount: async (email) => {
+    try {
+      const response = await axiosInstance.post(
+        "/users/initiate-delete",
+        { email },
+        {
+          headers: {
+            Authorization: `Bearer ${useAuthStore.getState().token}`,
+          },
+        }
+      );
+
+      if (response.data.status !== "success") {
+        throw new Error(response.data.message);
+      }
+
+      return response.data.message;
+    } catch (error) {
+      throw new Error(
+        error?.response?.data?.message || "Failed to initiate account deletion."
+      );
+    }
+  },
+
+  deleteAccount: async (email, otp) => {
     try {
       const response = await axiosInstance.delete("/users", {
         headers: {
           Authorization: `Bearer ${useAuthStore.getState().token}`,
         },
+        data: { email, otp }, // Use 'data' property to send body with DELETE request
       });
 
       if (response.data.status === "success") {
         set({ currentUser: null });
+        // Call signOut from useAuthStore which will handle setting the user to null.
+        useAuthStore.getState().signOut();
       }
+      return response.data;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      throw new Error(error.response?.data?.message || "Failed to delete account");
     }
   },
 }));
