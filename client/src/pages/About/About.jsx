@@ -29,13 +29,13 @@ const professors = [
 ];
 
 const students = [
-  { name: "Veerendranath", role: "Frontend Developer", email: "vpottipa@kent.edu", linkedin: "#", img: " " },
+  { name: "Veerendranath", role: "Frontend Developer", email: "vpottipa@kent.edu", linkedin: "#", img: ".././../src/assets/images/.png " },
   { name: "Arunkumar Turaka", role: "UI/UX Designer", email: "aturaka@kent.edu", linkedin: "#", img: ".././../src/assets/images/arun.png" },
-  { name: "Jagadeesh", role: "Backend Developer", email: "Jaladasu@kent.edu", linkedin: "#", img: " " },
-  { name: "SwethaNagaSai chirumamilla ", role: "Frontend Developer", email: "schirum4@kent.edu ", linkedin: "#", img: " " },
-  { name: "Hrushikesh Tadepally", role: "Backend Developer", email: "htadepal@kent.edu ", linkedin: "#", img: " " },
-  { name: "Shivasaketh Simaladari ", role: "Frontend Developer", email: "ssimalad@kent.edu", linkedin: "#", img: " " },
-  { name: "Srilakshmi Dasari", role: "Backend Developer", email: "dsrilaks@kent.edu ", linkedin: "#", img: " " }
+  { name: "Jagadeesh", role: "Backend Developer", email: "Jaladasu@kent.edu", linkedin: "#", img: ".././../src/assets/images/.png " },
+  { name: "SwethaNagaSai chirumamilla ", role: "Frontend Developer", email: "schirum4@kent.edu ", linkedin: "#", img: ".././../src/assets/images/.png " },
+  { name: "Hrushikesh Tadepally", role: "Backend Developer", email: "htadepal@kent.edu ", linkedin: "#", img: ".././../src/assets/images/.png " },
+  { name: "Shivasaketh Simaladari ", role: "Frontend Developer", email: "ssimalad@kent.edu", linkedin: "#", img: ".././../src/assets/images/.png " },
+  { name: "Srilakshmi Dasari", role: "Backend Developer", email: "dsrilaks@kent.edu ", linkedin: "#", img: ".././../src/assets/images/.png " }
 ];
 
 const About = () => {
@@ -59,8 +59,8 @@ const About = () => {
           </div>
           <div className="mv-text">
             <h2>🎯 Our Mission</h2>
-            <p>Our mission is to foster a trustworthy, affordable transportation culture for students.</p>
-            <p>By enabling students to share rides with peers, we ensure community and comfort every trip.</p>
+            <p>We’re exploring the idea of creating a low-cost, friendly ride-sharing web application specifically for weekend travel. </p>
+            <p>The main focus would be on helping students, particularly international ones, travel to nearby destinations, like tourist spots or popular hangouts around their university—without the high cost of other ride services.</p>
           </div>
         </div>
         <div className="mv-split reverse">
@@ -69,7 +69,7 @@ const About = () => {
           </div>
           <div className="mv-text">
             <h2>🌍 Our Vision</h2>
-            <p>We envision a student travel ecosystem where spontaneity meets safety and connection.</p>
+            <p>The idea is to offer a safe and affordable way to travel with people you know or who are part of your community. It’s not about competing with big platforms like Uber or Rapido, but more about creating a trusted environment</p>
           </div>
         </div>
       </section>
