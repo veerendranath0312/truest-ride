@@ -25,7 +25,7 @@ const useChatStore = create((set, get) => ({
     }
 
     // Create new socket with proper configuration
-    socket = io(import.meta.env.SOCKET_URL, {
+    socket = io(import.meta.env.VITE_SOCKET_URL, {
       query: { token },
       transports: ["websocket", "polling"],
       reconnection: true,

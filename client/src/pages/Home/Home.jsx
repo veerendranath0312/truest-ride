@@ -75,16 +75,14 @@ function Home() {
       loading: "Offering ride...",
       success: () => {
         // Reset the form data and close the modal after successful creation
-        setTimeout(() => {
-          setFormData({
-            from: "",
-            to: "",
-            rideDate: new Date().toISOString(),
-            totalSeats: 1,
-            carModel: "",
-          });
-          closeModal();
-        }, 1000);
+        setFormData({
+          from: "",
+          to: "",
+          rideDate: new Date().toISOString(),
+          totalSeats: 1,
+          carModel: "",
+        });
+        closeModal();
         return "Ride offered successfully!";
       },
       error: (err) => err.message,

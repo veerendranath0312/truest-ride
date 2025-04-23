@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { toast } from "sonner";
 import { User, MapPin, School, Calendar, Loader2 } from "lucide-react";
-import RidesList from "../Home/RidesList";
 
 import useAuthStore from "../../store/useAuthStore";
 import useRideStore from "../../store/useRideStore";

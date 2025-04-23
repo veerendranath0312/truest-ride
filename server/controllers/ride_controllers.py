@@ -187,32 +187,37 @@ class RideController:
     @staticmethod
     def search_rides(data):
         try:
-            # Convert the ride_date to UTC
+            # Get location parameters
             from_location = data.get('from')
             to_location = data.get('to')
-            start_date = datetime.fromisoformat(data.get('startDate')).astimezone(timezone.utc)
-            end_date = datetime.fromisoformat(data.get('endDate')).astimezone(timezone.utc)
 
+            # Create base match criteria
             match_stage = {
                 'available_seats': {'$gt': 0}  # Filter out rides with zero available seats
             }
 
+            # Add location filters if provided
             if from_location:
                 match_stage['from_location'] = {'$regex': from_location, '$options': 'i'}
 
             if to_location:
                 match_stage['to_location'] = {'$regex': to_location, '$options': 'i'}
 
-            if start_date and end_date:
+            # Add date filters only if both dates are provided
+            if data.get('startDate') and data.get('endDate'):
+                start_date = datetime.fromisoformat(data.get('startDate')).astimezone(timezone.utc)
+                end_date = datetime.fromisoformat(data.get('endDate')).astimezone(timezone.utc)
+
                 if start_date == end_date:
                     match_stage['ride_date'] = {'$eq': start_date}
                 else:
                     match_stage['ride_date'] = {'$gte': start_date, '$lte': end_date}
 
 
-            # Get the current_user
+            # Get the current_user and only exclude their rides if authenticated
             user = get_current_user()
-            match_stage['provider'] = {'$ne': user.id} # Exclude rides offered by the current_user
+            if user:  # Check if user is authenticated
+                match_stage['provider'] = {'$ne': user.id}
 
             rides = Ride.objects.aggregate([
                 {'$match': match_stage},
