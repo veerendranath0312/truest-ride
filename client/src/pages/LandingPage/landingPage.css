@@ -126,9 +126,14 @@
 
 .landing-page__features__flex {
   display: flex;
-  gap: 1rem;
-  justify-content: center;
+  gap: 1.5rem;
+  justify-content: space-between;
+  align-items: stretch;
   font-weight: light;
+}
+
+.landing-page__features__flex__item {
+  flex: 1;
 }
 
 .landing-page__features__flex__item ion-icon {
@@ -211,7 +216,8 @@ hr {
   }
 
   .landing-page__features__flex {
-    flex-wrap: wrap;
+    flex-direction: column;
+    text-wrap: balance;
     gap: 2rem;
   }
 }
