@@ -87,14 +87,13 @@ function Profile() {
             <div className="profile__header">
               <img
                 className="profile__image"
-                src="https://www.shutterstock.com/image-vector/july-3-2023-vector-illustration-600nw-2326749515.jpg"
+                src={currentUser.image_url}
                 alt={`${currentUser.full_name}'s profile`}
               />
               <div className="profile__header__group">
                 <h1 className="profile__name">{capitalize(currentUser.full_name)}</h1>
                 <p className="profile__email">{currentUser.email}</p>
               </div>
-              {/* If viewing own profile, show settings button */}
               {isOwnProfile && (
                 <button
                   className="profile__button"
@@ -104,7 +103,6 @@ function Profile() {
                 </button>
               )}
             </div>
-
             {/* If viewing own profile, show total rides */}
             <hr />
             {isOwnProfile && (

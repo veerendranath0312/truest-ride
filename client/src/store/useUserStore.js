@@ -36,7 +36,11 @@ const useUserStore = create((set) => ({
       });
 
       if (response.data.status === "success") {
-        set({ currentUser: response.data.data.user });
+        const updatedUser = response.data.data.user;
+        set({ currentUser: updatedUser });
+
+        // Update the auth store user data as well
+        useAuthStore.getState().updateUserData(updatedUser);
       }
     } catch (error) {
       throw new Error(error.response.data.message);

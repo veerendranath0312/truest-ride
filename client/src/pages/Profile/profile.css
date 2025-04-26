@@ -20,6 +20,7 @@
   border-radius: 40%;
   width: 130px;
   height: 130px;
+  object-fit: cover;
 }
 
 .profile__name {

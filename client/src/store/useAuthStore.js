@@ -114,10 +114,14 @@ const useAuthStore = create(
         }
       },
 
-      signUp: async (fullname, email) => {
+      signUp: async (fullname, email, gender) => {
         set({ isSigningUp: true });
         try {
-          const response = await axiosInstance.post("/auth/signup", { fullname, email });
+          const response = await axiosInstance.post("/auth/signup", {
+            fullname,
+            email,
+            gender,
+          });
 
           if (response.data.status === "success") {
             set({ otpSent: true });
@@ -139,12 +143,12 @@ const useAuthStore = create(
         }
       },
 
-      verifySignUp: async (fullname, email, otp) => {
-        set({ isSigningUp: true });
+      verifySignUp: async (fullname, email, gender, otp) => {
         try {
           const response = await axiosInstance.post("/auth/verify-signup", {
             fullname,
             email,
+            gender,
             otp,
           });
 
@@ -224,6 +228,15 @@ const useAuthStore = create(
         } catch (err) {
           return false; // If decoding fails, consider the token invalid
         }
+      },
+
+      updateUserData: (updatedUser) => {
+        set((state) => ({
+          user: {
+            ...state.user,
+            ...updatedUser,
+          },
+        }));
       },
     }),
     {

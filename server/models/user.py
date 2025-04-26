@@ -1,5 +1,6 @@
 from mongoengine import *
 from datetime import datetime, timezone
+from urllib.parse import quote
 
 
 class User(Document):
@@ -10,7 +11,7 @@ class User(Document):
     university = StringField(default='')
     university_start_date = DateTimeField()
     university_end_date = DateTimeField()
-    gender = StringField(choices=['Male', 'Female', 'Other'])
+    gender = StringField(required=True, choices=['Male', 'Female', 'Other'])
     age = IntField(min_value=18, max_value=100)
     created_at = DateTimeField(default=datetime.now(timezone.utc))
     image_url = StringField(default='')
@@ -22,6 +23,19 @@ class User(Document):
             {'fields': ['university']}
         ]
     }
+
+    def save(self, *args, **kwargs):
+        # Set default avatar based on gender if image_url is not set
+        if not self.image_url:
+            # URL encode the username to handle special characters and spaces
+            encoded_name = quote(self.full_name)
+            if self.gender == 'Male':
+                self.image_url = f'https://avatar.iran.liara.run/public/boy?username={encoded_name}'
+            elif self.gender == 'Female':
+                self.image_url = f'https://avatar.iran.liara.run/public/girl?username={encoded_name}'
+            else:
+                self.image_url = f'https://avatar.iran.liara.run/public/boy?username={encoded_name}'
+        super(User, self).save(*args, **kwargs)
 
     def to_json(self):
         return {

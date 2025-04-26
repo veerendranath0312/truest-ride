@@ -9,7 +9,7 @@ function FormSelect({ label, error, options, ...props }) {
       </label>
       <select {...props} className={`form__input ${error && "form__input--error"}`}>
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option key={option.value} value={option.value} className="form__input__option">
             {option.label}
           </option>
         ))}

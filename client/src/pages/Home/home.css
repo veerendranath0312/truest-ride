@@ -308,6 +308,20 @@
   width: 100%;
 }
 
+.modal__form .image-preview {
+  width: 80px;
+  height: 80px;
+  border-radius: 40%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.modal__form .image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .modal-close {
   position: absolute;
   top: 20px;

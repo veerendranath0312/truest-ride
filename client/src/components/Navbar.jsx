@@ -51,7 +51,11 @@ function Navbar() {
             <span className="navbar__profile__name">
               {capitalize(user?.full_name?.split(" ")[0] || "")}
             </span>
-            <ion-icon name="person-circle-outline"></ion-icon>
+            <img
+              src={user?.image_url}
+              alt={`${user?.full_name}'s avatar`}
+              className="navbar__profile__avatar"
+            />
           </div>
           <div
             className={
