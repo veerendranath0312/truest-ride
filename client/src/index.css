@@ -103,16 +103,24 @@ body {
   display: none;
 }
 
-ion-icon[name="person-circle-outline"] {
+/* ion-icon[name="person-circle-outline"] {
   font-size: 36px;
   transition: color var(--transition-time) linear;
-}
+} */
 
 .navbar__profile {
   display: flex;
   align-items: center;
   gap: 0.25rem;
   cursor: pointer;
+}
+
+.navbar__profile__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-left: 4px;
 }
 
 .navbar__link__profile_icon:hover {
@@ -339,6 +347,10 @@ an .active class name for easy styling with CSS */
   cursor: text;
 }
 
+.form__group select option:first-child {
+  color: var(--text-secondary);
+}
+
 .form__input--error {
   border: 1px solid var(--btn-danger);
 }
@@ -354,9 +366,7 @@ select.form__input {
   background-size: 1em;
   padding-right: 2.5rem;
 }
-.form__group select option {
-  color: var(--text-secondary);
-}
+
 /* REACT DATEPICKER CUSTOME STYLES */
 .react-datepicker-wrapper {
   width: 100%;
@@ -558,6 +568,12 @@ select.form__input {
 
   .navbar__profile__name {
     display: none;
+  }
+
+  .navbar__profile__avatar {
+    width: 30px;
+    height: 30px;
+    margin-left: 0;
   }
 }
 

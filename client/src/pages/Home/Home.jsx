@@ -94,7 +94,7 @@ function Home() {
       <Navbar isAuthenticated={true} />
       <div className="container">
         <h2 className="home__welcome">
-          Welcome back, {capitalize(user?.full_name?.split(" ")[0] || "")}{" "}
+          Welcome, {capitalize(user?.full_name?.split(" ")[0] || "")}{" "}
           <span className="waving-hand" role="img" aria-label="waving hand">
             👋
           </span>

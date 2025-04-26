@@ -6,6 +6,8 @@ import Navbar from "../../components/Navbar";
 import JoinUs from "../../components/JoinUs";
 import Footer from "../../components/Footer";
 import Notification from "../../components/Notification";
+import FormInput from "../../components/FormInput";
+import FormSelect from "../../components/FormSelect";
 import { validateEducationalEmail } from "../../utils/helpers";
 
 import newBeginningImage from "../../assets/New Beginnings.svg";
@@ -16,10 +18,16 @@ function Register() {
   const { otpSent, signUp, verifySignUp, isSigningUp, isAuthenticated, setOtpSent } =
     useAuthStore();
 
-  const [formData, setFormData] = useState({ fullname: "", email: "" });
+  const [formData, setFormData] = useState({
+    fullname: "",
+    email: "",
+    gender: "",
+  });
+
   const [formLabelErrors, setFormLabelErrors] = useState({
     fullnameErrorLabel: "",
     emailErrorLabel: "",
+    genderErrorLabel: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -36,15 +44,16 @@ function Register() {
   }, [isAuthenticated, navigate]);
 
   // Handle form input change and clear error messages
-  const handleFormChange = (e) => {
+  // Handle form input change and clear error messages
+  const handleFormChange = (field, value) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [field]: value,
     });
 
     setFormLabelErrors({
       ...formLabelErrors,
-      [`${e.target.name}ErrorLabel`]: "",
+      [`${field}ErrorLabel`]: "",
     });
     setErrorMessage(""); // Clear error message when user starts typing
   };
@@ -63,6 +72,10 @@ function Register() {
       errors.emailErrorLabel = "Email is required";
     }
 
+    if (!formData.gender) {
+      errors.genderErrorLabel = "Gender is required";
+    }
+
     if (Object.keys(errors).length > 0) {
       setFormLabelErrors(errors);
       return;
@@ -72,16 +85,18 @@ function Register() {
       setFormLabelErrors({
         fullnameErrorLabel: "",
         emailErrorLabel: "",
+        genderErrorLabel: "",
       });
       setErrorMessage("Enter a valid educational email.");
       return;
     }
 
     try {
-      await signUp(formData.fullname, formData.email);
+      await signUp(formData.fullname, formData.email, formData.gender);
       setFormLabelErrors({
         fullnameErrorLabel: "",
         emailErrorLabel: "",
+        genderErrorLabel: "",
       });
       setErrorMessage("");
     } catch (err) {
@@ -92,7 +107,7 @@ function Register() {
   // Verify OTP and sign up the user if OTP is valid and redirect to the home page
   const handleVerifyOtp = async (otp) => {
     try {
-      await verifySignUp(formData.fullname, formData.email, otp);
+      await verifySignUp(formData.fullname, formData.email, formData.gender, otp);
       navigate("/home", { replace: true });
     } catch (err) {
       throw new Error(err.message);
@@ -126,48 +141,43 @@ function Register() {
                 {errorMessage && <Notification type="error" message={errorMessage} />}
 
                 <form className="form" onSubmit={handleRegister}>
-                  <div className="form__group">
-                    <label
-                      htmlFor="fullname"
-                      className={`form__label ${
-                        formLabelErrors.fullnameErrorLabel && "form__label--error"
-                      }`}
-                    >
-                      {formLabelErrors.fullnameErrorLabel || "Full name"}
-                    </label>
-                    <input
-                      type="text"
-                      id="fullname"
-                      name="fullname"
-                      placeholder="Full name"
-                      className={`form__input ${
-                        formLabelErrors.fullnameErrorLabel && "form__input--error"
-                      }`}
-                      value={formData.fullname}
-                      onChange={handleFormChange}
-                    />
-                  </div>
-                  <div className="form__group">
-                    <label
-                      htmlFor="email"
-                      className={`form__label ${
-                        formLabelErrors.emailErrorLabel && "form__label--error"
-                      }`}
-                    >
-                      {formLabelErrors.emailErrorLabel || "Email"}
-                    </label>
-                    <input
-                      type="text"
-                      id="email"
-                      name="email"
-                      placeholder="Email address"
-                      className={`form__input ${
-                        formLabelErrors.emailErrorLabel && "form__input--error"
-                      }`}
-                      value={formData.email}
-                      onChange={handleFormChange}
-                    />
-                  </div>
+                  <FormInput
+                    type="text"
+                    id="fullname"
+                    name="fullname"
+                    label="Full name"
+                    placeholder="Enter your full name"
+                    value={formData.fullname}
+                    onChange={(e) => handleFormChange("fullname", e.target.value)}
+                    error={formLabelErrors.fullnameErrorLabel}
+                  />
+
+                  <FormInput
+                    type="email"
+                    id="email"
+                    name="email"
+                    label="Email"
+                    placeholder="Enter your email address"
+                    value={formData.email}
+                    onChange={(e) => handleFormChange("email", e.target.value)}
+                    error={formLabelErrors.emailErrorLabel}
+                  />
+
+                  <FormSelect
+                    id="gender"
+                    name="gender"
+                    label="Gender"
+                    value={formData.gender}
+                    onChange={(e) => handleFormChange("gender", e.target.value)}
+                    error={formLabelErrors.genderErrorLabel}
+                    options={[
+                      { value: "", label: "Select your gender" },
+                      { value: "Male", label: "Male" },
+                      { value: "Female", label: "Female" },
+                      { value: "Other", label: "Other" },
+                    ]}
+                  />
+
                   <button className="btn form__button form__button--email">
                     {isSigningUp ? (
                       <>
