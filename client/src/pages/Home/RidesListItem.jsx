@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { Loader, MessageCircleMore } from "lucide-react";
+import {
+  Loader,
+  MessageCircleMore,
+  MapPin,
+  ArrowRight,
+  Calendar,
+  Users,
+  Car,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import useRideStore from "../../store/useRideStore";
@@ -42,11 +50,9 @@ function RidesListItem({ ride }) {
     <div className="ride__search__results__item">
       <div className="ride__search__results__item__details">
         <h4 className="ride__search__results__item__title">
-          <ion-icon name="location-outline"></ion-icon>
-          {ride.from_location} <ion-icon name="arrow-forward-outline"></ion-icon>{" "}
-          {ride.to_location}
+          <MapPin size={16} strokeWidth={2} />
+          {ride.from_location} <ArrowRight size={16} strokeWidth={2} /> {ride.to_location}
         </h4>
-        {/* TODO: Implement navigation to the user profile */}
         <p className="ride__search__results__item__description">
           Ride offered by{" "}
           <Link
@@ -59,18 +65,18 @@ function RidesListItem({ ride }) {
         </p>
         <div className="ride_search__results__item__info">
           <p>
-            <ion-icon name="calendar-outline"></ion-icon>
+            <Calendar size={16} />
             {formattedRideDate(ride.ride_date)}
           </p>
           <p>
-            <ion-icon name="people-outline"></ion-icon>
+            <Users size={16} />
             {ride.available_seats} seats available
           </p>
           <p>
-            <ion-icon name="car-sport-outline"></ion-icon>
+            <Car size={16} />
             {ride.car_model}
           </p>
-        </div>{" "}
+        </div>
       </div>
       <button
         className="ride__search__results__item__button"
