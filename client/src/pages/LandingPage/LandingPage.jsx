@@ -19,7 +19,7 @@ function LandingPage() {
             </p>
           </div>
 
-          <form action="" className="landing-page__search__form">
+          {/* <form action="" className="landing-page__search__form">
             <div className="landing-page__search__form__group">
               <ion-icon name="location-outline"></ion-icon>
               <input
@@ -38,7 +38,7 @@ function LandingPage() {
             </div>
 
             <button className="landing-page__search__form__button">Search</button>
-          </form>
+          </form> */}
         </div>
       </section>
 
