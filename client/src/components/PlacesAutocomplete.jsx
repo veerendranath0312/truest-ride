@@ -63,11 +63,24 @@ function PlacesAutocomplete({
     }
   };
 
+  if (!isLoaded) {
+    return (
+      <div className="form__group">
+        <label htmlFor={id} className="form__label">
+          {label}
+        </label>
+        <div className="form__input form__input--loading">
+          <Loader2 size={18} className="loader-spin" />
+        </div>
+      </div>
+    );
+  }
+
   if (loadError) {
     return (
       <div className="form__group">
         <label htmlFor={id} className="form__label">
-          Error loading Google Maps
+          {label}
         </label>
         <input
           type="text"
@@ -78,19 +91,6 @@ function PlacesAutocomplete({
           value={inputValue}
           onChange={handleInputChange}
         />
-      </div>
-    );
-  }
-
-  if (!isLoaded) {
-    return (
-      <div className="form__group">
-        <label htmlFor={id} className="form__label">
-          {label}
-        </label>
-        <div className="form__input form__input--loading">
-          <Loader2 size={18} className="loader-spin" />
-        </div>
       </div>
     );
   }
