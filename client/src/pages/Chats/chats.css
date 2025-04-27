@@ -73,7 +73,8 @@
 }
 
 .chat-list__item:hover {
-  background-color: #383838;
+  /* background-color: #383838; */
+  background-color: var(--bg-secondary);
 }
 
 .chat-list__item-info {

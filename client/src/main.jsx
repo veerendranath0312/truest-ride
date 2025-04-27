@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
+import { ThemeProvider } from "./context/ThemeContext";
 import App from "./App.jsx";
 import ScrollToTop from "./utils/ScrollToTop";
 import LandingPage from "./pages/LandingPage/LandingPage";
@@ -18,30 +19,32 @@ import Profile from "./pages/Profile/Profile.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter>
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<App />}>
-          <Route path="about" element={<About />} />
+    <ThemeProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<App />}>
+            <Route path="about" element={<About />} />
 
-          {/* Redirects the SignIn and Register pages to Home page when the user is authenticated */}
-          <Route element={<AuthLayout requireAuth={false} />}>
-            <Route index element={<LandingPage />} />
-            <Route path="signin" element={<SignIn />} />
-            <Route path="register" element={<Register />} />
-          </Route>
+            {/* Redirects the SignIn and Register pages to Home page when the user is authenticated */}
+            <Route element={<AuthLayout requireAuth={false} />}>
+              <Route index element={<LandingPage />} />
+              <Route path="signin" element={<SignIn />} />
+              <Route path="register" element={<Register />} />
+            </Route>
 
-          {/* Protected Routes */}
-          <Route element={<AuthLayout requireAuth={true} />}>
-            <Route path="home" element={<Home />} />
-            <Route path="chats" element={<Chats />} />
-            <Route path="chats/:chatId" element={<Chats />} />
-            <Route path="library" element={<Library />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="user/:username" element={<Profile />} />
+            {/* Protected Routes */}
+            <Route element={<AuthLayout requireAuth={true} />}>
+              <Route path="home" element={<Home />} />
+              <Route path="chats" element={<Chats />} />
+              <Route path="chats/:chatId" element={<Chats />} />
+              <Route path="library" element={<Library />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="user/:username" element={<Profile />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   </StrictMode>
 );

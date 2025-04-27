@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { Home, MessagesSquare, Library, User, LogOut } from "lucide-react";
+import { Home, MessagesSquare, Library, User, LogOut, Sun, Moon } from "lucide-react";
 import useAuthStore from "../store/useAuthStore";
+import { useTheme } from "../context/ThemeContext";
 import { NavLink, Link } from "react-router";
 import { capitalize } from "../utils/helpers";
 
 function Navbar() {
   const { isAuthenticated, user, signOut } = useAuthStore();
+  const { theme, toggleTheme } = useTheme();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -68,6 +70,20 @@ function Navbar() {
               <User size={14} color="var(--text-secondary)" />
               Profile
             </Link>
+
+            <div onClick={toggleTheme} className="navbar__link__profile__dropdown__item">
+              {theme === "light" ? (
+                <>
+                  <Moon size={14} color="var(--text-secondary)" />
+                  Dark mode
+                </>
+              ) : (
+                <>
+                  <Sun size={14} color="var(--text-secondary)" />
+                  Light mode
+                </>
+              )}
+            </div>
 
             <div
               to="/logout"

@@ -1,6 +1,25 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap");
 
 :root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --bg-tertiary: #e8e8e8;
+  --text-primary: #000000;
+  --text-secondary: #535353;
+  --text-tertiary: #838383;
+  --btn-primary: #0f0f0f;
+  --btn-primary-hover: #1d1d1d;
+  --btn-secondary: #33bb7a;
+  --btn-secondary-hover: #389e6e;
+  --btn-danger: #e14d4d;
+  --font-family-primary: "Inter", serif;
+  --font-family-secondary: "Libre Baskerville", serif;
+  --ui-outline: #d7d7d7;
+  --ui-outline-danger: rgba(225, 77, 77, 0.2);
+  --transition-time: 0.25s;
+}
+
+[data-theme="dark"] {
   --bg-primary: #000000;
   --bg-secondary: #131313;
   --bg-tertiary: #272727;
@@ -9,14 +28,7 @@
   --text-tertiary: #7c7c7c;
   --btn-primary: #f0f0f0;
   --btn-primary-hover: #e2e2e2;
-  --btn-secondary: #33bb7a;
-  --btn-secondary-hover: #389e6e;
-  --btn-danger: #e14d4d;
-  --font-family-primary: "Inter", serif;
-  --font-family-secondary: "Libre Baskerville", serif;
   --ui-outline: #383838;
-  --ui-outline-danger: rgba(225, 77, 77, 0.2);
-  --transition-time: 0.25s;
 }
 
 * {
@@ -29,6 +41,7 @@ body {
   font-family: var(--font-family-primary);
   background-color: var(--bg-primary);
   color: var(--text-primary);
+  transition: background-color var(--transition-time), color var(--transition-time);
 }
 
 .no-scroll {
@@ -59,6 +72,11 @@ body {
   justify-content: center;
   align-items: center;
   padding: 14px 20px;
+  background: var(--btn-primary);
+}
+
+.btn:hover {
+  background: var(--btn-primary-hover);
 }
 
 /* ========== NAVBAR STYLING ========== */
