@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Loader2, Loader } from "lucide-react";
 import Notification from "./Notification";
 
@@ -6,6 +6,7 @@ function OTPVerification({
   email,
   onVerify,
   onCancel,
+  onResend,
   isLoading,
   title,
   buttonText = "Verify",
@@ -15,6 +16,24 @@ function OTPVerification({
 }) {
   const [otp, setOtp] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [countdown, setCountdown] = useState(30);
+  const [canResend, setCanResend] = useState(false);
+
+  useEffect(() => {
+    let timer;
+
+    if (countdown > 0) {
+      timer = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+    } else {
+      setCanResend(true);
+    }
+
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [countdown]);
 
   const handleOtpChange = (e) => {
     setOtp(e.target.value);
@@ -36,6 +55,19 @@ function OTPVerification({
     }
   };
 
+  const handleResend = async () => {
+    if (!canResend) return;
+
+    try {
+      await onResend();
+      setErrorMessage("");
+    } catch (err) {
+      setErrorMessage(err.message);
+    } finally {
+      setCountdown(30);
+      setCanResend(false);
+    }
+  };
   return (
     <>
       <div className="form__hero__text">
@@ -98,6 +130,15 @@ function OTPVerification({
               )}
             </button>
           </div>
+        )}
+        {canResend ? (
+          <p className="form__footer form__footer--resend" onClick={handleResend}>
+            Resend code
+          </p>
+        ) : (
+          <p className="form__footer">
+            Didn&apos;t receive the code? <b>Resend code in {countdown} sec</b>
+          </p>
         )}
       </form>
     </>

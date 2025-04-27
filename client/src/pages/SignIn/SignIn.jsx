@@ -65,6 +65,14 @@ function SignIn() {
     }
   };
 
+  const handleResendOtp = async () => {
+    try {
+      await signIn(email);
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+
   // Verify OTP and sign in the user if OTP is valid and redirect to the home page
   const handleVerifyOtp = async (otp) => {
     try {
@@ -86,6 +94,7 @@ function SignIn() {
               <OTPVerification
                 email={email}
                 onVerify={handleVerifyOtp}
+                onResend={handleResendOtp}
                 isLoading={isSigningIn}
                 title="Check your inbox"
                 buttonText="Sign in"

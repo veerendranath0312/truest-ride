@@ -24,6 +24,14 @@ function AdvancedSettings() {
     }
   };
 
+  const handleResendOtp = async () => {
+    try {
+      await initiateDeleteAccount(user.email);
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+
   const handleVerifyAndDelete = async (otp) => {
     setIsLoading(true);
     try {
@@ -66,6 +74,7 @@ function AdvancedSettings() {
               email={user.email}
               onVerify={handleVerifyAndDelete}
               onCancel={handleCancel}
+              onResend={handleResendOtp}
               isLoading={isLoading}
               buttonText="Close account"
               loadingText="Closing account..."
