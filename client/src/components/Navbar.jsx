@@ -71,20 +71,24 @@ function Navbar() {
               Profile
             </Link>
 
-            <div onClick={toggleTheme} className="navbar__link__profile__dropdown__item">
-              {theme === "light" ? (
-                <>
-                  <Moon size={14} color="var(--text-secondary)" />
-                  Dark mode
-                </>
-              ) : (
-                <>
-                  <Sun size={14} color="var(--text-secondary)" />
-                  Light mode
-                </>
-              )}
-            </div>
-
+            {isAuthenticated && (
+              <div
+                onClick={toggleTheme}
+                className="navbar__link__profile__dropdown__item"
+              >
+                {theme === "light" ? (
+                  <>
+                    <Moon size={14} color="var(--text-secondary)" />
+                    Dark mode
+                  </>
+                ) : (
+                  <>
+                    <Sun size={14} color="var(--text-secondary)" />
+                    Light mode
+                  </>
+                )}
+              </div>
+            )}
             <div
               to="/logout"
               className="navbar__link__profile__dropdown__item"
