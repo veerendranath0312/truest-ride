@@ -27,7 +27,7 @@ class AuthController:
             if User.objects(email=email).first():
                 return {'status': 'fail', 'message': 'Email already registered'}, 400
 
-            if AuthService.generate_otp_and_email(email):
+            if AuthService.generate_otp_and_email(email, full_name):
                 return {
                     'status': 'success',
                     'message': 'OTP sent to email'
@@ -93,7 +93,7 @@ class AuthController:
             if not user:
                 return {'status': 'fail', 'message': 'User not found'}, 404
 
-            if AuthService.generate_otp_and_email(email):
+            if AuthService.generate_otp_and_email(email, user.full_name):
                 return {
                     'status': 'success',
                     'message': 'OTP sent to email'
