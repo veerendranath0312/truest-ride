@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Truest Ride Verification</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", sans-serif;
+        line-height: 1.6;
+        color: #272727;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .header {
+        font-family: "Baskervville", serif;
+        background-color: #000000;
+        color: #f9f9f9;
+        padding: 20px;
+        text-align: center;
+        border-radius: 8px 8px 0 0;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+      }
+      .content {
+        background-color: #ffffff;
+        padding: 30px;
+        border: 1px solid #e0e0e0;
+        border-radius: 0 0 8px 8px;
+        line-height: 145%;
+      }
+
+      .otp-code {
+        font-size: 32px;
+        font-weight: bold;
+        color: #1a237e;
+        letter-spacing: 4px;
+        text-align: center;
+        margin: 20px 0;
+        padding: 10px;
+        background-color: #f5f5f5;
+        border-radius: 4px;
+      }
+      .footer {
+        margin-top: 20px;
+        text-align: center;
+        color: #666;
+        font-size: 12px;
+      }
+      .warning {
+        background-color: #fff3e0;
+        padding: 10px;
+        border-radius: 4px;
+        margin: 20px 0;
+        color: #e65100;
+        font-size: 14px;
+      }
+      .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: white;
+        text-decoration: none;
+      }
+      .social-links {
+        margin-top: 15px;
+      }
+      .social-links a {
+        color: #1a237e;
+        margin: 0 10px;
+        text-decoration: none;
+      }
+      .support-info {
+        font-size: 14px;
+        color: #666;
+        margin-top: 15px;
+      }
+      .support-info a {
+        color: #1a237e;
+        text-decoration: none;
+      }
+      .info {
+        color: #272727;
+        font-size: 14px;
+        margin-top: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1><span>🚘</span>&nbsp; TruestRide</h1>
+      </div>
+      <div class="content">
+        <p>Hi {{ name }},</p>
+        <p class="info">
+          To ensure the security of your account, please use the following verification
+          code:
+        </p>
+
+        <div class="otp-code">{{ otp }}</div>
+
+        <p class="info">⚠️ This code will expire in 5 minutes for security purposes.</p>
+
+        <p class="info">
+          If you didn't request this code, please ignore this email. Someone might have
+          entered your email address by mistake.
+        </p>
+
+        <div class="support-info">
+          Need help? Contact our support team at
+          <a href="mailto:support@truestride.com">support@truestride.com</a>
+        </div>
+      </div>
+      <div class="footer">
+        <!-- <div class="social-links">
+                <a href="https://facebook.com/truestride">Facebook</a>
+                <a href="https://twitter.com/truestride">Twitter</a>
+                <a href="https://instagram.com/truestride">Instagram</a>
+            </div> -->
+        <p>This is an automated message, please do not reply to this email.</p>
+        <p>© {{ year }} Truest Ride. All rights reserved.</p>
+        <p>Secure • Reliable • Trusted</p>
+      </div>
+    </div>
+  </body>
+</html>

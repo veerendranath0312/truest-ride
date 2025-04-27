@@ -54,7 +54,7 @@ class AuthService:
         }
 
     @staticmethod
-    def generate_otp_and_email(email):
+    def generate_otp_and_email(email, name=None):
         # Generate secure OTP
         otp_obj = AuthService.generate_secure_otp()
 
@@ -78,7 +78,7 @@ class AuthService:
         # Send OTP to user's email
         mail_service = MailService()
 
-        return mail_service.send_otp_email(email, otp_obj['raw'])
+        return mail_service.send_otp_email(email, otp_obj['raw'], name)
 
     @staticmethod
     def is_otp_expired(expires):

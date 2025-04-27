@@ -22,6 +22,7 @@ function ProfileForm({ onClose }) {
     universityEndDate: currentUser.university_end_date
       ? new Date(currentUser.university_end_date)
       : null,
+    imageUrl: currentUser.image_url || "",
   });
 
   const [formLabelErrors, setFormLabelErrors] = useState({
@@ -32,6 +33,7 @@ function ProfileForm({ onClose }) {
     universityErrorLabel: "",
     universityStartDateErrorLabel: "",
     universityEndDateErrorLabel: "",
+    imageUrlErrorLabel: "",
   });
 
   const handleInputChange = (field, value) => {
@@ -68,6 +70,8 @@ function ProfileForm({ onClose }) {
     } else if (!formData.universityStartDate && formData.universityEndDate) {
       errors.universityStartDateErrorLabel = "Start date is required";
     }
+
+    if (!formData.imageUrl.trim()) errors.imageUrlErrorLabel = "Image URL is required";
 
     if (Object.keys(errors).length > 0) {
       setFormLabelErrors(errors);
@@ -207,6 +211,32 @@ function ProfileForm({ onClose }) {
               formLabelErrors.universityEndDateErrorLabel && "form__input--error"
             }`}
             minDate={formData.universityStartDate || new Date()}
+          />
+        </div>
+      </div>
+
+      <div className="modal__form__group">
+        <FormInput
+          type="url"
+          id="imageUrl"
+          name="imageUrl"
+          label="Profile Image URL"
+          placeholder="Enter image URL (optional)"
+          value={formData.imageUrl}
+          onChange={(e) => handleInputChange("imageUrl", e.target.value)}
+          error={formLabelErrors.imageUrlErrorLabel}
+        />
+        <div className="image-preview">
+          <img
+            src={formData.imageUrl || currentUser.image_url}
+            alt="Profile preview"
+            onError={(e) => {
+              e.target.src = currentUser.image_url;
+              setFormLabelErrors((prev) => ({
+                ...prev,
+                imageUrlErrorLabel: "Invalid image URL",
+              }));
+            }}
           />
         </div>
       </div>

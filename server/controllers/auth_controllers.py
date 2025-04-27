@@ -9,9 +9,15 @@ class AuthController:
         try:
             full_name = data.get('fullname')
             email = data.get('email')
-            # Check email in the data
-            if not email or not full_name:
-                return {'status': 'fail', 'message': 'Email and Fullname are required'}, 400
+            gender = data.get('gender')
+            
+            # Check required fields in the data
+            if not email or not full_name or not gender:
+                return {'status': 'fail', 'message': 'Email, Fullname, and Gender are required'}, 400
+
+            # Validate gender
+            if gender not in ['Male', 'Female', 'Other']:
+                return {'status': 'fail', 'message': 'Invalid gender value'}, 400
 
             # Check if email is valid
             if not AuthService.validate_educational_email(email):
@@ -21,7 +27,7 @@ class AuthController:
             if User.objects(email=email).first():
                 return {'status': 'fail', 'message': 'Email already registered'}, 400
 
-            if AuthService.generate_otp_and_email(email):
+            if AuthService.generate_otp_and_email(email, full_name):
                 return {
                     'status': 'success',
                     'message': 'OTP sent to email'
@@ -40,22 +46,21 @@ class AuthController:
         try:
             full_name = data.get('fullname')
             email = data.get('email')
+            gender = data.get('gender')
             otp = data.get('otp')
 
-            # Check email and OTP in the data
-            if not email or not otp or not full_name:
-                return {'status': 'fail', 'message': 'Email, Fullname, and OTP are required'}, 400
+            # Check required fields
+            if not email or not otp or not full_name or not gender:
+                return {'status': 'fail', 'message': 'Email, Fullname, Gender, and OTP are required'}, 400
 
             otp_verification_result = AuthService.verify_otp(email, otp)
-            print(otp_verification_result)
             if otp_verification_result[0]['status'] == 'fail':
                 return otp_verification_result
 
             # Once the OTP is verified, create the user
-            user = User(email=email, full_name=full_name)
-            user.save()
+            user = User(email=email, full_name=full_name, gender=gender)
+            user.save()  # This will automatically set the default avatar based on gender
 
-            # Create a secure JWT token for the user and return it
             return {
                 'status': 'success',
                 'data': {
@@ -63,7 +68,9 @@ class AuthController:
                     'user': {
                         'id': str(user.id),
                         'email': user.email,
-                        'full_name': user.full_name
+                        'full_name': user.full_name,
+                        'gender': user.gender,
+                        'image_url': user.image_url
                     }
                 }
             }, 200
@@ -86,7 +93,7 @@ class AuthController:
             if not user:
                 return {'status': 'fail', 'message': 'User not found'}, 404
 
-            if AuthService.generate_otp_and_email(email):
+            if AuthService.generate_otp_and_email(email, user.full_name):
                 return {
                     'status': 'success',
                     'message': 'OTP sent to email'
@@ -126,7 +133,8 @@ class AuthController:
                     'user': {
                         'id': str(user.id),
                         'email': user.email,
-                        'full_name': user.full_name
+                        'full_name': user.full_name,
+                        'image_url': user.image_url
                     }
                 }
             }, 200
