@@ -104,6 +104,14 @@ function Register() {
     }
   };
 
+  const handleResendOtp = async () => {
+    try {
+      await signUp(formData.fullname, formData.email, formData.gender);
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+
   // Verify OTP and sign up the user if OTP is valid and redirect to the home page
   const handleVerifyOtp = async (otp) => {
     try {
@@ -125,6 +133,7 @@ function Register() {
               <OTPVerification
                 email={formData.email}
                 onVerify={handleVerifyOtp}
+                onResend={handleResendOtp}
                 isLoading={isSigningUp}
                 title="Check your inbox"
                 buttonText="Sign up"
