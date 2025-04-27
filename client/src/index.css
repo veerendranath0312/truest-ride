@@ -516,6 +516,12 @@ select.form__input {
   color: var(--text-primary);
 }
 
+.form__footer--resend {
+  color: var(--btn-secondary);
+  cursor: pointer;
+  font-weight: bold;
+  transition: all var(--transition-time) ease-out;
+}
 /* ========== NOTIFICATION STYLES ========== */
 
 .notification {
