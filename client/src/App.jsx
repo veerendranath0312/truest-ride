@@ -4,10 +4,12 @@ import { Toaster } from "sonner";
 import "./App.css";
 import useAuthStore from "./store/useAuthStore";
 import useChatStore from "./store/useChatStore";
+import { useTheme } from "./context/ThemeContext";
 
 function App() {
   const { checkAuth, isAuthenticated } = useAuthStore();
   const { initializeSocket, disconnectSocket } = useChatStore();
+  const { theme } = useTheme();
 
   // Validate token on app load
   useEffect(() => {
@@ -26,7 +28,11 @@ function App() {
 
   return (
     <>
-      <Toaster visibleToasts={5} position="bottom-right" />
+      <Toaster
+        visibleToasts={5}
+        theme={theme === "dark" ? "light" : "dark"}
+        position="bottom-right"
+      />
       <Outlet />
     </>
   );
