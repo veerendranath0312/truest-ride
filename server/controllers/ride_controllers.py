@@ -27,7 +27,8 @@ class RideController:
             user = get_current_user()
 
             # Convert the ride_date to UTC
-            ride_date = datetime.fromisoformat(data['rideDate']).astimezone(timezone.utc)
+            ride_date_str = data['rideDate'].replace('Z', '+00:00')
+            ride_date = datetime.fromisoformat(ride_date_str).astimezone(timezone.utc)
 
             ride_obj = Ride(
                 from_location=data['from'],
@@ -205,9 +206,6 @@ class RideController:
 
             # Add date filters only if both dates are provided
             if data.get('startDate') and data.get('endDate'):
-                # start_date = datetime.fromisoformat(data.get('startDate')).astimezone(timezone.utc)
-                # end_date = datetime.fromisoformat(data.get('endDate')).astimezone(timezone.utc)
-
                 # Handle 'Z' timezone format by replacing with +00:00
                 start_date_str = data.get('startDate').replace('Z', '+00:00')
                 end_date_str = data.get('endDate').replace('Z', '+00:00')
