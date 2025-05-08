@@ -15,7 +15,6 @@ import Profile from "./pages/Profile/Profile";
 import AuthLayout from "./components/AuthLayout";
 
 import "./index.css";
-import Profile from "./pages/Profile/Profile.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

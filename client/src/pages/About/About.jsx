@@ -82,7 +82,6 @@ const students = [
 const About = () => {
   return (
     <div className="about-page light-theme">
-    <div className="about-page light-theme">
       <Navbar />
 
       <section className="hero full-border-hero">
@@ -219,7 +218,6 @@ const About = () => {
       </footer>
     </div>
   );
-};
 };
 
 export default About;
