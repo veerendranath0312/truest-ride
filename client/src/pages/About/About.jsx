@@ -1,83 +1,83 @@
-import Navbar from "../../components/Navbar";
-import "./About.css";
+import Navbar from '../../components/Navbar'
+import './about.css'
 
 const stakeholders = [
   {
-    name: "Rakesh Kumar Vasa",
-    title: "Student at Rowan University",
+    name: 'Rakesh Kumar Vasa',
+    title: 'Student at Rowan University',
     description: ` Truest Ride empowers students with safe, low-cost weekend travel. Built on trust and community, it connects riders within their campus network for a secure experience.
 
 `,
-    img: ".././../src/assets/images/rakesh.png",
-    linkedin: "#",
+    img: '.././../src/assets/images/rakesh.png',
+    linkedin: '#',
   },
-];
+]
 
 const professors = [
   {
-    name: "Gregory S. DeLozier",
-    email: "gdelozie@kent.edu",
-    img: ".././../src/assets/images/proff1.png",
+    name: 'Gregory S. DeLozier',
+    email: 'gdelozie@kent.edu',
+    img: '.././../src/assets/images/proff1.png',
   },
   {
-    name: "Boggia, Branson",
-    email: "bboggia@kent.edu",
-    linkedin: "#",
-    img: ".././../src/assets/images/branson.png",
+    name: 'Boggia, Branson',
+    email: 'bboggia@kent.edu',
+    linkedin: '#',
+    img: '.././../src/assets/images/branson.png',
   },
-];
+]
 
 const students = [
   {
-    name: "Veerendranath",
-    role: "Frontend Developer",
-    email: "vpottipa@kent.edu",
-    linkedin: "#",
-    img: "../../assets/images/veerendra.HEIC",
+    name: 'Veerendranath',
+    role: 'Frontend Developer',
+    email: 'vpottipa@kent.edu',
+    linkedin: '#',
+    img: '../../assets/images/veerendra.HEIC',
   },
   {
-    name: "Arunkumar Turaka",
-    role: "UI/UX Designer",
-    email: "aturaka@kent.edu",
-    linkedin: "#",
-    img: ".././../src/assets/images/arun.jpeg",
+    name: 'Arunkumar Turaka',
+    role: 'UI/UX Designer',
+    email: 'aturaka@kent.edu',
+    linkedin: '#',
+    img: '.././../src/assets/images/arun.jpeg',
   },
   {
-    name: "Jagadeesh",
-    role: "Backend Developer",
-    email: "Jaladasu@kent.edu",
-    linkedin: "#",
-    img: " ",
+    name: 'Jagadeesh',
+    role: 'Backend Developer',
+    email: 'Jaladasu@kent.edu',
+    linkedin: '#',
+    img: ' ',
   },
   {
-    name: "SwethaNagaSai chirumamilla ",
-    role: "Frontend Developer",
-    email: "schirum4@kent.edu ",
-    linkedin: "#",
-    img: " ",
+    name: 'SwethaNagaSai chirumamilla ',
+    role: 'Frontend Developer',
+    email: 'schirum4@kent.edu ',
+    linkedin: '#',
+    img: ' ',
   },
   {
-    name: "Hrushikesh Tadepally",
-    role: "Backend Developer",
-    email: "htadepal@kent.edu ",
-    linkedin: "#",
-    img: " ",
+    name: 'Hrushikesh Tadepally',
+    role: 'Backend Developer',
+    email: 'htadepal@kent.edu ',
+    linkedin: '#',
+    img: ' ',
   },
   {
-    name: "Shivasaketh Simaladari ",
-    role: "Frontend Developer",
-    email: "ssimalad@kent.edu",
-    linkedin: "#",
-    img: " ",
+    name: 'Shivasaketh Simaladari ',
+    role: 'Frontend Developer',
+    email: 'ssimalad@kent.edu',
+    linkedin: '#',
+    img: ' ',
   },
   {
-    name: "Srilakshmi Dasari",
-    role: "Backend Developer",
-    email: "dsrilaks@kent.edu ",
-    linkedin: "#",
-    img: " ",
+    name: 'Srilakshmi Dasari',
+    role: 'Backend Developer',
+    email: 'dsrilaks@kent.edu ',
+    linkedin: '#',
+    img: ' ',
   },
-];
+]
 
 const About = () => {
   return (
@@ -88,8 +88,8 @@ const About = () => {
         <div className="hero-content full-border">
           <h1>Built by Students. Trusted by Students.</h1>
           <p className="subtitle">
-            Truest Ride is a seamless, community-driven ride-sharing experience crafted
-            with care and mentorship.
+            Truest Ride is a seamless, community-driven ride-sharing experience
+            crafted with care and mentorship.
           </p>
         </div>
       </section>
@@ -105,12 +105,12 @@ const About = () => {
           <div className="mv-text">
             <h2>🎯 Our Mission</h2>
             <p>
-              Our mission is to foster a trustworthy, affordable transportation culture
-              for students.
+              Our mission is to foster a trustworthy, affordable transportation
+              culture for students.
             </p>
             <p>
-              By enabling students to share rides with peers, we ensure community and
-              comfort every trip.
+              By enabling students to share rides with peers, we ensure
+              community and comfort every trip.
             </p>
           </div>
         </div>
@@ -124,8 +124,8 @@ const About = () => {
           <div className="mv-text">
             <h2>🌍 Our Vision</h2>
             <p>
-              We envision a student travel ecosystem where spontaneity meets safety and
-              connection.
+              We envision a student travel ecosystem where spontaneity meets
+              safety and connection.
             </p>
           </div>
         </div>
@@ -156,7 +156,11 @@ const About = () => {
           {students.slice(0, 3).map((member, i) => (
             <div key={i} className="team-member">
               <div className="profile-frame">
-                <img src={member.img} alt={member.name} className="profile-img" />
+                <img
+                  src={member.img}
+                  alt={member.name}
+                  className="profile-img"
+                />
               </div>
               <h3>{member.name}</h3>
               <p>{member.role}</p>
@@ -173,7 +177,11 @@ const About = () => {
           {students.slice(3).map((member, i) => (
             <div key={i} className="team-member">
               <div className="profile-frame">
-                <img src={member.img} alt={member.name} className="profile-img" />
+                <img
+                  src={member.img}
+                  alt={member.name}
+                  className="profile-img"
+                />
               </div>
               <h3>{member.name}</h3>
               <p>{member.role}</p>
@@ -209,16 +217,19 @@ const About = () => {
         <div className="footer-content">
           <h2>Let&apos;s Connect</h2>
           <p>
-            We&apos;d love to hear from you. Questions, feedback, or just a friendly
-            hello!
+            We&apos;d love to hear from you. Questions, feedback, or just a
+            friendly hello!
           </p>
-          <a href="mailto:truestride.team@gmail.com" className="footer-contact-btn white">
+          <a
+            href="mailto:truestride.team@gmail.com"
+            className="footer-contact-btn white"
+          >
             👋 Say hi to our team
           </a>
         </div>
       </footer>
     </div>
-  );
-};
+  )
+}
 
-export default About;
+export default About
