@@ -48,7 +48,7 @@ function Footer() {
             </a>
           </div>
         </div>
-        <div className="footer-flex-item">
+        {/* <div className="footer-flex-item">
           <p className="footer-flex-item__label">Stay up to date</p>
           <div className="footer-flex-item__subscribe">
             <input
@@ -61,7 +61,7 @@ function Footer() {
               <ion-icon name="send-outline"></ion-icon>
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
