@@ -5,7 +5,6 @@
 }
 
 /* Hero Section */
-/* Hero Section */
 .hero {
   display: flex;
   justify-content: center;
@@ -13,8 +12,8 @@
   height: 100vh;
 
   /* Background with overlay similar to landing page */
-  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-    url("../../assets/about-cover-2.jpg");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+    url("../../assets/about-cover.jpg");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -75,29 +74,59 @@
 /* Story Section */
 .story-section {
   padding: 100px 0;
-  background: #000;
+  background-color: var(--bg-primary);
+}
+
+.story-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.story-heading {
+  flex: 0 0 40%;
+  max-width: 450px;
+  position: sticky;
+  top: 120px;
+}
+
+.story-heading h2 {
+  font-size: 30px;
+  font-weight: 300;
+  font-family: var(--font-family-secondary);
+  color: var(--text-primary);
+  line-height: 1.3;
+  text-wrap: balance;
+  text-align: left;
+  line-height: 145%;
 }
 
 .story-content {
-  max-width: 700px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.story-content h2 {
-  font-size: 2.5rem;
-  font-weight: 600;
-  margin-bottom: 32px;
-  color: #1a202c;
+  flex: 1;
+  text-align: left;
 }
 
 .story-text {
-  font-size: 1.125rem;
-  color: #4a5568;
-  margin-bottom: 24px;
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
   line-height: 1.7;
 }
 
+.story-content span {
+  color: var(--text-primary);
+}
+
+.story-content h3 {
+  font-size: 25px;
+  font-weight: 300;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  line-height: 145%;
+}
 /* Values Section */
 .values-section {
   padding: 100px 0;
@@ -487,6 +516,27 @@
   .hero-stats {
     flex-direction: column;
     gap: 24px;
+  }
+
+  @media (max-width: 768px) {
+    .story-layout {
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .story-heading {
+      flex: none;
+      max-width: none;
+      text-align: center;
+    }
+
+    .story-heading h2 {
+      position: static; /* Remove sticky on mobile */
+    }
+
+    .story-content {
+      text-align: left;
+    }
   }
 
   .values-grid {

@@ -84,7 +84,6 @@ const About = () => {
   // Create refs for each section
   const aboutRef = useRef(null);
   const teamRef = useRef(null);
-  const missionRef = useRef(null);
 
   const scrollToSection = (sectionRef, sectionName) => {
     if (sectionRef.current) {
@@ -116,12 +115,6 @@ const About = () => {
                 About
               </button>
               <button
-                className={`nav-link ${activeSection === "advisors" ? "active" : ""}`}
-                onClick={() => scrollToSection(missionRef, "advisors")}
-              >
-                Mission
-              </button>
-              <button
                 className={`nav-link ${activeSection === "team" ? "active" : ""}`}
                 onClick={() => scrollToSection(teamRef, "team")}
               >
@@ -135,60 +128,63 @@ const About = () => {
       {/* Story Section */}
       <section className="story-section" ref={aboutRef}>
         <div className="container">
-          <div className="story-content">
-            <h2>Our Story</h2>
-            <p className="story-text">
-              Truest Ride began as a simple idea: what if students could travel home for
-              the weekend without breaking the bank or compromising on safety? As graduate
-              students at Kent State University, we experienced firsthand the challenges
-              of expensive flights and unreliable transportation options.
-            </p>
-            <p className="story-text">
-              We envisioned a platform where trust isn&apos; t just a feature—it&apos;s
-              the foundation. By connecting students within their campus network,
-              we&apos;ve created a community where every ride feels like traveling with a
-              friend.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Mission & Values */}
-      <section className="values-section" ref={missionRef}>
-        <div className="container">
-          <h2>What Drives Us</h2>
-          <div className="values-grid">
-            <div className="value-card">
-              <div className="value-icon">🛡️</div>
-              <h3>Safety First</h3>
-              <p>
-                Campus-verified students only. Every rider and driver is part of our
-                trusted university network.
-              </p>
+          <div className="story-layout">
+            <div className="story-heading">
+              <h2>
+                One ride. <br /> Shared stories. <br /> Trusted travel.
+              </h2>
             </div>
-            <div className="value-card">
-              <div className="value-icon">💰</div>
-              <h3>Affordable Travel</h3>
-              <p>
-                Share costs, not compromises. Making weekend trips home financially
-                accessible for every student.
+            <div className="story-content">
+              <p className="story-text">
+                Truest Ride is built by a team of students and young professionals who
+                personally experienced the challenges of traveling without reliable
+                transportation — whether for campus commutes or weekend getaways to places
+                just beyond the reach of public transport.
               </p>
-            </div>
-            <div className="value-card">
-              <div className="value-icon">🤝</div>
-              <h3>Community-Driven</h3>
-              <p>
-                Built by students who understand student needs. Every feature is designed
-                with your experience in mind.
+              <p className="story-text">
+                The idea began after one too many trips had to be delayed, rearranged, or
+                canceled because buses were limited, taxis were too expensive, and friends
+                weren’t always free. What we needed was a simple way to connect with
+                someone already heading in the same direction.
               </p>
-            </div>
-            <div className="value-card">
-              <div className="value-icon">⚡</div>
-              <h3>Simple & Fast</h3>
-              <p>
-                Book rides in seconds, not minutes. Our intuitive platform gets you moving
-                quickly.
+              <h3>So we built it.</h3>
+              <p className="story-text">
+                Truest Ride is a place where students can offer and join rides in a
+                trusted, verified community. It’s a space designed to make mobility
+                easier, more affordable, and more social — starting with students, but
+                built for anyone who believes in shared travel.
               </p>
+              <p className="story-text">
+                We believe technology can do more than move people from one place to
+                another. It can bring people together. Truest Ride helps students make the
+                most of every journey — not just by saving money or avoiding travel
+                stress, but by creating small communities along the way. A quiet ride to
+                class. A spontaneous road trip. A ride home with someone you’ve never met
+                — until now.
+              </p>
+              <p className="story-text">
+                We&apos;re committed to working alongside the people who use Truest Ride —
+                listening to their stories, ideas, and feedback — to shape a platform that
+                feels just as personal as it is practical.
+              </p>
+              <p className="story-text">
+                Truest Ride is built on the belief that{" "}
+                <span>
+                  someone in your own campus community might be the perfect travel
+                  companion
+                </span>
+                , and that finding them shouldn&apos;t be hard. We&apos;re here to make it
+                easier, safer, and more connected.
+              </p>
+              <p className="story-text">
+                As we grow, we&apos;re exploring new technologies, real-time features, and
+                integrations with universities to make Truest Ride the smartest, most
+                student-focused ride-sharing experience possible.
+              </p>
+              <h3>
+                We&apos;re excited by what&apos;s ahead. <br /> And even more excited to
+                share the ride with you.
+              </h3>
             </div>
           </div>
         </div>

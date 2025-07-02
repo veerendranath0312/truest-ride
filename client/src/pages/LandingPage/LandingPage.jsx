@@ -18,27 +18,6 @@ function LandingPage() {
               costs, and make new friends.
             </p>
           </div>
-
-          {/* <form action="" className="landing-page__search__form">
-            <div className="landing-page__search__form__group">
-              <ion-icon name="location-outline"></ion-icon>
-              <input
-                type="text"
-                className="landing-page__search__form__input landing-page__search__form__input--departure"
-                placeholder="Departure"
-              />
-            </div>
-            <div className="landing-page__search__form__group ">
-              <ion-icon name="location-outline"></ion-icon>
-              <input
-                type="text"
-                className="landing-page__search__form__input landing-page__search__form__input--destination"
-                placeholder="Destination"
-              />
-            </div>
-
-            <button className="landing-page__search__form__button">Search</button>
-          </form> */}
         </div>
       </section>
 
