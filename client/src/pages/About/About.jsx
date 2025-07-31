@@ -37,14 +37,14 @@ const students = [
     role: "Full-stack Developer",
     email: "vpottipa@kent.edu",
     linkedin: "https://www.linkedin.com/in/veerendranathp/",
-    img: "../../assets/images/veerendra.HEIC",
+    img: "../../src/assets/images/veerendra.jpg",
   },
   {
     name: "Arunkumar",
     role: "UI/UX Designer",
     email: "aturaka@kent.edu",
     linkedin: "https://www.linkedin.com/in/arunkumarturaka/",
-    img: ".././../src/assets/images/arun.jpeg",
+    img: ".././../src/assets/images/arun.jpg",
   },
   {
     name: "Jagadeesh",
@@ -58,7 +58,7 @@ const students = [
     role: "Frontend Developer",
     email: "schirum4@kent.edu ",
     linkedin: "https://www.linkedin.com/in/nagasai-chirumamilla/",
-    img: " ",
+    img: ".././../src/assets/images/nagasai.jpg",
   },
   {
     name: "Hrushikesh",
@@ -72,7 +72,7 @@ const students = [
     role: "Frontend Developer",
     email: "ssimalad@kent.edu",
     linkedin: "https://www.linkedin.com/in/shivasaketh-simaladari/",
-    img: " ",
+    img: ".././../src/assets/images/saketh.jpg",
   },
   {
     name: "Srilakshmi",
