@@ -3,13 +3,13 @@ import Navbar from "../../components/Navbar";
 import JoinUs from "../../components/JoinUs";
 import Footer from "../../components/Footer";
 
-import bransonImg from "../../assets/branson.png";
-import gregImg from "../../assets/greg.png";
-import veerendraImg from "../../assets/veerendra.jpg";
-import arunImg from "../../assets/arun.jpg";
-import jagadeeshImg from "../../assets/jagadeesh.jpg";
-import nagasaiImg from "../../assets/nagasai.jpg";
-import sakethImg from "../../assets/saketh.jpg";
+import bransonImg from "/branson.png";
+import gregImg from "/greg.png";
+import veerendraImg from "/veerendra.JPG";
+import arunImg from "/arun.jpg";
+import jagadeeshImg from "/jagadeesh.jpg";
+import nagasaiImg from "/nagasai.jpg";
+import sakethImg from "/saketh.jpg";
 
 import "./about.css";
 
