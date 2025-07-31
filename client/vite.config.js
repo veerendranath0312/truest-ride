@@ -7,7 +7,17 @@ export default defineConfig((command, mode) => {
 
   return {
     plugins: [react()],
-
+    assetsInclude: [
+      "**/*.jpg",
+      "**/*.JPG",
+      "**/*.jpeg",
+      "**/*.png",
+      "**/*.svg",
+      "**/*.gif",
+      "**/*.webp",
+      "**/*.ico",
+      "**/*.pdf",
+    ],
     server: {
       proxy: {
         "/api": {

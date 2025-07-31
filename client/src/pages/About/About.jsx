@@ -2,6 +2,15 @@ import { useState, useRef } from "react";
 import Navbar from "../../components/Navbar";
 import JoinUs from "../../components/JoinUs";
 import Footer from "../../components/Footer";
+
+import bransonImg from "../../assets/branson.png";
+import gregImg from "../../assets/greg.png";
+import veerendraImg from "../../assets/veerendra.jpg";
+import arunImg from "../../assets/arun.jpg";
+import jagadeeshImg from "../../assets/jagadeesh.jpg";
+import nagasaiImg from "../../assets/nagasai.jpg";
+import sakethImg from "../../assets/saketh.jpg";
+
 import "./about.css";
 
 const stakeholders = [
@@ -18,14 +27,14 @@ const professors = [
   {
     name: "Gregory S. DeLozier",
     email: "gdelozie@kent.edu",
-    img: ".././../src/assets/proff1.png",
+    img: gregImg,
     professor: "Adjunct Professor",
     linkedin: "https://www.linkedin.com/in/greg-delozier-58a2a09/",
   },
   {
     name: "Branson Boggia",
     email: "bboggia@kent.edu",
-    img: ".././../src/assets/branson.png",
+    img: bransonImg,
     professor: "Adjunct Instructor",
     linkedin: "https://www.linkedin.com/in/branson-boggia-9b7441122/",
   },
@@ -37,28 +46,28 @@ const students = [
     role: "Full-stack Developer",
     email: "vpottipa@kent.edu",
     linkedin: "https://www.linkedin.com/in/veerendranathp/",
-    img: "src/assets/veerendra.jpg",
+    img: veerendraImg,
   },
   {
     name: "Arunkumar",
     role: "UI/UX Designer",
     email: "aturaka@kent.edu",
     linkedin: "https://www.linkedin.com/in/arunkumarturaka/",
-    img: "src/assets/arun.jpg",
+    img: arunImg,
   },
   {
     name: "Jagadeesh",
     role: "Backend Developer",
     email: "Jaladasu@kent.edu",
     linkedin: "https://www.linkedin.com/in/jagadeesh-chandra-prasad-aladasu-239105158/",
-    img: "src/assets/jagadeesh.jpg",
+    img: jagadeeshImg,
   },
   {
     name: "Naga Sai",
     role: "Frontend Developer",
     email: "schirum4@kent.edu ",
     linkedin: "https://www.linkedin.com/in/nagasai-chirumamilla/",
-    img: "src/assets/nagasai.jpg",
+    img: nagasaiImg,
   },
   {
     name: "Hrushikesh",
@@ -72,14 +81,14 @@ const students = [
     role: "Frontend Developer",
     email: "ssimalad@kent.edu",
     linkedin: "https://www.linkedin.com/in/shivasaketh-simaladari/",
-    img: "src/assets/saketh.jpg",
+    img: sakethImg,
   },
   {
     name: "Srilakshmi",
     role: "Backend Developer",
     email: "dsrilaks@kent.edu ",
     linkedin: "https://www.linkedin.com/in/srilakshmi-dasari-9b2812221/",
-    img: " ",
+    img: "",
   },
 ];
 
