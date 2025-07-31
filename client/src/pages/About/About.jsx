@@ -1,5 +1,7 @@
 import { useState, useRef } from "react";
 import Navbar from "../../components/Navbar";
+import JoinUs from "../../components/JoinUs";
+import Footer from "../../components/Footer";
 import "./about.css";
 
 const stakeholders = [
@@ -17,63 +19,66 @@ const professors = [
     name: "Gregory S. DeLozier",
     email: "gdelozie@kent.edu",
     img: ".././../src/assets/images/proff1.png",
+    professor: "Adjunct Professor",
+    linkedin: "https://www.linkedin.com/in/greg-delozier-58a2a09/",
   },
   {
-    name: "Boggia, Branson",
+    name: "Branson Boggia",
     email: "bboggia@kent.edu",
-    linkedin: "#",
     img: ".././../src/assets/images/branson.png",
+    professor: "Adjunct Instructor",
+    linkedin: "https://www.linkedin.com/in/branson-boggia-9b7441122/",
   },
 ];
 
 const students = [
   {
     name: "Veerendranath",
-    role: "Frontend Developer",
+    role: "Full-stack Developer",
     email: "vpottipa@kent.edu",
-    linkedin: "#",
+    linkedin: "https://www.linkedin.com/in/veerendranathp/",
     img: "../../assets/images/veerendra.HEIC",
   },
   {
-    name: "Arunkumar Turaka",
+    name: "Arunkumar",
     role: "UI/UX Designer",
     email: "aturaka@kent.edu",
-    linkedin: "#",
+    linkedin: "https://www.linkedin.com/in/arunkumarturaka/",
     img: ".././../src/assets/images/arun.jpeg",
   },
   {
     name: "Jagadeesh",
     role: "Backend Developer",
     email: "Jaladasu@kent.edu",
-    linkedin: "#",
-    img: " ",
+    linkedin: "https://www.linkedin.com/in/jagadeesh-chandra-prasad-aladasu-239105158/",
+    img: ".././../src/assets/images/jagadeesh.jpg",
   },
   {
-    name: "SwethaNagaSai chirumamilla ",
+    name: "Naga Sai",
     role: "Frontend Developer",
     email: "schirum4@kent.edu ",
-    linkedin: "#",
+    linkedin: "https://www.linkedin.com/in/nagasai-chirumamilla/",
     img: " ",
   },
   {
-    name: "Hrushikesh Tadepally",
+    name: "Hrushikesh",
     role: "Backend Developer",
     email: "htadepal@kent.edu ",
-    linkedin: "#",
+    linkedin: "https://www.linkedin.com/in/hrushikesh-tadepally/",
     img: " ",
   },
   {
-    name: "Shivasaketh Simaladari ",
+    name: "Shivasaketh",
     role: "Frontend Developer",
     email: "ssimalad@kent.edu",
-    linkedin: "#",
+    linkedin: "https://www.linkedin.com/in/shivasaketh-simaladari/",
     img: " ",
   },
   {
-    name: "Srilakshmi Dasari",
+    name: "Srilakshmi",
     role: "Backend Developer",
     email: "dsrilaks@kent.edu ",
-    linkedin: "#",
+    linkedin: "https://www.linkedin.com/in/srilakshmi-dasari-9b2812221/",
     img: " ",
   },
 ];
@@ -190,14 +195,15 @@ const About = () => {
         </div>
       </section>
 
+      <div className="section-divider">
+        <hr />
+      </div>
+
       {/* Academic Leadership */}
       <section className="advisors-section">
         <div className="container">
           <h2>Academic Leadership</h2>
-          <p className="section-subtitle">
-            Guided by experienced faculty who believe in student innovation
-          </p>
-          <div className="advisors-grid">
+          <div className="advisors-flex">
             {professors.map((prof, i) => (
               <div key={i} className="advisor-card">
                 <div className="advisor-image">
@@ -205,9 +211,9 @@ const About = () => {
                 </div>
                 <div className="advisor-info">
                   <h3>{prof.name}</h3>
-                  <p>Faculty Advisor</p>
-                  <a href={`mailto:${prof.email}`} className="contact-link">
-                    {prof.email}
+                  <p>{prof.professor}</p>
+                  <a href={prof.linkedin} className="contact-link">
+                    LinkedIn
                   </a>
                 </div>
               </div>
@@ -219,10 +225,7 @@ const About = () => {
       {/* Team Section */}
       <section className="team-section" ref={teamRef}>
         <div className="container">
-          <h2>Meet the Team</h2>
-          <p className="section-subtitle">
-            Graduate students passionate about solving real problems
-          </p>
+          <h2>Team</h2>
           <div className="team-grid">
             {students.map((member, i) => (
               <div key={i} className="team-card">
@@ -233,14 +236,12 @@ const About = () => {
                   <h3>{member.name}</h3>
                   <p className="team-role">{member.role}</p>
                   <div className="team-links">
-                    <a href={`mailto:${member.email}`} className="team-email">
+                    <a href={`mailto:${member.email}`} className="team-link">
                       Email
                     </a>
-                    {member.linkedin !== "#" && (
-                      <a href={member.linkedin} className="team-linkedin">
-                        LinkedIn
-                      </a>
-                    )}
+                    <a href={member.linkedin} className="team-link">
+                      LinkedIn
+                    </a>
                   </div>
                 </div>
               </div>
@@ -248,6 +249,10 @@ const About = () => {
           </div>
         </div>
       </section>
+
+      <div className="section-divider">
+        <hr />
+      </div>
 
       {/* Stakeholder Spotlight */}
       <section className="stakeholder-section">
@@ -268,42 +273,16 @@ const About = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="cta-section">
+      <div className="section-divider">
+        <hr />
+      </div>
+
+      <section>
         <div className="container">
-          <div className="cta-content">
-            <h2>Ready to Transform Your Travel Experience?</h2>
-            <p>
-              Join thousands of students who&apos;ve discovered a better way to travel
-              home.
-            </p>
-            <div className="cta-buttons">
-              <a href="/signup" className="cta-primary">
-                Start Riding
-              </a>
-              <a href="/contact" className="cta-secondary">
-                Get in Touch
-              </a>
-            </div>
-          </div>
+          <JoinUs />
+          <Footer />
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="footer">
-        <div className="container">
-          <div className="footer-content">
-            <h3>Questions? We&apos;re Here to Help</h3>
-            <p>
-              Whether you&apos;re a curious student, university administrator, or just
-              want to learn more about our mission.
-            </p>
-            <a href="mailto:truestride.team@gmail.com" className="footer-contact">
-              truestride.team@gmail.com
-            </a>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

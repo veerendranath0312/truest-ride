@@ -32,7 +32,7 @@ function Footer() {
             <a className="footer-flex-item__link" href="#">
               FAQ
             </a>
-            <a className="footer-flex-item__link" href="#">
+            <a className="footer-flex-item__link" href="mailto:truestride.team@gmail.com">
               Contact
             </a>
           </div>

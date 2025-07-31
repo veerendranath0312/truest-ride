@@ -127,104 +127,57 @@
   margin-bottom: 12px;
   line-height: 145%;
 }
-/* Values Section */
-.values-section {
-  padding: 100px 0;
-  background: white;
+
+/* Section Divider */
+.section-divider {
+  padding: 0 1rem;
 }
 
-.values-section h2 {
-  font-size: 2.5rem;
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 64px;
-  color: #1a202c;
-}
-
-.values-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 32px;
-}
-
-.value-card {
-  text-align: center;
-  padding: 32px 24px;
-  border-radius: 12px;
-  background: #f8fafc;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.value-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-}
-
-.value-icon {
-  font-size: 3rem;
-  margin-bottom: 16px;
-}
-
-.value-card h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 16px;
-  color: #1a202c;
-}
-
-.value-card p {
-  color: #4a5568;
-  line-height: 1.6;
+.section-divider hr {
+  height: 1px;
+  background: var(--ui-outline);
+  border: none;
+  margin: 0;
 }
 
 /* Advisors Section */
 .advisors-section {
-  padding: 100px 0;
-  background: #f8fafc;
+  padding-top: 50px;
 }
 
 .advisors-section h2 {
-  font-size: 2.5rem;
-  font-weight: 600;
+  font-size: 30px;
+  font-weight: 400;
   text-align: center;
-  margin-bottom: 16px;
-  color: #1a202c;
+  margin-bottom: 40px;
+  color: var(--text-primary);
 }
 
-.section-subtitle {
-  text-align: center;
-  font-size: 1.125rem;
-  color: #4a5568;
-  margin-bottom: 64px;
-}
-
-.advisors-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+.advisors-flex {
+  background: var(--bg-secondary);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 32px 16px;
   gap: 32px;
-  max-width: 800px;
-  margin: 0 auto;
+  max-width: 100%;
 }
 
 .advisor-card {
-  background: white;
-  border-radius: 16px;
-  padding: 32px;
+  padding: 16px;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.2s ease;
-}
-
-.advisor-card:hover {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .advisor-image {
   width: 100px;
   height: 100px;
-  border-radius: 50%;
+  border-radius: 40%;
   overflow: hidden;
-  margin: 0 auto 24px;
+  background: var(--bg-tertiary);
 }
 
 .advisor-image img {
@@ -236,19 +189,28 @@
 .advisor-info h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: 8px;
-  color: #1a202c;
+  margin-top: 12px;
+  color: var(--text-primary);
 }
 
 .advisor-info p {
-  color: #4a5568;
-  margin-bottom: 16px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  font-size: 0.9rem;
 }
 
 .contact-link {
-  color: #667eea;
-  text-decoration: none;
+  display: inline-block;
+  color: var(--text-primary);
   font-size: 0.9rem;
+  font-weight: 300;
+  margin-top: 8px;
+  transition: all var(--transition-time) ease;
+}
+
+.contact-link:hover {
+  color: var(--btn-secondary-hover);
+  text-decoration: underline;
 }
 
 .contact-link:hover {
@@ -257,45 +219,88 @@
 
 /* Team Section */
 .team-section {
-  padding: 100px 0;
-  background: white;
+  padding: 50px 0;
+  background: var(--bg-primary);
 }
 
 .team-section h2 {
-  font-size: 2.5rem;
-  font-weight: 600;
+  font-size: 30px;
+  font-weight: 400;
   text-align: center;
-  margin-bottom: 16px;
-  color: #1a202c;
+  margin-bottom: 40px;
+  color: var(--text-primary);
 }
 
 .team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 32px;
   margin-top: 64px;
 }
 
 .team-card {
-  background: #f8fafc;
+  background: var(--bg-secondary);
   border-radius: 16px;
   padding: 24px;
   text-align: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* border: 1px solid var(--ui-outline); */
+  aspect-ratio: 3/4;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 200px; /* Fixed width for consistent sizing */
+  flex-shrink: 0;
+}
+
+/* Random rotation for each card */
+.team-card:nth-child(1) {
+  transform: rotate(-2deg);
+}
+.team-card:nth-child(2) {
+  transform: rotate(1.5deg);
+}
+.team-card:nth-child(3) {
+  transform: rotate(-1deg);
+}
+.team-card:nth-child(4) {
+  transform: rotate(2.5deg);
+}
+.team-card:nth-child(5) {
+  transform: rotate(-1.8deg);
+}
+.team-card:nth-child(6) {
+  transform: rotate(1.2deg);
+}
+.team-card:nth-child(7) {
+  transform: rotate(-2.3deg);
+}
+.team-card:nth-child(8) {
+  transform: rotate(1.8deg);
+}
+.team-card:nth-child(9) {
+  transform: rotate(-1.5deg);
+}
+.team-card:nth-child(10) {
+  transform: rotate(2deg);
 }
 
 .team-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transform: rotate(0deg) translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  position: relative;
 }
 
 .team-image {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  border-radius: 40%;
   overflow: hidden;
-  margin: 0 auto 16px;
-  background: #e2e8f0;
+  margin: 0 auto 20px;
+  background: var(--bg-tertiary);
+  flex-shrink: 0;
 }
 
 .team-image img {
@@ -304,82 +309,100 @@
   object-fit: cover;
 }
 
+.team-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .team-info h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: #1a202c;
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 8px;
+  color: var(--text-primary);
 }
 
 .team-role {
-  color: #4a5568;
-  font-size: 0.9rem;
-  margin-bottom: 16px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 300;
+  margin-bottom: 20px;
 }
 
 .team-links {
   display: flex;
   gap: 12px;
   justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
 }
 
-.team-email,
-.team-linkedin {
-  padding: 6px 12px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: 0.85rem;
-  transition: background-color 0.2s ease;
+.team-link {
+  color: var(--text-primary);
+  transition: color 0.2s ease;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 300;
 }
 
-.team-email {
-  background: #667eea;
-  color: white;
+.team-link:hover {
+  color: var(--btn-secondary-hover);
 }
 
-.team-email:hover {
-  background: #5a67d8;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .team-grid {
+    gap: 24px;
+  }
+
+  .team-card {
+    padding: 24px;
+    aspect-ratio: 2.5/3;
+    width: 180px;
+  }
 }
 
-.team-linkedin {
-  background: #0077b5;
-  color: white;
-}
+@media (max-width: 480px) {
+  .team-grid {
+    gap: 16px;
+  }
 
-.team-linkedin:hover {
-  background: #005885;
+  .team-card {
+    padding: 20px;
+    width: 180px;
+  }
 }
 
 /* Stakeholder Section */
 .stakeholder-section {
-  padding: 100px 0;
-  background: #f8fafc;
+  padding: 50px 0;
 }
 
 .stakeholder-section h2 {
-  font-size: 2.5rem;
-  font-weight: 600;
+  font-size: 30px;
+  font-weight: 400;
   text-align: center;
-  margin-bottom: 64px;
-  color: #1a202c;
+  margin-bottom: 20px;
+  color: var(--text-primary);
 }
 
 .stakeholder-spotlight {
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   gap: 48px;
   max-width: 900px;
   margin: 0 auto;
-  background: white;
+
   border-radius: 16px;
-  padding: 48px;
+  padding: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .stakeholder-image {
   width: 120px;
   height: 120px;
-  border-radius: 50%;
+  border-radius: 40%;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -391,86 +414,25 @@
 }
 
 .stakeholder-content blockquote {
-  font-size: 1.25rem;
+  font-size: 18px;
+  font-weight: 400;
   line-height: 1.6;
-  color: #1a202c;
+  color: var(--text-primary);
   margin: 0 0 24px;
   font-style: italic;
 }
 
 .stakeholder-info h4 {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 400;
   margin-bottom: 4px;
-  color: #1a202c;
+  color: var(--btn-secondary-hover);
 }
 
 .stakeholder-info p {
-  color: #4a5568;
-  font-size: 0.9rem;
-}
-
-/* CTA Section */
-.cta-section {
-  padding: 100px 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-}
-
-.cta-content {
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.cta-content h2 {
-  font-size: 2.5rem;
-  font-weight: 600;
-  margin-bottom: 24px;
-  line-height: 1.2;
-}
-
-.cta-content p {
-  font-size: 1.125rem;
-  margin-bottom: 40px;
-  opacity: 0.9;
-}
-
-.cta-buttons {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-}
-
-.cta-primary,
-.cta-secondary {
-  padding: 16px 32px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.2s ease;
-}
-
-.cta-primary {
-  background: white;
-  color: #667eea;
-}
-
-.cta-primary:hover {
-  background: #f8fafc;
-  transform: translateY(-2px);
-}
-
-.cta-secondary {
-  background: transparent;
-  color: white;
-  border: 2px solid white;
-}
-
-.cta-secondary:hover {
-  background: white;
-  color: #667eea;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 300;
 }
 
 /* Footer */
@@ -518,25 +480,24 @@
     gap: 24px;
   }
 
-  @media (max-width: 768px) {
-    .story-layout {
-      flex-direction: column;
-      gap: 30px;
-    }
+  .story-layout {
+    flex-direction: column;
+    gap: 30px;
+  }
 
-    .story-heading {
-      flex: none;
-      max-width: none;
-      text-align: center;
-    }
+  .story-heading {
+    flex: none;
+    max-width: none;
+    text-align: center;
+  }
 
-    .story-heading h2 {
-      position: static; /* Remove sticky on mobile */
-    }
+  .story-heading {
+    position: static; /* Force override sticky positioning */
+    top: auto;
+  }
 
-    .story-content {
-      text-align: left;
-    }
+  .story-content {
+    text-align: left;
   }
 
   .values-grid {
@@ -545,6 +506,7 @@
 
   .stakeholder-spotlight {
     flex-direction: column;
+    align-items: center;
     text-align: center;
     gap: 32px;
   }
@@ -585,5 +547,11 @@
 
   .stakeholder-spotlight {
     padding: 32px 24px;
+  }
+
+  .story-heading h2 {
+    position: static; /* Ensure sticky is removed on very small screens */
+    top: auto;
+    font-size: 24px;
   }
 }
