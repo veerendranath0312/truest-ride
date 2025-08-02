@@ -10,6 +10,7 @@ import arunImg from "/arun.jpg";
 import jagadeeshImg from "/jagadeesh.jpg";
 import nagasaiImg from "/nagasai.jpg";
 import sakethImg from "/saketh.jpg";
+import rakeshImg from "/rakesh.png";
 
 import "./about.css";
 
@@ -18,7 +19,7 @@ const stakeholders = [
     name: "Rakesh Kumar Vasa",
     title: "Student at Rowan University",
     description: ` Truest Ride empowers students with safe, low-cost weekend travel. Built on trust and community, it connects riders within their campus network for a secure experience.`,
-    img: ".././../src/assets/rakesh.png",
+    img: rakeshImg,
     linkedin: "#",
   },
 ];
