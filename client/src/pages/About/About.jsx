@@ -11,6 +11,8 @@ import jagadeeshImg from "/jagadeesh.jpg";
 import nagasaiImg from "/nagasai.jpg";
 import sakethImg from "/saketh.jpg";
 import rakeshImg from "/rakesh.png";
+import sriImg from "/sri.JPG";
+import notionImg from "/my-notion-face-portrait.PNG";
 
 import "./about.css";
 
@@ -75,7 +77,7 @@ const students = [
     role: "Backend Developer",
     email: "htadepal@kent.edu ",
     linkedin: "https://www.linkedin.com/in/hrushikesh-tadepally/",
-    img: " ",
+    img: notionImg,
   },
   {
     name: "Shivasaketh",
@@ -89,7 +91,7 @@ const students = [
     role: "Backend Developer",
     email: "dsrilaks@kent.edu ",
     linkedin: "https://www.linkedin.com/in/srilakshmi-dasari-9b2812221/",
-    img: "",
+    img: sriImg,
   },
 ];
 

@@ -12,6 +12,7 @@ export default defineConfig((command, mode) => {
       "**/*.JPG",
       "**/*.jpeg",
       "**/*.png",
+      "**/*.PNG",
       "**/*.svg",
       "**/*.gif",
       "**/*.webp",

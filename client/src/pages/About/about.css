@@ -4,6 +4,9 @@
   padding: 0 24px;
 }
 
+.about-page {
+  background: var(--bg-primary);
+}
 /* Hero Section */
 .hero {
   display: flex;
@@ -74,7 +77,6 @@
 /* Story Section */
 .story-section {
   padding: 100px 0;
-  background-color: var(--bg-primary);
 }
 
 .story-layout {
@@ -220,7 +222,6 @@
 /* Team Section */
 .team-section {
   padding: 50px 0;
-  background: var(--bg-primary);
 }
 
 .team-section h2 {
